@@ -1,0 +1,4 @@
+D:\Dev\SBSchool\SBSchool\Rules\bin\Release\Rules.dll
+D:\Dev\SBSchool\SBSchool\Rules\bin\Release\Rules.pdb
+D:\Dev\SBSchool\SBSchool\Rules\obj\Release\Rules.dll
+D:\Dev\SBSchool\SBSchool\Rules\obj\Release\Rules.pdb

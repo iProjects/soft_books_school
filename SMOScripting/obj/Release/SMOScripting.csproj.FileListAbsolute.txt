@@ -1,0 +1,10 @@
+D:\Dev\SBSchool\SBSchool\SMOScripting\bin\Release\SQL.txt
+D:\Dev\SBSchool\SBSchool\SMOScripting\bin\Release\SMOScripting.exe.config
+D:\Dev\SBSchool\SBSchool\SMOScripting\bin\Release\SMOScripting.exe
+D:\Dev\SBSchool\SBSchool\SMOScripting\bin\Release\SMOScripting.pdb
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.csprojResolveAssemblyReference.cache
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.ScriptForm.resources
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.Properties.Resources.resources
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.csproj.GenerateResource.Cache
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.exe
+D:\Dev\SBSchool\SBSchool\SMOScripting\obj\Release\SMOScripting.pdb

@@ -1,0 +1,144 @@
+<RuleDefinitions xmlns="http://schemas.microsoft.com/winfx/2006/xaml/workflow">
+	<RuleDefinitions.RuleSets>
+		<RuleSet Description="{p3:Null}" Name="RegExamsRuleSet" ChainingBehavior="Full" xmlns:p3="http://schemas.microsoft.com/winfx/2006/xaml">
+			<RuleSet.Rules>
+				<Rule ReevaluationBehavior="Always" Priority="0" Description="{p3:Null}" Active="True" Name="Fees Paid">
+					<Rule.ElseActions>
+						<RuleStatementAction>
+							<RuleStatementAction.CodeDomStatement>
+								<ns0:CodeAssignStatement LinePragma="{p3:Null}" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodeAssignStatement.Left>
+										<ns0:CodePropertyReferenceExpression PropertyName="Message">
+											<ns0:CodePropertyReferenceExpression.TargetObject>
+												<ns0:CodeThisReferenceExpression />
+											</ns0:CodePropertyReferenceExpression.TargetObject>
+										</ns0:CodePropertyReferenceExpression>
+									</ns0:CodeAssignStatement.Left>
+									<ns0:CodeAssignStatement.Right>
+										<ns0:CodePrimitiveExpression>
+											<ns0:CodePrimitiveExpression.Value>
+												<ns1:String xmlns:ns1="clr-namespace:System;Assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Has not met the minimum fees requirement</ns1:String>
+											</ns0:CodePrimitiveExpression.Value>
+										</ns0:CodePrimitiveExpression>
+									</ns0:CodeAssignStatement.Right>
+								</ns0:CodeAssignStatement>
+							</RuleStatementAction.CodeDomStatement>
+						</RuleStatementAction>
+					</Rule.ElseActions>
+					<Rule.ThenActions>
+						<RuleStatementAction>
+							<RuleStatementAction.CodeDomStatement>
+								<ns0:CodeAssignStatement LinePragma="{p3:Null}" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodeAssignStatement.Left>
+										<ns0:CodePropertyReferenceExpression PropertyName="IsSuccess">
+											<ns0:CodePropertyReferenceExpression.TargetObject>
+												<ns0:CodeThisReferenceExpression />
+											</ns0:CodePropertyReferenceExpression.TargetObject>
+										</ns0:CodePropertyReferenceExpression>
+									</ns0:CodeAssignStatement.Left>
+									<ns0:CodeAssignStatement.Right>
+										<ns0:CodePrimitiveExpression>
+											<ns0:CodePrimitiveExpression.Value>
+												<ns1:Boolean xmlns:ns1="clr-namespace:System;Assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">true</ns1:Boolean>
+											</ns0:CodePrimitiveExpression.Value>
+										</ns0:CodePrimitiveExpression>
+									</ns0:CodeAssignStatement.Right>
+								</ns0:CodeAssignStatement>
+							</RuleStatementAction.CodeDomStatement>
+						</RuleStatementAction>
+					</Rule.ThenActions>
+					<Rule.Condition>
+						<RuleExpressionCondition Name="{p3:Null}">
+							<RuleExpressionCondition.Expression>
+								<ns0:CodeBinaryOperatorExpression Operator="LessThanOrEqual" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodeBinaryOperatorExpression.Right>
+										<ns0:CodePrimitiveExpression>
+											<ns0:CodePrimitiveExpression.Value>
+												<ns1:Int32 xmlns:ns1="clr-namespace:System;Assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">1000</ns1:Int32>
+											</ns0:CodePrimitiveExpression.Value>
+										</ns0:CodePrimitiveExpression>
+									</ns0:CodeBinaryOperatorExpression.Right>
+									<ns0:CodeBinaryOperatorExpression.Left>
+										<ns0:CodeBinaryOperatorExpression Operator="Subtract">
+											<ns0:CodeBinaryOperatorExpression.Right>
+												<ns0:CodePropertyReferenceExpression PropertyName="FeesPaid">
+													<ns0:CodePropertyReferenceExpression.TargetObject>
+														<ns0:CodeThisReferenceExpression />
+													</ns0:CodePropertyReferenceExpression.TargetObject>
+												</ns0:CodePropertyReferenceExpression>
+											</ns0:CodeBinaryOperatorExpression.Right>
+											<ns0:CodeBinaryOperatorExpression.Left>
+												<ns0:CodePropertyReferenceExpression PropertyName="FeesCharged">
+													<ns0:CodePropertyReferenceExpression.TargetObject>
+														<ns0:CodeThisReferenceExpression />
+													</ns0:CodePropertyReferenceExpression.TargetObject>
+												</ns0:CodePropertyReferenceExpression>
+											</ns0:CodeBinaryOperatorExpression.Left>
+										</ns0:CodeBinaryOperatorExpression>
+									</ns0:CodeBinaryOperatorExpression.Left>
+								</ns0:CodeBinaryOperatorExpression>
+							</RuleExpressionCondition.Expression>
+						</RuleExpressionCondition>
+					</Rule.Condition>
+				</Rule>
+				<Rule ReevaluationBehavior="Always" Priority="0" Description="{p3:Null}" Active="True" Name="Eligibility">
+					<Rule.ElseActions>
+						<RuleStatementAction>
+							<RuleStatementAction.CodeDomStatement>
+								<ns0:CodeAssignStatement LinePragma="{p3:Null}" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodeAssignStatement.Left>
+										<ns0:CodePropertyReferenceExpression PropertyName="Message">
+											<ns0:CodePropertyReferenceExpression.TargetObject>
+												<ns0:CodeThisReferenceExpression />
+											</ns0:CodePropertyReferenceExpression.TargetObject>
+										</ns0:CodePropertyReferenceExpression>
+									</ns0:CodeAssignStatement.Left>
+									<ns0:CodeAssignStatement.Right>
+										<ns0:CodePrimitiveExpression>
+											<ns0:CodePrimitiveExpression.Value>
+												<ns1:String xmlns:ns1="clr-namespace:System;Assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Not Eligible.  Please contact the administator to find out why you are debarred from registering exams</ns1:String>
+											</ns0:CodePrimitiveExpression.Value>
+										</ns0:CodePrimitiveExpression>
+									</ns0:CodeAssignStatement.Right>
+								</ns0:CodeAssignStatement>
+							</RuleStatementAction.CodeDomStatement>
+						</RuleStatementAction>
+					</Rule.ElseActions>
+					<Rule.ThenActions>
+						<RuleStatementAction>
+							<RuleStatementAction.CodeDomStatement>
+								<ns0:CodeAssignStatement LinePragma="{p3:Null}" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodeAssignStatement.Left>
+										<ns0:CodePropertyReferenceExpression PropertyName="IsSuccess">
+											<ns0:CodePropertyReferenceExpression.TargetObject>
+												<ns0:CodeThisReferenceExpression />
+											</ns0:CodePropertyReferenceExpression.TargetObject>
+										</ns0:CodePropertyReferenceExpression>
+									</ns0:CodeAssignStatement.Left>
+									<ns0:CodeAssignStatement.Right>
+										<ns0:CodePrimitiveExpression>
+											<ns0:CodePrimitiveExpression.Value>
+												<ns1:Boolean xmlns:ns1="clr-namespace:System;Assembly=mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">true</ns1:Boolean>
+											</ns0:CodePrimitiveExpression.Value>
+										</ns0:CodePrimitiveExpression>
+									</ns0:CodeAssignStatement.Right>
+								</ns0:CodeAssignStatement>
+							</RuleStatementAction.CodeDomStatement>
+						</RuleStatementAction>
+					</Rule.ThenActions>
+					<Rule.Condition>
+						<RuleExpressionCondition Name="{p3:Null}">
+							<RuleExpressionCondition.Expression>
+								<ns0:CodePropertyReferenceExpression PropertyName="IsEligible" xmlns:ns0="clr-namespace:System.CodeDom;Assembly=System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+									<ns0:CodePropertyReferenceExpression.TargetObject>
+										<ns0:CodeThisReferenceExpression />
+									</ns0:CodePropertyReferenceExpression.TargetObject>
+								</ns0:CodePropertyReferenceExpression>
+							</RuleExpressionCondition.Expression>
+						</RuleExpressionCondition>
+					</Rule.Condition>
+				</Rule>
+			</RuleSet.Rules>
+		</RuleSet>
+	</RuleDefinitions.RuleSets>
+</RuleDefinitions>

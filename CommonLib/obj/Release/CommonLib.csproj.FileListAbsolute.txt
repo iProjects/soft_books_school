@@ -1,0 +1,5 @@
+D:\Dev\SBSchool\SBSchool\CommonLib\bin\Release\CommonLib.dll
+D:\Dev\SBSchool\SBSchool\CommonLib\bin\Release\CommonLib.pdb
+D:\Dev\SBSchool\SBSchool\CommonLib\obj\Release\CommonLib.csprojResolveAssemblyReference.cache
+D:\Dev\SBSchool\SBSchool\CommonLib\obj\Release\CommonLib.dll
+D:\Dev\SBSchool\SBSchool\CommonLib\obj\Release\CommonLib.pdb
