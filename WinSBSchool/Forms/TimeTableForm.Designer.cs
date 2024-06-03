@@ -49,10 +49,10 @@
             this.radioButtonDayMode = new System.Windows.Forms.RadioButton();
             this.radioButtonWeekMode = new System.Windows.Forms.RadioButton();
             this.radioButtonMonthMode = new System.Windows.Forms.RadioButton();
-            this.monthView1 = new System.Windows.Forms.Calendar.MonthView();
+            this.monthView = new System.Windows.Forms.Calendar.MonthView();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.calendar1 = new System.Windows.Forms.Calendar.Calendar();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.calendar = new System.Windows.Forms.Calendar.Calendar();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.redTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yellowTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.greenTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,11 +103,12 @@
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.meetingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bindingSourceClassStream = new System.Windows.Forms.BindingSource(this.components);
+            this.btnaddtimetabledetails = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxCalendarMode.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceClassStream)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,7 +120,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1037, 62);
+            this.panel1.Size = new System.Drawing.Size(1170, 62);
             this.panel1.TabIndex = 0;
             // 
             // groupBox2
@@ -130,7 +131,7 @@
             this.groupBox2.Location = new System.Drawing.Point(1, 8);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(256, 43);
-            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
             // cboClassStreams
@@ -167,24 +168,25 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnaddtimetabledetails);
             this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Controls.Add(this.btnClose);
             this.groupBox1.Controls.Add(this.btnPrintAll);
             this.groupBox1.Controls.Add(this.btnPrint);
             this.groupBox1.Location = new System.Drawing.Point(576, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(415, 48);
-            this.groupBox1.TabIndex = 2;
+            this.groupBox1.Size = new System.Drawing.Size(484, 48);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
             // btnSave
             // 
             this.btnSave.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Location = new System.Drawing.Point(23, 17);
+            this.btnSave.Location = new System.Drawing.Point(102, 15);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 0;
+            this.btnSave.TabIndex = 1;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -194,10 +196,10 @@
             this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(322, 17);
+            this.btnClose.Location = new System.Drawing.Point(390, 15);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 3;
+            this.btnClose.TabIndex = 4;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -206,10 +208,10 @@
             // 
             this.btnPrintAll.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnPrintAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrintAll.Location = new System.Drawing.Point(229, 17);
+            this.btnPrintAll.Location = new System.Drawing.Point(294, 15);
             this.btnPrintAll.Name = "btnPrintAll";
             this.btnPrintAll.Size = new System.Drawing.Size(75, 23);
-            this.btnPrintAll.TabIndex = 2;
+            this.btnPrintAll.TabIndex = 3;
             this.btnPrintAll.Text = "PrintAll";
             this.btnPrintAll.UseVisualStyleBackColor = false;
             this.btnPrintAll.Click += new System.EventHandler(this.btnPrintAll_Click);
@@ -218,10 +220,10 @@
             // 
             this.btnPrint.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrint.Location = new System.Drawing.Point(131, 17);
+            this.btnPrint.Location = new System.Drawing.Point(198, 15);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
-            this.btnPrint.TabIndex = 1;
+            this.btnPrint.TabIndex = 2;
             this.btnPrint.Text = "Print";
             this.btnPrint.UseVisualStyleBackColor = false;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
@@ -234,7 +236,7 @@
             this.groupBoxCalendarMode.Location = new System.Drawing.Point(259, 9);
             this.groupBoxCalendarMode.Name = "groupBoxCalendarMode";
             this.groupBoxCalendarMode.Size = new System.Drawing.Size(313, 43);
-            this.groupBoxCalendarMode.TabIndex = 1;
+            this.groupBoxCalendarMode.TabIndex = 2;
             this.groupBoxCalendarMode.TabStop = false;
             this.groupBoxCalendarMode.Text = "Calendar View Mode";
             // 
@@ -277,44 +279,44 @@
             this.radioButtonMonthMode.UseVisualStyleBackColor = true;
             this.radioButtonMonthMode.CheckedChanged += new System.EventHandler(this.radioButtonMonthMode_CheckedChanged);
             // 
-            // monthView1
+            // monthView
             // 
-            this.monthView1.ArrowsColor = System.Drawing.SystemColors.Window;
-            this.monthView1.ArrowsSelectedColor = System.Drawing.Color.Gold;
-            this.monthView1.DayBackgroundColor = System.Drawing.Color.Empty;
-            this.monthView1.DayGrayedText = System.Drawing.SystemColors.GrayText;
-            this.monthView1.DaySelectedBackgroundColor = System.Drawing.SystemColors.Highlight;
-            this.monthView1.DaySelectedColor = System.Drawing.SystemColors.WindowText;
-            this.monthView1.DaySelectedTextColor = System.Drawing.SystemColors.HighlightText;
-            this.monthView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.monthView1.ItemPadding = new System.Windows.Forms.Padding(2);
-            this.monthView1.Location = new System.Drawing.Point(0, 62);
-            this.monthView1.MaxSelectionCount = 40;
-            this.monthView1.MonthTitleColor = System.Drawing.SystemColors.ActiveCaption;
-            this.monthView1.MonthTitleColorInactive = System.Drawing.SystemColors.InactiveCaption;
-            this.monthView1.MonthTitleTextColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.monthView1.MonthTitleTextColorInactive = System.Drawing.SystemColors.InactiveCaptionText;
-            this.monthView1.Name = "monthView1";
-            this.monthView1.Size = new System.Drawing.Size(212, 447);
-            this.monthView1.TabIndex = 0;
-            this.monthView1.Text = "monthView1";
-            this.monthView1.TodayBorderColor = System.Drawing.Color.Maroon;
-            this.monthView1.SelectionChanged += new System.EventHandler(this.monthView1_SelectionChanged);
+            this.monthView.ArrowsColor = System.Drawing.SystemColors.Window;
+            this.monthView.ArrowsSelectedColor = System.Drawing.Color.Gold;
+            this.monthView.DayBackgroundColor = System.Drawing.Color.Empty;
+            this.monthView.DayGrayedText = System.Drawing.SystemColors.GrayText;
+            this.monthView.DaySelectedBackgroundColor = System.Drawing.SystemColors.Highlight;
+            this.monthView.DaySelectedColor = System.Drawing.SystemColors.WindowText;
+            this.monthView.DaySelectedTextColor = System.Drawing.SystemColors.HighlightText;
+            this.monthView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.monthView.ItemPadding = new System.Windows.Forms.Padding(2);
+            this.monthView.Location = new System.Drawing.Point(0, 62);
+            this.monthView.MaxSelectionCount = 40;
+            this.monthView.MonthTitleColor = System.Drawing.SystemColors.ActiveCaption;
+            this.monthView.MonthTitleColorInactive = System.Drawing.SystemColors.InactiveCaption;
+            this.monthView.MonthTitleTextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.monthView.MonthTitleTextColorInactive = System.Drawing.SystemColors.InactiveCaptionText;
+            this.monthView.Name = "monthView";
+            this.monthView.Size = new System.Drawing.Size(212, 631);
+            this.monthView.TabIndex = 0;
+            this.monthView.Text = "monthView1";
+            this.monthView.TodayBorderColor = System.Drawing.Color.Maroon;
+            this.monthView.SelectionChanged += new System.EventHandler(this.monthView1_SelectionChanged);
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(212, 62);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 447);
+            this.splitter1.Size = new System.Drawing.Size(3, 631);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
             // 
-            // calendar1
+            // calendar
             // 
-            this.calendar1.ContextMenuStrip = this.contextMenuStrip1;
-            this.calendar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.calendar1.FirstDayOfWeek = System.DayOfWeek.Monday;
-            this.calendar1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.calendar.ContextMenuStrip = this.contextMenuStrip;
+            this.calendar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.calendar.FirstDayOfWeek = System.DayOfWeek.Monday;
+            this.calendar.Font = new System.Drawing.Font("Segoe UI", 9F);
             calendarHighlightRange1.DayOfWeek = System.DayOfWeek.Monday;
             calendarHighlightRange1.EndTime = System.TimeSpan.Parse("17:00:00");
             calendarHighlightRange1.StartTime = System.TimeSpan.Parse("08:00:00");
@@ -330,30 +332,30 @@
             calendarHighlightRange5.DayOfWeek = System.DayOfWeek.Friday;
             calendarHighlightRange5.EndTime = System.TimeSpan.Parse("17:00:00");
             calendarHighlightRange5.StartTime = System.TimeSpan.Parse("08:00:00");
-            this.calendar1.HighlightRanges = new System.Windows.Forms.Calendar.CalendarHighlightRange[] {
+            this.calendar.HighlightRanges = new System.Windows.Forms.Calendar.CalendarHighlightRange[] {
         calendarHighlightRange1,
         calendarHighlightRange2,
         calendarHighlightRange3,
         calendarHighlightRange4,
         calendarHighlightRange5};
-            this.calendar1.Location = new System.Drawing.Point(215, 62);
-            this.calendar1.Name = "calendar1";
-            this.calendar1.Size = new System.Drawing.Size(822, 447);
-            this.calendar1.TabIndex = 0;
-            this.calendar1.Text = "calendar1";
-            this.calendar1.LoadItems += new System.Windows.Forms.Calendar.Calendar.CalendarLoadEventHandler(this.calendar1_LoadItems);
-            this.calendar1.DayHeaderClick += new System.Windows.Forms.Calendar.Calendar.CalendarDayEventHandler(this.calendar1_DayHeaderClick);
-            this.calendar1.ItemCreated += new System.Windows.Forms.Calendar.Calendar.CalendarItemCancelEventHandler(this.calendar1_ItemCreated);
-            this.calendar1.ItemDeleted += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemDeleted);
-            this.calendar1.ItemClick += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemClick);
-            this.calendar1.ItemDoubleClick += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemDoubleClick);
-            this.calendar1.ItemSelected += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemSelected);
-            this.calendar1.ItemMouseHover += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemMouseHover);
-            this.calendar1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.calendar1_KeyDown);
+            this.calendar.Location = new System.Drawing.Point(215, 62);
+            this.calendar.Name = "calendar";
+            this.calendar.Size = new System.Drawing.Size(955, 631);
+            this.calendar.TabIndex = 0;
+            this.calendar.Text = "calendar";
+            this.calendar.LoadItems += new System.Windows.Forms.Calendar.Calendar.CalendarLoadEventHandler(this.calendar1_LoadItems);
+            this.calendar.DayHeaderClick += new System.Windows.Forms.Calendar.Calendar.CalendarDayEventHandler(this.calendar1_DayHeaderClick);
+            this.calendar.ItemCreated += new System.Windows.Forms.Calendar.Calendar.CalendarItemCancelEventHandler(this.calendar1_ItemCreated);
+            this.calendar.ItemDeleted += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemDeleted);
+            this.calendar.ItemClick += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemClick);
+            this.calendar.ItemDoubleClick += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemDoubleClick);
+            this.calendar.ItemSelected += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemSelected);
+            this.calendar.ItemMouseHover += new System.Windows.Forms.Calendar.Calendar.CalendarItemEventHandler(this.calendar1_ItemMouseHover);
+            this.calendar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.calendar1_KeyDown);
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.redTagToolStripMenuItem,
             this.yellowTagToolStripMenuItem,
             this.greenTagToolStripMenuItem,
@@ -369,8 +371,8 @@
             this.editItemToolStripMenuItem,
             this.toolStripSeparator4,
             this.pickActivityToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 292);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(167, 270);
             // 
             // redTagToolStripMenuItem
             // 
@@ -431,55 +433,55 @@
             // diagonalToolStripMenuItem
             // 
             this.diagonalToolStripMenuItem.Name = "diagonalToolStripMenuItem";
-            this.diagonalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.diagonalToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.diagonalToolStripMenuItem.Text = "Diagonal";
             this.diagonalToolStripMenuItem.Click += new System.EventHandler(this.diagonalToolStripMenuItem_Click);
             // 
             // toolStripSeparator15
             // 
             this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator15.Size = new System.Drawing.Size(126, 6);
             // 
             // verticalToolStripMenuItem
             // 
             this.verticalToolStripMenuItem.Name = "verticalToolStripMenuItem";
-            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.verticalToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.verticalToolStripMenuItem.Text = "Vertical";
             this.verticalToolStripMenuItem.Click += new System.EventHandler(this.verticalToolStripMenuItem_Click);
             // 
             // toolStripSeparator14
             // 
             this.toolStripSeparator14.Name = "toolStripSeparator14";
-            this.toolStripSeparator14.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator14.Size = new System.Drawing.Size(126, 6);
             // 
             // horizontalToolStripMenuItem
             // 
             this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.horizontalToolStripMenuItem.Text = "Horizontal";
             this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.horizontalToolStripMenuItem_Click);
             // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator13.Size = new System.Drawing.Size(126, 6);
             // 
             // hatchToolStripMenuItem
             // 
             this.hatchToolStripMenuItem.Name = "hatchToolStripMenuItem";
-            this.hatchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hatchToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.hatchToolStripMenuItem.Text = "Cross";
             this.hatchToolStripMenuItem.Click += new System.EventHandler(this.hatchToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(126, 6);
             // 
             // noneToolStripMenuItem
             // 
             this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
-            this.noneToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
             this.noneToolStripMenuItem.Text = "None";
             this.noneToolStripMenuItem.Click += new System.EventHandler(this.noneToolStripMenuItem_Click);
             // 
@@ -504,67 +506,67 @@
             // hourToolStripMenuItem
             // 
             this.hourToolStripMenuItem.Name = "hourToolStripMenuItem";
-            this.hourToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hourToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.hourToolStripMenuItem.Text = "1 hour";
             this.hourToolStripMenuItem.Click += new System.EventHandler(this.sixtyMinutesToolStripMenuItem_Click);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(129, 6);
             // 
             // minutesToolStripMenuItem
             // 
             this.minutesToolStripMenuItem.Name = "minutesToolStripMenuItem";
-            this.minutesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.minutesToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.minutesToolStripMenuItem.Text = "30 minutes";
             this.minutesToolStripMenuItem.Click += new System.EventHandler(this.thirtyMinutesToolStripMenuItem_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(129, 6);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(132, 22);
             this.toolStripMenuItem4.Text = "15 minutes";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.fifteenMinutesToolStripMenuItem_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(129, 6);
             // 
             // minutesToolStripMenuItem1
             // 
             this.minutesToolStripMenuItem1.Name = "minutesToolStripMenuItem1";
-            this.minutesToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.minutesToolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.minutesToolStripMenuItem1.Text = "10 minutes";
             this.minutesToolStripMenuItem1.Click += new System.EventHandler(this.tenMinutesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(129, 6);
             // 
             // minutesToolStripMenuItem2
             // 
             this.minutesToolStripMenuItem2.Name = "minutesToolStripMenuItem2";
-            this.minutesToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.minutesToolStripMenuItem2.Size = new System.Drawing.Size(132, 22);
             this.minutesToolStripMenuItem2.Text = "6 minutes";
             this.minutesToolStripMenuItem2.Click += new System.EventHandler(this.sixMinutesToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(129, 6);
             // 
             // minutesToolStripMenuItem3
             // 
             this.minutesToolStripMenuItem3.Name = "minutesToolStripMenuItem3";
-            this.minutesToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.minutesToolStripMenuItem3.Size = new System.Drawing.Size(132, 22);
             this.minutesToolStripMenuItem3.Text = "5 minutes";
             this.minutesToolStripMenuItem3.Click += new System.EventHandler(this.fiveMinutesToolStripMenuItem_Click);
             // 
@@ -597,43 +599,43 @@
             // northToolStripMenuItem
             // 
             this.northToolStripMenuItem.Name = "northToolStripMenuItem";
-            this.northToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.northToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.northToolStripMenuItem.Text = "North";
             this.northToolStripMenuItem.Click += new System.EventHandler(this.northToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(102, 6);
             // 
             // eastToolStripMenuItem
             // 
             this.eastToolStripMenuItem.Name = "eastToolStripMenuItem";
-            this.eastToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.eastToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.eastToolStripMenuItem.Text = "East";
             this.eastToolStripMenuItem.Click += new System.EventHandler(this.eastToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(102, 6);
             // 
             // southToolStripMenuItem
             // 
             this.southToolStripMenuItem.Name = "southToolStripMenuItem";
-            this.southToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.southToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.southToolStripMenuItem.Text = "South";
             this.southToolStripMenuItem.Click += new System.EventHandler(this.southToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(102, 6);
             // 
             // westToolStripMenuItem
             // 
             this.westToolStripMenuItem.Name = "westToolStripMenuItem";
-            this.westToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.westToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.westToolStripMenuItem.Text = "West";
             this.westToolStripMenuItem.Click += new System.EventHandler(this.westToolStripMenuItem_Click);
             // 
@@ -712,17 +714,30 @@
             this.meetingToolStripMenuItem.Text = "Meeting";
             this.meetingToolStripMenuItem.Click += new System.EventHandler(this.meetingToolStripMenuItem_Click);
             // 
+            // btnaddtimetabledetails
+            // 
+            this.btnaddtimetabledetails.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnaddtimetabledetails.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnaddtimetabledetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnaddtimetabledetails.Location = new System.Drawing.Point(6, 15);
+            this.btnaddtimetabledetails.Name = "btnaddtimetabledetails";
+            this.btnaddtimetabledetails.Size = new System.Drawing.Size(75, 23);
+            this.btnaddtimetabledetails.TabIndex = 0;
+            this.btnaddtimetabledetails.Text = "Add";
+            this.btnaddtimetabledetails.UseVisualStyleBackColor = false;
+            this.btnaddtimetabledetails.Click += new System.EventHandler(this.btnaddtimetabledetails_Click);
+            // 
             // TimeTableForm
             // 
-            this.AcceptButton = this.btnSave;
+            this.AcceptButton = this.btnaddtimetabledetails;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(1037, 509);
-            this.Controls.Add(this.calendar1);
+            this.ClientSize = new System.Drawing.Size(1170, 693);
+            this.Controls.Add(this.calendar);
             this.Controls.Add(this.splitter1);
-            this.Controls.Add(this.monthView1);
+            this.Controls.Add(this.monthView);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TimeTableForm";
@@ -738,7 +753,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBoxCalendarMode.ResumeLayout(false);
             this.groupBoxCalendarMode.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceClassStream)).EndInit();
             this.ResumeLayout(false);
 
@@ -750,10 +765,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSearchClassStream;
         private System.Windows.Forms.ComboBox cboClassStreams;
-        private System.Windows.Forms.Calendar.MonthView monthView1;
+        private System.Windows.Forms.Calendar.MonthView monthView;
         private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.Calendar.Calendar calendar1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Calendar.Calendar calendar;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem redTagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem yellowTagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem greenTagToolStripMenuItem;
@@ -814,6 +829,7 @@
         private System.Windows.Forms.RadioButton radioButtonMonthMode;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnaddtimetabledetails;
 
     }
 }

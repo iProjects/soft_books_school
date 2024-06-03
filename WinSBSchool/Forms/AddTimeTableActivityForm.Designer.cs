@@ -46,10 +46,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
@@ -221,9 +221,9 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Activity";
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // AddTimeTableActivityForm
             // 
@@ -239,12 +239,11 @@
             this.Name = "AddTimeTableActivityForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Time Table Activity";
-            this.Load += new System.EventHandler(this.AddTimeTableActivityForm_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -266,7 +265,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.ComboBox cboByWho;
 
     }

@@ -66,7 +66,7 @@ namespace WinSBSchool.Forms
                 listBoxGradingSystem.DisplayMember = "Description";
                 listBoxGradingSystem.DataSource = bindingSourceGS;
                 listBoxGradingSystem.SelectedIndex = -1;
-                
+
             }
             catch (Exception ex)
             {
@@ -91,25 +91,39 @@ namespace WinSBSchool.Forms
         {
             try
             {
+                errorProvider1.Clear();
+
                 if (string.IsNullOrEmpty(txtGradingSys.Text))
                 {
-                    errorProvider1.Clear();
                     errorProvider1.SetError(txtGradingSys, "Grading System Description cannot be null!");
                     return;
                 }
 
-                GradingSystem item = new GradingSystem();
-                //item.Description = "New Item";
-                item.Description = Utils.ConvertFirstLetterToUpper(txtGradingSys.Text.Trim());
+                string item = txtGradingSys.Text.Trim();
 
-                db.GradingSystems.AddObject(item);
+                //check if exists
+                var exists = db.GradingSystems.Where(i => i.Description == item).FirstOrDefault();
+                if (exists != null)
+                {
+                    errorProvider1.Clear();
+                    errorProvider1.SetError(txtGradingSys, "Grading System Description exists!");
+                    return;
+                }
+
+                GradingSystem gs = new GradingSystem();
+                //item.Description = "New Item";
+                gs.Description = Utils.ConvertFirstLetterToUpper(txtGradingSys.Text.Trim());
+                gs.Description = gs.Description.ToUpper();
+
+                db.GradingSystems.AddObject(gs);
+                db.SaveChanges(System.Data.Objects.SaveOptions.AcceptAllChangesAfterSave);
 
                 RefreshGrid();
             }
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
-            } 
+            }
         }
         public void RefreshGrid()
         {
@@ -118,11 +132,20 @@ namespace WinSBSchool.Forms
                 //clear bindings
                 gs = null;
                 listBoxGradingSystem.DataSource = null;
+                bindingSourceGSD.DataSource = null;
+                dataGridViewGradingSystem.DataSource = null;
+                groupBox1.Text = "0";
 
                 //rebind
                 gs = db.GradingSystems.Include("GradingSystemDets");
                 bindingSourceGS.DataSource = gs;
+                listBoxGradingSystem.DataSource = bindingSourceGS;
                 groupBox3.Text = bindingSourceGS.Count.ToString();
+
+                listBoxGradingSystem.ValueMember = "Id";
+                listBoxGradingSystem.DisplayMember = "Description";
+                listBoxGradingSystem.DataSource = bindingSourceGS;
+                listBoxGradingSystem.SelectedIndex = -1;
 
                 //listBoxGradingSystem.ValueMember = "Id";
                 //listBoxGradingSystem.DisplayMember = "Description";
@@ -152,9 +175,10 @@ namespace WinSBSchool.Forms
                         }
 
                         db.GradingSystems.DeleteObject(item);
+                        db.SaveChanges(System.Data.Objects.SaveOptions.AcceptAllChangesAfterSave);
 
                         RefreshGrid();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -180,8 +204,8 @@ namespace WinSBSchool.Forms
                         dataGridViewGradingSystem.DataSource = bindingSourceGSD;
                         groupBox1.Text = currentItem.GradingSystemDets.Count.ToString();
 
-                        this.txtGradingSys.DataBindings.Clear();
-                        this.txtGradingSys.DataBindings.Add("Text", bindingSourceGS, "Description");
+                        //this.txtGradingSys.DataBindings.Clear();
+                        //this.txtGradingSys.DataBindings.Add("Text", bindingSourceGS, "Description");
                     }
                 }
             }
@@ -205,7 +229,7 @@ namespace WinSBSchool.Forms
             {
                 Utils.ShowError(ex);
             }
-        } 
+        }
         private void ShowDirty()
         {
             try

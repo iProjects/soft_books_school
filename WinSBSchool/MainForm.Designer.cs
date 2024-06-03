@@ -1191,13 +1191,12 @@
             this.txtlog.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtlog.Dock = System.Windows.Forms.DockStyle.Right;
             this.txtlog.ForeColor = System.Drawing.Color.Lime;
-            this.txtlog.Location = new System.Drawing.Point(812, 49);
+            this.txtlog.Location = new System.Drawing.Point(591, 49);
             this.txtlog.Name = "txtlog";
             this.txtlog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txtlog.Size = new System.Drawing.Size(441, 669);
+            this.txtlog.Size = new System.Drawing.Size(662, 669);
             this.txtlog.TabIndex = 0;
             this.txtlog.Text = "";
-            this.txtlog.Visible = false;
             // 
             // webBrowser
             // 
@@ -1206,8 +1205,8 @@
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(812, 669);
-            this.webBrowser.TabIndex = 1;
+            this.webBrowser.Size = new System.Drawing.Size(591, 669);
+            this.webBrowser.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -1376,10 +1375,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
         private System.Windows.Forms.ToolStripStatusLabel lbl_info;
         private System.Windows.Forms.RichTextBox txtlog;
-        private System.Windows.Forms.WebBrowser webBrowser;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator37;
         private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
+        private System.Windows.Forms.WebBrowser webBrowser;
     }
 }
 

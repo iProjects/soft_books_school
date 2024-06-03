@@ -35,63 +35,62 @@ namespace WinSBSchool.Forms
 
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            errorProvider.Clear();
             if (IsTimeTableActivityValid())
             {
-                //try
-                //{
-                //    TimeTableForm tt = new TimeTableForm()
-                //    {
-                //        ClassStreamId = int.Parse(cboClassStream.SelectedValue.ToString()),
-                //        startdate = dtpStartTime.Value,
-                //        enddate = dtpEndTime.Value,
-                //        Activity = txtActivity.Text.Trim(),
-                //        Place = int.Parse(cboPlace.SelectedValue.ToString()),
-                //        ByWho = int.Parse(cboByWho.SelectedValue.ToString())
-                       
-                //    };
-                //    db.TimeTables.AddObject(tt);
-                //    db.SaveChanges();
+                try
+                {
+                    //TimeTableDet tt = new TimeTableDet()
+                    //{
+                    //    ClassStreamId = int.Parse(cboClassStream.SelectedValue.ToString()),
+                    //    startdate = dtpStartTime.Value,
+                    //    enddate = dtpEndTime.Value,
+                    //    Activity = txtActivity.Text.Trim(),
+                    //    Place = int.Parse(cboPlace.SelectedValue.ToString()),
+                          
+                    //    ByWho = int.Parse(cboByWho.SelectedValue.ToString())
+                         
+                    //};
+                    //db.TimeTables.AddObject(tt);
+                    //db.SaveChanges();
 
-                //    TimeTableActivityListForm f = (TimeTableActivityListForm)this.Owner;
-                //    f.RefreshSubjectsGrid();
-                //    this.Close();
-                //}
-                //catch (Exception exm)
-                ////{
-                ////    string msg = exm.Message;
-                //if (exm.InnerException != null)
-                //    msg += "\n" + exm.InnerException.Message;
-                //MessageBox.Show(msg, "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //}
+                    //TimeTableActivityListForm f = (TimeTableActivityListForm)this.Owner;
+                    //f.RefreshSubjectsGrid();
+                    //this.Close();
+                }
+                catch (Exception exm)
+                {
+                    string msg = exm.Message;
+                    if (exm.InnerException != null)
+                        msg += "\n" + exm.InnerException.Message;
+                    MessageBox.Show(msg, "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
+
         public bool IsTimeTableActivityValid()
         {
             bool noerror = true;
 
             if (cboClassStream.SelectedValue == null)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboClassStream, "Select ClassName Stream!");
-                return false;
+                errorProvider.SetError(cboClassStream, "Select ClassName Stream!");
+                noerror = false;
             }
             if (string.IsNullOrEmpty(txtActivity.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtActivity, "Activity  cannot be null!");
-                return false;
+                errorProvider.SetError(txtActivity, "Activity  cannot be null!");
+                noerror = false;
             }
             if (cboPlace.SelectedValue == null)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboPlace, "Select Place!");
-                return false;
+                errorProvider.SetError(cboPlace, "Select Place!");
+                noerror = false;
             }
             if (cboByWho.SelectedValue == null)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboByWho, "Select By Who!");
-                return false;
+                errorProvider.SetError(cboByWho, "Select By Who!");
+                noerror = false;
             }
             return noerror;
 
@@ -117,7 +116,7 @@ namespace WinSBSchool.Forms
                 cboByWho.DataSource = subjectteachers;
                 cboByWho.ValueMember = "TeacherId";
                 cboByWho.DisplayMember = "Name";
-                
+
             }
             catch (Exception ex)
             {
@@ -125,6 +124,6 @@ namespace WinSBSchool.Forms
             }
         }
 
-         
+
     }
 }

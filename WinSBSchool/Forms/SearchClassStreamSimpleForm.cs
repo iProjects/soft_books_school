@@ -253,7 +253,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-
+                Utils.LogEventViewer(e.Exception);
             }
             catch (Exception ex)
             {

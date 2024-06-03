@@ -75,8 +75,9 @@
     <EntitySet Name="StudentSubjectTargets" EntityType="SBSchoolDBModel.StudentSubjectTarget" />
     <EntitySet Name="Subjects" EntityType="SBSchoolDBModel.Subject" />
     <EntitySet Name="SubSubjects" EntityType="SBSchoolDBModel.SubSubject" />
-    <EntitySet Name="sysdiagrams" EntityType="SBSchoolDBModel.sysdiagram" />
+    <EntitySet Name="tbl_activities" EntityType="SBSchoolDBModel.tbl_activities" />
     <EntitySet Name="tbl_LAS" EntityType="SBSchoolDBModel.tbl_LAS" />
+    <EntitySet Name="tbl_venues" EntityType="SBSchoolDBModel.tbl_venues" />
     <EntitySet Name="Teachers" EntityType="SBSchoolDBModel.Teacher" />
     <EntitySet Name="TechParams" EntityType="SBSchoolDBModel.TechParam" />
     <EntitySet Name="TimeTableDets" EntityType="SBSchoolDBModel.TimeTableDet" />
@@ -423,7 +424,7 @@
     <Property Type="Int32" Name="EmployerId" Nullable="false" />
     <Property Type="String" Name="PayPoint" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Type="String" Name="EmpGroup" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Type="String" Name="EmpSchool" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="EmpPayroll" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Type="String" Name="PrevEmployer" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Type="DateTime" Name="DateLeft" />
     <Property Type="String" Name="PaymentMode" MaxLength="250" FixedLength="false" Unicode="true" />
@@ -1313,15 +1314,13 @@
     <Property Type="Int32" Name="GroupingFactor" />
     <Property Type="Boolean" Name="IsDeleted" />
   </EntityType>
-  <EntityType Name="sysdiagram">
+  <EntityType Name="tbl_activities">
     <Key>
-      <PropertyRef Name="diagram_id" />
+      <PropertyRef Name="id" />
     </Key>
-    <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Type="Int32" Name="principal_id" Nullable="false" />
-    <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Type="Int32" Name="version" />
-    <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+    <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="activity" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="tbl_LAS">
     <Key>
@@ -1334,6 +1333,14 @@
     <Property Type="String" Name="date_activated" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Type="String" Name="next_expiry_date" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Type="String" Name="days_for_expiry" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbl_venues">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="venue" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Teacher">
     <Key>

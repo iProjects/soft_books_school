@@ -73,8 +73,9 @@
     <EntitySet Name="StudentSubjectTargets" EntityType="SBSchoolDBModel.Store.StudentSubjectTargets" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Subjects" EntityType="SBSchoolDBModel.Store.Subjects" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="SubSubjects" EntityType="SBSchoolDBModel.Store.SubSubjects" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="sysdiagrams" EntityType="SBSchoolDBModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tbl_activities" EntityType="SBSchoolDBModel.Store.tbl_activities" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="tbl_LAS" EntityType="SBSchoolDBModel.Store.tbl_LAS" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="tbl_venues" EntityType="SBSchoolDBModel.Store.tbl_venues" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Teachers" EntityType="SBSchoolDBModel.Store.Teachers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TechParams" EntityType="SBSchoolDBModel.Store.TechParams" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TimeTableDets" EntityType="SBSchoolDBModel.Store.TimeTableDets" store:Type="Tables" Schema="dbo" />
@@ -434,7 +435,7 @@
     <Property Name="EmployerId" Type="int" Nullable="false" />
     <Property Name="PayPoint" Type="nvarchar" MaxLength="250" />
     <Property Name="EmpGroup" Type="nvarchar" MaxLength="250" />
-    <Property Name="EmpSchool" Type="nvarchar" MaxLength="250" />
+    <Property Name="EmpPayroll" Type="nvarchar" MaxLength="250" />
     <Property Name="PrevEmployer" Type="nvarchar" MaxLength="250" />
     <Property Name="DateLeft" Type="datetime" />
     <Property Name="PaymentMode" Type="nvarchar" MaxLength="250" />
@@ -1283,15 +1284,13 @@
     <Property Name="GroupingFactor" Type="int" />
     <Property Name="IsDeleted" Type="bit" />
   </EntityType>
-  <EntityType Name="sysdiagrams">
+  <EntityType Name="tbl_activities">
     <Key>
-      <PropertyRef Name="diagram_id" />
+      <PropertyRef Name="id" />
     </Key>
-    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
-    <Property Name="principal_id" Type="int" Nullable="false" />
-    <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="int" />
-    <Property Name="definition" Type="varbinary(max)" />
+    <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="activity" Type="nvarchar" MaxLength="500" />
+    <Property Name="status" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tbl_LAS">
     <Key>
@@ -1304,6 +1303,14 @@
     <Property Name="date_activated" Type="text" />
     <Property Name="next_expiry_date" Type="text" />
     <Property Name="days_for_expiry" Type="text" />
+  </EntityType>
+  <EntityType Name="tbl_venues">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="venue" Type="nvarchar" MaxLength="500" />
+    <Property Name="status" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Teachers">
     <Key>
@@ -1500,7 +1507,7 @@
     <Property Name="RoleId" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-      warning 6002: The table/view 'SBSchoolDB_2022.dbo.vwBankBranches' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'SBSchoolDB_february_2023.dbo.vwBankBranches' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
   <EntityType Name="vwBankBranches">
     <Key>
@@ -1519,7 +1526,7 @@
     <Property Name="BranchName" Type="nvarchar" Nullable="false" MaxLength="50" />
   </EntityType>
   <!--Errors Found During Generation:
-      warning 6002: The table/view 'SBSchoolDB_2022.dbo.vwExamResults' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'SBSchoolDB_february_2023.dbo.vwExamResults' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
   <EntityType Name="vwExamResults">
     <Key>
@@ -1878,35 +1885,4 @@
   </Association>
   <Function Name="CopyExamResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="CopyExamResultsDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-  <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="version" Type="int" Mode="In" />
-    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-  </Function>
-  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="version" Type="int" Mode="In" />
-    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-  </Function>
-  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-    <Parameter Name="owner_id" Type="int" Mode="In" />
-    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-  </Function>
-  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
 </Schema>

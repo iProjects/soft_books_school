@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.btnAdd = new System.Windows.Forms.LinkLabel();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtVenue = new System.Windows.Forms.TextBox();
@@ -50,7 +50,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.bindingSourceActivities = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSourceVenues = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceActivities)).BeginInit();
@@ -64,7 +64,7 @@
             this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose.ForeColor = System.Drawing.Color.Yellow;
             this.btnClose.LinkColor = System.Drawing.Color.Yellow;
-            this.btnClose.Location = new System.Drawing.Point(232, 16);
+            this.btnClose.Location = new System.Drawing.Point(209, 16);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(72, 25);
             this.btnClose.TabIndex = 1;
@@ -79,7 +79,7 @@
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.ForeColor = System.Drawing.Color.Yellow;
             this.btnAdd.LinkColor = System.Drawing.Color.Yellow;
-            this.btnAdd.Location = new System.Drawing.Point(113, 16);
+            this.btnAdd.Location = new System.Drawing.Point(125, 16);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(53, 25);
             this.btnAdd.TabIndex = 0;
@@ -87,9 +87,9 @@
             this.btnAdd.Text = "Add";
             this.btnAdd.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnAdd_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // groupBox1
             // 
@@ -268,7 +268,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Time Table Details";
             this.Load += new System.EventHandler(this.TimeTableDetailsForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -283,7 +283,7 @@
 
         private System.Windows.Forms.LinkLabel btnClose;
         private System.Windows.Forms.LinkLabel btnAdd;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtVenue;
         private System.Windows.Forms.TextBox txtActivity;

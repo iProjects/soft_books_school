@@ -136,7 +136,7 @@ namespace WinSBSchool.Forms
             try
             {
                 groupBoxServerLogin.Visible = false;
-
+                var dll_ver = System.Reflection.Assembly.GetAssembly(typeof(Repository)).GetName().Version.ToString();
                 string AssemblyProduct = app_assembly_info.AssemblyProduct;
                 string AssemblyVersion = app_assembly_info.AssemblyVersion;
                 string AssemblyCopyright = app_assembly_info.AssemblyCopyright;
@@ -162,6 +162,7 @@ namespace WinSBSchool.Forms
                 //txtpassword.Text = "sys";
 
                 groupBox1.Text = "build version - " + AssemblyVersion;
+                this.groupBox1.Text = "Version:     " + AssemblyVersion + "     Base:     " + dll_ver;
 
                 populate_auto_complete_values();
             }

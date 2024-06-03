@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using DAL;
 using CommonLib;
+using System.Linq;
 
 namespace WinSBSchool.Forms
 {
@@ -15,7 +16,7 @@ namespace WinSBSchool.Forms
         Repository rep;
         SBSchoolDBEntities db;
         string connection;
-        
+
 
         public TransactionTypesListForm(string Conn)
         {
@@ -30,7 +31,7 @@ namespace WinSBSchool.Forms
 
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            AddTransactionTypeForm attf = new AddTransactionTypeForm(connection) { Owner = this } ;
+            AddTransactionTypeForm attf = new AddTransactionTypeForm(connection) { Owner = this };
             attf.ShowDialog();
         }
 
@@ -64,7 +65,7 @@ namespace WinSBSchool.Forms
                 colCboxDebitCredit.MinimumWidth = 5;
                 colCboxDebitCredit.FlatStyle = FlatStyle.Flat;
                 colCboxDebitCredit.DefaultCellStyle.NullValue = "--- Select ---";
-                colCboxDebitCredit.ReadOnly = true; 
+                colCboxDebitCredit.ReadOnly = true;
                 //colCboxDebitCredit.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 if (!this.dataGridViewTransactionTypes.Columns.Contains("cbDebitCredit"))
                 {
@@ -91,18 +92,18 @@ namespace WinSBSchool.Forms
                 colCboxTxnTypeView.MinimumWidth = 5;
                 colCboxTxnTypeView.FlatStyle = FlatStyle.Flat;
                 colCboxTxnTypeView.DefaultCellStyle.NullValue = "--- Select ---";
-                colCboxTxnTypeView.ReadOnly = true; 
+                colCboxTxnTypeView.ReadOnly = true;
                 colCboxTxnTypeView.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 if (!this.dataGridViewTransactionTypes.Columns.Contains("cbTxnTypeView"))
                 {
                     dataGridViewTransactionTypes.Columns.Add(colCboxTxnTypeView);
                 }
 
-            dataGridViewTransactionTypes.AutoGenerateColumns = false;
-            this.dataGridViewTransactionTypes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            bindingSourceTransactionTypes.DataSource = rep.GetAllTransactionTypes();
-            dataGridViewTransactionTypes.DataSource = bindingSourceTransactionTypes;
-            groupBox2.Text = bindingSourceTransactionTypes.Count.ToString();
+                dataGridViewTransactionTypes.AutoGenerateColumns = false;
+                this.dataGridViewTransactionTypes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                bindingSourceTransactionTypes.DataSource = rep.GetAllTransactionTypes();
+                dataGridViewTransactionTypes.DataSource = bindingSourceTransactionTypes;
+                groupBox2.Text = bindingSourceTransactionTypes.Count.ToString();
             }
             catch (Exception ex)
             {
@@ -115,18 +116,18 @@ namespace WinSBSchool.Forms
 
             try
             {
-            //set the datasource to null
-            bindingSourceTransactionTypes.DataSource = null;
-            //set the datasource to a method
-            bindingSourceTransactionTypes.DataSource = rep.GetAllTransactionTypes();
-            groupBox2.Text = bindingSourceTransactionTypes.Count.ToString();
+                //set the datasource to null
+                bindingSourceTransactionTypes.DataSource = null;
+                //set the datasource to a method
+                bindingSourceTransactionTypes.DataSource = rep.GetAllTransactionTypes();
+                groupBox2.Text = bindingSourceTransactionTypes.Count.ToString();
             }
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
             }
         }
-      
+
 
         private void btnEdit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -146,7 +147,7 @@ namespace WinSBSchool.Forms
             }
         }
 
-      
+
 
         private void btnDelete_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -156,6 +157,18 @@ namespace WinSBSchool.Forms
                 {
 
                     DAL.TransactionType t = (DAL.TransactionType)bindingSourceTransactionTypes.Current;
+                    
+                    //first check if there are any transactions associated with this transaction type.
+                    var txns = from txn in db.Transactions
+                               join txntype in db.TransactionTypes on txn.TransactionTypeId equals txntype.Id
+                               where txntype.Id == t.Id
+                               select txn;
+                    var count = txns.ToList().Count();
+                    if (count > 0)
+                    {
+                        Utils.ShowError(new Exception("There are [ " + count + " ] Transactions associated with this Transaction Type."));
+                        return;
+                    }
 
                     if (DialogResult.Yes == MessageBox.Show("Are you sure you want to delete TransactionType\n" + t.Description.ToString().Trim().ToUpper(), "Confirm Delete", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                     {
@@ -212,12 +225,12 @@ namespace WinSBSchool.Forms
         {
             try
             {
-               
+
 
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Console.WriteLine(ex);
             }
         }
 

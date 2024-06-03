@@ -34,6 +34,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostScreen));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dataGridViewTransactionTypes = new System.Windows.Forms.DataGridView();
+            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnRetrieve = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,20 +46,17 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnClose = new System.Windows.Forms.Button();
             this.bindingSourceTransactionTypes = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridViewTransactionTypes = new System.Windows.Forms.DataGridView();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnrefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactionTypes)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceTransactionTypes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactionTypes)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -74,79 +75,18 @@
             this.splitContainer1.Panel2.Controls.Add(this.panelControls);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Size = new System.Drawing.Size(1042, 533);
-            this.splitContainer1.SplitterDistance = 290;
+            this.splitContainer1.SplitterDistance = 359;
             this.splitContainer1.TabIndex = 0;
             // 
-            // panel1
+            // groupBox2
             // 
-            this.panel1.Controls.Add(this.btnRetrieve);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(290, 94);
-            this.panel1.TabIndex = 0;
-            // 
-            // btnRetrieve
-            // 
-            this.btnRetrieve.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnRetrieve.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRetrieve.Location = new System.Drawing.Point(15, 44);
-            this.btnRetrieve.Name = "btnRetrieve";
-            this.btnRetrieve.Size = new System.Drawing.Size(75, 23);
-            this.btnRetrieve.TabIndex = 0;
-            this.btnRetrieve.Text = "Retrieve";
-            this.btnRetrieve.UseVisualStyleBackColor = false;
-            this.btnRetrieve.Click += new System.EventHandler(this.btnRetrieve_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Transaction Types";
-            // 
-            // panelControls
-            // 
-            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControls.Location = new System.Drawing.Point(0, 0);
-            this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 479);
-            this.panelControls.TabIndex = 1;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.groupBox1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 479);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(748, 54);
-            this.panel2.TabIndex = 0;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnClose);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(748, 54);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            // 
-            // btnClose
-            // 
-            this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(343, 19);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 1;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = false;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.groupBox2.Controls.Add(this.dataGridViewTransactionTypes);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(0, 94);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(359, 439);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
             // 
             // dataGridViewTransactionTypes
             // 
@@ -185,19 +125,10 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewTransactionTypes.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridViewTransactionTypes.Size = new System.Drawing.Size(284, 420);
+            this.dataGridViewTransactionTypes.Size = new System.Drawing.Size(353, 420);
             this.dataGridViewTransactionTypes.TabIndex = 0;
             this.dataGridViewTransactionTypes.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTransactionTypes_CellContentDoubleClick);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.dataGridViewTransactionTypes);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(0, 94);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(290, 439);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
+            this.dataGridViewTransactionTypes.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewTransactionTypes_DataError);
             // 
             // ColumnId
             // 
@@ -216,6 +147,90 @@
             this.ColumnDescription.Name = "ColumnDescription";
             this.ColumnDescription.ReadOnly = true;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnrefresh);
+            this.panel1.Controls.Add(this.btnRetrieve);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(359, 94);
+            this.panel1.TabIndex = 0;
+            // 
+            // btnRetrieve
+            // 
+            this.btnRetrieve.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnRetrieve.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRetrieve.Location = new System.Drawing.Point(15, 44);
+            this.btnRetrieve.Name = "btnRetrieve";
+            this.btnRetrieve.Size = new System.Drawing.Size(75, 23);
+            this.btnRetrieve.TabIndex = 0;
+            this.btnRetrieve.Text = "Retrieve";
+            this.btnRetrieve.UseVisualStyleBackColor = false;
+            this.btnRetrieve.Click += new System.EventHandler(this.btnRetrieve_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(138, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Transaction Types";
+            // 
+            // panelControls
+            // 
+            this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelControls.Location = new System.Drawing.Point(0, 0);
+            this.panelControls.Name = "panelControls";
+            this.panelControls.Size = new System.Drawing.Size(679, 479);
+            this.panelControls.TabIndex = 1;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.groupBox1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 479);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(679, 54);
+            this.panel2.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnClose);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(679, 54);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            // 
+            // btnClose
+            // 
+            this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Location = new System.Drawing.Point(343, 19);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 1;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // btnrefresh
+            // 
+            this.btnrefresh.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnrefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnrefresh.Location = new System.Drawing.Point(129, 44);
+            this.btnrefresh.Name = "btnrefresh";
+            this.btnrefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnrefresh.TabIndex = 1;
+            this.btnrefresh.Text = "&Refresh";
+            this.btnrefresh.UseVisualStyleBackColor = false;
+            this.btnrefresh.Click += new System.EventHandler(this.btnrefresh_Click);
+            // 
             // PostScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -232,13 +247,13 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactionTypes)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceTransactionTypes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactionTypes)).EndInit();
-            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -258,5 +273,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDescription;
+        private System.Windows.Forms.Button btnrefresh;
     }
 }

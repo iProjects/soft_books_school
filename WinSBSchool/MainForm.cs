@@ -410,6 +410,7 @@ namespace WinSBSchool
         {
             try
             {
+                var dll_ver = System.Reflection.Assembly.GetAssembly(typeof(Repository)).GetName().Version.ToString();
                 string AssemblyProduct = app_assembly_info.AssemblyProduct;
                 string AssemblyVersion = app_assembly_info.AssemblyVersion;
                 string AssemblyCopyright = app_assembly_info.AssemblyCopyright;
@@ -418,6 +419,7 @@ namespace WinSBSchool
                 this.lblselecteddatabase.Text = "Selected Database:     " + system.Database;
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("Selected Database [ " + system.Database + " ]", TAG));
                 this.lblversion.Text = "Version:     " + AssemblyVersion;
+                this.lblversion.Text = "Version:     " + AssemblyVersion + "     Base:     " + dll_ver;
                 this.lblrunningtime.Text = DateTime.Today.ToShortDateString();
                 this.toolStripStatusLabel3.Visible = false;
 
@@ -547,8 +549,8 @@ namespace WinSBSchool
                 {
                     try
                     {
-                        CollectAdminExtraInfo();
-                        CollectAdminAppInfo();
+                        //CollectAdminExtraInfo();
+                        //CollectAdminAppInfo();
                     }
                     catch (Exception ex)
                     {
@@ -912,11 +914,11 @@ namespace WinSBSchool
         {
             try
             {
-                ExecuteIPConfigCommands();
+                //ExecuteIPConfigCommands();
 
-                FindComputersConectedToHost();
+                //FindComputersConectedToHost();
 
-                GetClientExtraInfo();
+                //GetClientExtraInfo();
 
                 //GetHostNameandMac();
 
@@ -982,6 +984,7 @@ namespace WinSBSchool
 
                     lbl_info.Visible = true;
                     lbl_info.Text = " R     " + difference_to.ToString() + "         E     " + str_difference_from.ToString() + "  ";
+                    lbl_info.ToolTipText = " Remaining     " + difference_to.ToString() + "         Elapsed     " + str_difference_from.ToString() + "  ";
 
                     //expired
                     if (difference_to <= 0)
@@ -1064,6 +1067,7 @@ namespace WinSBSchool
 
                                 lbl_info.Visible = true;
                                 lbl_info.Text = " R     " + difference_to.ToString() + "         E     " + str_difference_from.ToString() + "  ";
+                                lbl_info.ToolTipText = " Remaining     " + difference_to.ToString() + "         Elapsed     " + str_difference_from.ToString() + "  ";
 
                                 //expired
                                 if (difference_to <= 0)
@@ -1149,6 +1153,7 @@ namespace WinSBSchool
 
                             lbl_info.Visible = true;
                             lbl_info.Text = " R     " + difference_to.ToString() + "         E     " + str_difference_from.ToString() + "  ";
+                            lbl_info.ToolTipText = " Remaining     " + difference_to.ToString() + "         Elapsed     " + str_difference_from.ToString() + "  ";
 
                             //expired
                             if (difference_to <= 0)
@@ -2565,7 +2570,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostScreen", TAG));
-                PostScreen postscreen = new PostScreen(LoggedInUser, connection);
+                PostScreen postscreen = new PostScreen(LoggedInUser, connection, _notificationmessageEventname);
                 postscreen.ShowDialog();
             }
             catch (Exception ex)

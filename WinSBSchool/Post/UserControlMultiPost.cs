@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using CommonLib;
 using DAL;
 using WinSBSchool.Forms;
+using System.Threading;
 
 namespace WinSBSchool.Post
 {
@@ -36,11 +37,25 @@ namespace WinSBSchool.Post
         decimal Amount;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
 
-        public UserControlMultiPost(TransactionType ttype, string _user, string Conn)
+        public UserControlMultiPost(TransactionType ttype, string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (Conn == null)
                 throw new ArgumentNullException("Conn");
@@ -67,6 +82,23 @@ namespace WinSBSchool.Post
 
             //configure the screen
             ConfigureScreen();
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished UserControlMultiPost initialization", TAG));
+
+        }
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
 
         private void UserControlMultiPost_Load(object sender, EventArgs e)
@@ -121,6 +153,9 @@ namespace WinSBSchool.Post
                     AutoCompleteMode.SuggestAppend;
                 txtbsBankSortCode.AutoCompleteSource =
                      AutoCompleteSource.CustomSource;
+
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished UserControlMultiPost load", TAG));
+
             }
             catch (Exception ex)
             {
@@ -498,7 +533,7 @@ namespace WinSBSchool.Post
             return noerror;
         }
         private void btnPost_Click(object sender, EventArgs e)
-        { 
+        {
             /*
              * 1. validate screen input
              * 2. build up transactions 
@@ -556,10 +591,10 @@ namespace WinSBSchool.Post
                     DebitTransaction.UserName = user;
                     DebitTransaction.Authorizer = "SYSTEM";
                     DebitTransaction.StatementFlag = TType.StatementFlag;
-                    DebitTransaction.PostDate = DateTime.Today;
+                    DebitTransaction.PostDate = DateTime.Now;
                     int valuedays = TType.ValueDays ?? 0;
                     DebitTransaction.ValueDate = DebitTransaction.PostDate.AddDays(valuedays);
-                    DebitTransaction.RecordDate = DateTime.Today;
+                    DebitTransaction.RecordDate = DateTime.Now;
                     DebitTransaction.TransRef = _transRef;
 
                     transactions.Add(DebitTransaction);
@@ -581,10 +616,10 @@ namespace WinSBSchool.Post
                     CreditTransaction.UserName = user;
                     CreditTransaction.Authorizer = "SYSTEM";
                     CreditTransaction.StatementFlag = TType.StatementFlag;
-                    CreditTransaction.PostDate = DateTime.Today;
+                    CreditTransaction.PostDate = DateTime.Now;
                     valuedays = TType.ValueDays ?? 0;
                     CreditTransaction.ValueDate = CreditTransaction.PostDate.AddDays(valuedays);
-                    CreditTransaction.RecordDate = DateTime.Today;
+                    CreditTransaction.RecordDate = DateTime.Now;
                     CreditTransaction.TransRef = _transRef;
 
                     transactions.Add(CreditTransaction);
@@ -705,7 +740,7 @@ namespace WinSBSchool.Post
                         case "E": //see narrative as per screen input + account name
                             narr += txtDebitNarrative.Text + " - " + DrAccountAfterPosting.AccountName;
                             break;
-                    } 
+                    }
                 }
                 else
                 {
@@ -788,6 +823,7 @@ namespace WinSBSchool.Post
                 }
                 catch (Exception ex)
                 {
+                    _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
                     throw new Exception("Exception Occured While Printing", ex);
                 }
                 //streamToPrint = new StreamReader ("C:\\MyFile.txt");
@@ -1591,7 +1627,7 @@ namespace WinSBSchool.Post
                 Utils.ShowError(ex);
             }
         }
-         
+
 
 
 

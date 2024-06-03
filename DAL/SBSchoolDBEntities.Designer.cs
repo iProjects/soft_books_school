@@ -1253,18 +1253,18 @@ namespace DAL
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<sysdiagram> sysdiagrams
+        public ObjectSet<tbl_activities> tbl_activities
         {
             get
             {
-                if ((_sysdiagrams == null))
+                if ((_tbl_activities == null))
                 {
-                    _sysdiagrams = base.CreateObjectSet<sysdiagram>("sysdiagrams");
+                    _tbl_activities = base.CreateObjectSet<tbl_activities>("tbl_activities");
                 }
-                return _sysdiagrams;
+                return _tbl_activities;
             }
         }
-        private ObjectSet<sysdiagram> _sysdiagrams;
+        private ObjectSet<tbl_activities> _tbl_activities;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1281,6 +1281,22 @@ namespace DAL
             }
         }
         private ObjectSet<tbl_LAS> _tbl_LAS;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<tbl_venues> tbl_venues
+        {
+            get
+            {
+                if ((_tbl_venues == null))
+                {
+                    _tbl_venues = base.CreateObjectSet<tbl_venues>("tbl_venues");
+                }
+                return _tbl_venues;
+            }
+        }
+        private ObjectSet<tbl_venues> _tbl_venues;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2119,11 +2135,11 @@ namespace DAL
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the sysdiagrams EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the tbl_activities EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddTosysdiagrams(sysdiagram sysdiagram)
+        public void AddTotbl_activities(tbl_activities tbl_activities)
         {
-            base.AddObject("sysdiagrams", sysdiagram);
+            base.AddObject("tbl_activities", tbl_activities);
         }
     
         /// <summary>
@@ -2132,6 +2148,14 @@ namespace DAL
         public void AddTotbl_LAS(tbl_LAS tbl_LAS)
         {
             base.AddObject("tbl_LAS", tbl_LAS);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the tbl_venues EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTotbl_venues(tbl_venues tbl_venues)
+        {
+            base.AddObject("tbl_venues", tbl_venues);
         }
     
         /// <summary>
@@ -6387,24 +6411,24 @@ namespace DAL
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String EmpSchool
+        public global::System.String EmpPayroll
         {
             get
             {
-                return _EmpSchool;
+                return _EmpPayroll;
             }
             set
             {
-                OnEmpSchoolChanging(value);
-                ReportPropertyChanging("EmpSchool");
-                _EmpSchool = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("EmpSchool");
-                OnEmpSchoolChanged();
+                OnEmpPayrollChanging(value);
+                ReportPropertyChanging("EmpPayroll");
+                _EmpPayroll = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("EmpPayroll");
+                OnEmpPayrollChanged();
             }
         }
-        private global::System.String _EmpSchool;
-        partial void OnEmpSchoolChanging(global::System.String value);
-        partial void OnEmpSchoolChanged();
+        private global::System.String _EmpPayroll;
+        partial void OnEmpPayrollChanging(global::System.String value);
+        partial void OnEmpPayrollChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -23286,26 +23310,22 @@ namespace DAL
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="SBSchoolDBModel", Name="sysdiagram")]
+    [EdmEntityTypeAttribute(NamespaceName="SBSchoolDBModel", Name="tbl_activities")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class sysdiagram : EntityObject
+    public partial class tbl_activities : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new sysdiagram object.
+        /// Create a new tbl_activities object.
         /// </summary>
-        /// <param name="name">Initial value of the name property.</param>
-        /// <param name="principal_id">Initial value of the principal_id property.</param>
-        /// <param name="diagram_id">Initial value of the diagram_id property.</param>
-        public static sysdiagram Createsysdiagram(global::System.String name, global::System.Int32 principal_id, global::System.Int32 diagram_id)
+        /// <param name="id">Initial value of the id property.</param>
+        public static tbl_activities Createtbl_activities(global::System.Int32 id)
         {
-            sysdiagram sysdiagram = new sysdiagram();
-            sysdiagram.name = name;
-            sysdiagram.principal_id = principal_id;
-            sysdiagram.diagram_id = diagram_id;
-            return sysdiagram;
+            tbl_activities tbl_activities = new tbl_activities();
+            tbl_activities.id = id;
+            return tbl_activities;
         }
 
         #endregion
@@ -23315,125 +23335,77 @@ namespace DAL
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                OnnameChanging(value);
-                ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("name");
-                OnnameChanged();
-            }
-        }
-        private global::System.String _name;
-        partial void OnnameChanging(global::System.String value);
-        partial void OnnameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 principal_id
-        {
-            get
-            {
-                return _principal_id;
-            }
-            set
-            {
-                Onprincipal_idChanging(value);
-                ReportPropertyChanging("principal_id");
-                _principal_id = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("principal_id");
-                Onprincipal_idChanged();
-            }
-        }
-        private global::System.Int32 _principal_id;
-        partial void Onprincipal_idChanging(global::System.Int32 value);
-        partial void Onprincipal_idChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 diagram_id
+        public global::System.Int32 id
         {
             get
             {
-                return _diagram_id;
+                return _id;
             }
             set
             {
-                if (_diagram_id != value)
+                if (_id != value)
                 {
-                    Ondiagram_idChanging(value);
-                    ReportPropertyChanging("diagram_id");
-                    _diagram_id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("diagram_id");
-                    Ondiagram_idChanged();
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
                 }
             }
         }
-        private global::System.Int32 _diagram_id;
-        partial void Ondiagram_idChanging(global::System.Int32 value);
-        partial void Ondiagram_idChanged();
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> version
+        public global::System.String activity
         {
             get
             {
-                return _version;
+                return _activity;
             }
             set
             {
-                OnversionChanging(value);
-                ReportPropertyChanging("version");
-                _version = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("version");
-                OnversionChanged();
+                OnactivityChanging(value);
+                ReportPropertyChanging("activity");
+                _activity = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("activity");
+                OnactivityChanged();
             }
         }
-        private Nullable<global::System.Int32> _version;
-        partial void OnversionChanging(Nullable<global::System.Int32> value);
-        partial void OnversionChanged();
+        private global::System.String _activity;
+        partial void OnactivityChanging(global::System.String value);
+        partial void OnactivityChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Byte[] definition
+        public global::System.String status
         {
             get
             {
-                return StructuralObject.GetValidValue(_definition);
+                return _status;
             }
             set
             {
-                OndefinitionChanging(value);
-                ReportPropertyChanging("definition");
-                _definition = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("definition");
-                OndefinitionChanged();
+                OnstatusChanging(value);
+                ReportPropertyChanging("status");
+                _status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("status");
+                OnstatusChanged();
             }
         }
-        private global::System.Byte[] _definition;
-        partial void OndefinitionChanging(global::System.Byte[] value);
-        partial void OndefinitionChanged();
+        private global::System.String _status;
+        partial void OnstatusChanging(global::System.String value);
+        partial void OnstatusChanged();
 
         #endregion
 
@@ -23635,6 +23607,111 @@ namespace DAL
         private global::System.String _days_for_expiry;
         partial void Ondays_for_expiryChanging(global::System.String value);
         partial void Ondays_for_expiryChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SBSchoolDBModel", Name="tbl_venues")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class tbl_venues : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new tbl_venues object.
+        /// </summary>
+        /// <param name="id">Initial value of the id property.</param>
+        public static tbl_venues Createtbl_venues(global::System.Int32 id)
+        {
+            tbl_venues tbl_venues = new tbl_venues();
+            tbl_venues.id = id;
+            return tbl_venues;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String venue
+        {
+            get
+            {
+                return _venue;
+            }
+            set
+            {
+                OnvenueChanging(value);
+                ReportPropertyChanging("venue");
+                _venue = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("venue");
+                OnvenueChanged();
+            }
+        }
+        private global::System.String _venue;
+        partial void OnvenueChanging(global::System.String value);
+        partial void OnvenueChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                OnstatusChanging(value);
+                ReportPropertyChanging("status");
+                _status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("status");
+                OnstatusChanged();
+            }
+        }
+        private global::System.String _status;
+        partial void OnstatusChanging(global::System.String value);
+        partial void OnstatusChanged();
 
         #endregion
 

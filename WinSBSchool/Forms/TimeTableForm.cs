@@ -48,7 +48,7 @@ namespace WinSBSchool.Forms
         {
             get
             {
-                return new FileInfo(Path.Combine(Application.StartupPath, "DBScripts/items.xml"));
+                return new FileInfo(get_file_uri());
             }
         }
         private CalendarHighlightRange[] _highlightRanges;
@@ -58,14 +58,14 @@ namespace WinSBSchool.Forms
         private const int maximumDaysInWeekView = 7;
         private const int daysInWeek = 7;
         /// <summary>
-         /// Gets or sets the time ranges that should be highlighted as work-time.
-         /// This ranges are week based.
-         /// </summary>
-          public CalendarHighlightRange[] HighlightRanges
-          {
-              get { return _highlightRanges; }
-             set { _highlightRanges = value;   }
-          }
+        /// Gets or sets the time ranges that should be highlighted as work-time.
+        /// This ranges are week based.
+        /// </summary>
+        public CalendarHighlightRange[] HighlightRanges
+        {
+            get { return _highlightRanges; }
+            set { _highlightRanges = value; }
+        }
         #endregion "private fields"
 
         #region "constructor"
@@ -97,48 +97,48 @@ namespace WinSBSchool.Forms
                 cboClassStreams.DisplayMember = "Description";
 
                 /*read the xml from database*/
-                //if (ItemsFile.Exists)
-                //{
-                //    List<ItemInfo> lst = new List<ItemInfo>();
-                //    XmlSerializer xml = new XmlSerializer(lst.GetType());
-                //    using (Stream _school = ItemsFile.OpenRead())
-                //    {
-                //        lst = xml.Deserialize(_school) as List<ItemInfo>;
-                //    }
-                //    foreach (ItemInfo item in lst)
-                //    {
-                //        CalendarItem cal = new CalendarItem(calendar1, item.StartTime, item.EndTime, item.Text);
-                //        if (!(item.R == 0 && item.G == 0 && item.B == 0))
-                //        {
-                //            cal.ApplyColor(Color.FromArgb(item.A, item.R, item.G, item.B));
-                //        }
-                //        _items.Add(cal);
-                //    }
-                //    PlaceItems();
-                //}
+                if (ItemsFile.Exists)
+                {
+                    List<ItemInfo> lst = new List<ItemInfo>();
+                    XmlSerializer xml = new XmlSerializer(lst.GetType());
+                    using (Stream _school = ItemsFile.OpenRead())
+                    {
+                        lst = xml.Deserialize(_school) as List<ItemInfo>;
+                    }
+                    foreach (ItemInfo item in lst)
+                    {
+                        CalendarItem cal = new CalendarItem(calendar, item.StartTime, item.EndTime, item.Text);
+                        if (!(item.R == 0 && item.G == 0 && item.B == 0))
+                        {
+                            cal.ApplyColor(Color.FromArgb(item.A, item.R, item.G, item.B));
+                        }
+                        _items.Add(cal);
+                    }
+                    PlaceItems();
+                }
 
 
                 //Monthview colors
-                monthView1.ArrowsColor = CalendarColorTable.FromHex("#77A1D3");
-                monthView1.DaySelectedBackgroundColor = CalendarColorTable.FromHex("#FFD700");
-                monthView1.DaySelectedTextColor = CalendarColorTable.FromHex("#FF1493");
-                monthView1.MonthTitleTextColor = CalendarColorTable.FromHex("#00008B");
-                monthView1.MonthTitleTextColorInactive = CalendarColorTable.FromHex("#FFF0F5");
-                monthView1.MonthTitleColor = CalendarColorTable.FromHex("#00FF00");
-                monthView1.MonthTitleColorInactive = CalendarColorTable.FromHex("#8A2BE2");
+                monthView.ArrowsColor = CalendarColorTable.FromHex("#77A1D3");
+                monthView.DaySelectedBackgroundColor = CalendarColorTable.FromHex("#FFD700");
+                monthView.DaySelectedTextColor = CalendarColorTable.FromHex("#FF1493");
+                monthView.MonthTitleTextColor = CalendarColorTable.FromHex("#00008B");
+                monthView.MonthTitleTextColorInactive = CalendarColorTable.FromHex("#FFF0F5");
+                monthView.MonthTitleColor = CalendarColorTable.FromHex("#00FF00");
+                monthView.MonthTitleColorInactive = CalendarColorTable.FromHex("#8A2BE2");
 
-                monthView1.SelectionStart = DateTime.Now;
-                monthView1.SelectionEnd = DateTime.Now;
-                monthView1.MaxSelectionCount = 40;
-                monthView1.DayNamesVisible = true; 
+                monthView.SelectionStart = DateTime.Now;
+                monthView.SelectionEnd = DateTime.Now;
+                monthView.MaxSelectionCount = 40;
+                monthView.DayNamesVisible = true;
 
                 DateTime today = DateTime.Today;
                 DateTime firstMonthDay = new DateTime(today.Year, today.Month, 1);
                 DateTime lastMonthDay = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-                calendar1.SetViewRange(firstMonthDay, lastMonthDay);
-                calendar1.FirstDayOfWeek = DayOfWeek.Monday;
+                calendar.SetViewRange(firstMonthDay, lastMonthDay);
+                calendar.FirstDayOfWeek = DayOfWeek.Monday;
 
-                calendar1.HighlightRanges = new CalendarHighlightRange[] { 
+                calendar.HighlightRanges = new CalendarHighlightRange[] { 
                   new CalendarHighlightRange( DayOfWeek.Monday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
                  new CalendarHighlightRange( DayOfWeek.Tuesday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
                  new CalendarHighlightRange( DayOfWeek.Wednesday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
@@ -156,17 +156,67 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
+        private string get_file_uri()
+        {
+            try
+            {
+                string filename = "items.xml";
+                string dir = pathlookup("calendar");
+                string filepath = Utils.build_file_path(dir, filename);
+
+                //check if file exists.
+                if (!System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Create(filepath);
+
+                    var doc = new XmlDocument();
+                    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    doc.Save(filepath);
+                     
+                } 
+
+                return filepath;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile_and_EventViewer(ex);
+                return null;
+            }
+        }
+        public string pathlookup(string folder)
+        {
+            try
+            {
+                string app_dir = Utils.get_application_path();
+                var dir = Path.Combine(app_dir, folder);
+
+
+                if (!System.IO.Directory.Exists(dir))
+                {
+                    System.IO.Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile_and_EventViewer(ex);
+                return null;
+            }
+        }
+
         public void PlaceItems()
         {
             try
             {
                 foreach (CalendarItem item in _items)
                 {
-                    if (calendar1.ViewIntersects(item))
-                    { 
-                        calendar1.Items.Add(item);
+                    if (calendar.ViewIntersects(item))
+                    {
+                        calendar.Items.Add(item);
                     }
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -177,16 +227,19 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.Items.Clear();
+                calendar.Items.Clear();
                 _items = new List<CalendarItem>();
-                string calendar_timetable_Temp_filename = "DBScripts/items_Temp.xml";
+                //string calendar_timetable_Temp_filename = "DBScripts/items_Temp.xml";
+                string calendar_timetable_Temp_filename = get_file_uri();
+
                 this.GetDataFromDB(calendar_timetable_Temp_filename);
+
                 if (File.Exists(calendar_timetable_Temp_filename))
                 {
                     List<ItemInfo_DTO> calendar_timetable = this.GetDataFromXML(calendar_timetable_Temp_filename);
                     foreach (var item in calendar_timetable)
                     {
-                        CalendarItem cal = new CalendarItem(calendar1, DateTime.Parse(item.StartTime), DateTime.Parse(item.EndTime), item.Text);
+                        CalendarItem cal = new CalendarItem(calendar, DateTime.Parse(item.StartTime), DateTime.Parse(item.EndTime), item.Text);
                         if (!(item.R == "0" && item.G == "0" && item.B == "0"))
                         {
                             cal.ApplyColor(Color.FromArgb(int.Parse(item.A), int.Parse(item.R), int.Parse(item.G), int.Parse(item.B)));
@@ -231,25 +284,33 @@ namespace WinSBSchool.Forms
             try
             {
                 List<ItemInfo_DTO> lst = new List<ItemInfo_DTO>();
+
                 if (cboClassStreams.SelectedIndex != -1)
                 {
                     ClassStream cs = (ClassStream)cboClassStreams.SelectedItem;
-                    string _startDate = monthView1.SelectionStart.ToString();
-                    string _endDate = monthView1.SelectionEnd.ToString();
+
+                    string _startDate = monthView.SelectionStart.ToString();
+                    string _endDate = monthView.SelectionEnd.ToString();
+
                     var _ttquery = from tt in db.TimeTables
                                    where tt.ClassStreamId == cs.Id
                                    select tt;
+
                     List<TimeTable> _StreamTT = _ttquery.ToList();
                     List<ItemInfo_DTO> timetable_list = new List<ItemInfo_DTO>();
+
                     foreach (var item in _StreamTT)
                     {
                         string _xml = item.ClassTimeTableXML;
 
                         XmlSerializer xmls = new XmlSerializer(lst.GetType());
                         XmlReader xr = XmlReader.Create(new StringReader(_xml));
+
                         var xMembers = from members in XElement.Load(xr).Elements()
                                        select members;
+
                         var status = new BindingList<KeyValuePair<string, string>>();
+
                         foreach (var x in xMembers.Attributes())
                         {
                             status.Add(new KeyValuePair<string, string>(x.Name.ToString(), x.Value.ToString()));
@@ -257,6 +318,7 @@ namespace WinSBSchool.Forms
 
                         IEnumerable<string> allStrings = status.Select(z => z.Value).ToList();
                         List<IEnumerable<string>> listOfLists = new List<IEnumerable<string>>();
+
                         for (int i = 0; i < allStrings.Count(); i += 7)
                         {
                             listOfLists.Add(allStrings.Skip(i).Take(7));
@@ -273,14 +335,17 @@ namespace WinSBSchool.Forms
                             }
                         }
                     }
+
                     var xml = new XElement("ArrayOfItemInfo", timetable_list.Select(x => new XElement("ItemInfo",
-                                   new XAttribute("StartTime", x.StartTime.ToString()),
-                                   new XAttribute("EndTime", x.EndTime.ToString()),
-                                    new XAttribute("Text", x.Text),
-                                     new XAttribute("A", x.A.ToString()),
-                                      new XAttribute("R", x.R.ToString()),
-                                      new XAttribute("G", x.G.ToString()),
-                                      new XAttribute("B", x.B.ToString()))));
+                                new XAttribute("StartTime", x.StartTime.ToString()),
+                                new XAttribute("EndTime", x.EndTime.ToString()),
+                                new XAttribute("Text", x.Text),
+                                new XAttribute("A", x.A.ToString()),
+                                new XAttribute("R", x.R.ToString()),
+                                new XAttribute("G", x.G.ToString()),
+                                new XAttribute("B", x.B.ToString())
+                                      )));
+
                     xml.Save(filename);
                 }
                 return true;
@@ -296,24 +361,30 @@ namespace WinSBSchool.Forms
             try
             {
                 /*save calendar to xml*/
-                string calendar_timetable_filename = "DBScripts/items.xml";
+                string calendar_timetable_filename = get_file_uri();
+
                 if (_items.Count != 0)
                 {
                     var xml = new XElement("ArrayOfItemInfo", _items.Select(x => new XElement("ItemInfo",
-                                        new XAttribute("StartTime", x.StartDate.ToString()),
-                    new XAttribute("EndTime", x.EndDate.ToString()),
-                     new XAttribute("Text", x.Text),
-                      new XAttribute("A", x.ForeColor.A.ToString()),
-                       new XAttribute("R", x.ForeColor.R.ToString()),
-                       new XAttribute("G", x.ForeColor.G.ToString()),
-                       new XAttribute("B", x.ForeColor.B.ToString()))));
+                                new XAttribute("StartTime", x.StartDate.ToString()),
+                                new XAttribute("EndTime", x.EndDate.ToString()),
+                                new XAttribute("Text", x.Text),
+                                new XAttribute("A", x.ForeColor.A.ToString()),
+                                new XAttribute("R", x.ForeColor.R.ToString()),
+                                new XAttribute("G", x.ForeColor.G.ToString()),
+                                new XAttribute("B", x.ForeColor.B.ToString())
+
+                       )));
+
                     xml.Save(calendar_timetable_filename);
 
                     /*save xml to db*/
                     XmlDocument doc = new XmlDocument();
                     doc.Load(calendar_timetable_filename);
+
                     string timetable_xml_contents = doc.InnerXml;
                     string temp_timetable_xml = File.ReadAllText(calendar_timetable_filename);
+
                     if (cboClassStreams.SelectedIndex != -1)
                     {
                         ClassStream cs = (ClassStream)cboClassStreams.SelectedItem;
@@ -356,10 +427,11 @@ namespace WinSBSchool.Forms
                                     {
                                         db.TimeTableDets.AddObject(ttd);
                                         db.SaveChanges();
+
+                                        MessageBox.Show("Save Successful!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     }
                                 }
                             }
-                            MessageBox.Show("Save Successful!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
 
                         if (!db.TimeTables.Any(i => i.ClassStreamId == _tt.ClassStreamId))
@@ -397,10 +469,11 @@ namespace WinSBSchool.Forms
                                     {
                                         db.TimeTableDets.AddObject(ttd);
                                         db.SaveChanges();
+
+                                        MessageBox.Show("Save Successful!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     }
                                 }
                             }
-                            MessageBox.Show("Save Successful!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -553,7 +626,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                Text = e.Item.Text; 
+                Text = e.Item.Text;
             }
             catch (Exception ex)
             {
@@ -597,7 +670,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.SetViewRange(e.CalendarDay.Date, e.CalendarDay.Date);
+                calendar.SetViewRange(e.CalendarDay.Date, e.CalendarDay.Date);
             }
             catch (Exception ex)
             {
@@ -661,7 +734,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                contextItem = calendar1.ItemAt(contextMenuStrip1.Bounds.Location);
+                contextItem = calendar.ItemAt(contextMenuStrip.Bounds.Location);
             }
             catch (Exception ex)
             {
@@ -672,7 +745,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.FiveMinutes;
+                calendar.TimeScale = CalendarTimeScale.FiveMinutes;
             }
             catch (Exception ex)
             {
@@ -683,7 +756,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.SixMinutes;
+                calendar.TimeScale = CalendarTimeScale.SixMinutes;
             }
             catch (Exception ex)
             {
@@ -694,7 +767,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.TenMinutes;
+                calendar.TimeScale = CalendarTimeScale.TenMinutes;
             }
             catch (Exception ex)
             {
@@ -705,7 +778,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.FifteenMinutes;
+                calendar.TimeScale = CalendarTimeScale.FifteenMinutes;
             }
             catch (Exception ex)
             {
@@ -716,7 +789,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.ThirtyMinutes;
+                calendar.TimeScale = CalendarTimeScale.ThirtyMinutes;
             }
             catch (Exception ex)
             {
@@ -727,7 +800,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.TimeScale = CalendarTimeScale.SixtyMinutes;
+                calendar.TimeScale = CalendarTimeScale.SixtyMinutes;
             }
             catch (Exception ex)
             {
@@ -738,10 +811,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ApplyColor(Color.Red);
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -753,10 +826,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ApplyColor(Color.Gold);
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -768,10 +841,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ApplyColor(Color.Green);
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -783,10 +856,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ApplyColor(Color.DarkBlue);
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -802,10 +875,10 @@ namespace WinSBSchool.Forms
                 {
                     if (dlg.ShowDialog() == DialogResult.OK)
                     {
-                        foreach (CalendarItem item in calendar1.GetSelectedItems())
+                        foreach (CalendarItem item in calendar.GetSelectedItems())
                         {
                             item.ApplyColor(dlg.Color);
-                            calendar1.Invalidate(item);
+                            calendar.Invalidate(item);
                         }
                     }
                 }
@@ -819,11 +892,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.Pattern = System.Drawing.Drawing2D.HatchStyle.ForwardDiagonal;
                     item.PatternColor = Color.Red;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -835,11 +908,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.Pattern = System.Drawing.Drawing2D.HatchStyle.Vertical;
                     item.PatternColor = Color.Red;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -851,11 +924,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.Pattern = System.Drawing.Drawing2D.HatchStyle.Horizontal;
                     item.PatternColor = Color.Red;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -867,11 +940,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.Pattern = System.Drawing.Drawing2D.HatchStyle.DiagonalCross;
                     item.PatternColor = Color.Red;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -883,11 +956,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.Pattern = System.Drawing.Drawing2D.HatchStyle.DiagonalCross;
                     item.PatternColor = Color.Empty;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -899,7 +972,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                calendar1.SetViewRange(monthView1.SelectionStart, monthView1.SelectionEnd);
+                calendar.SetViewRange(monthView.SelectionStart, monthView.SelectionEnd);
                 Populate_Timetable();
             }
             catch (Exception ex)
@@ -922,10 +995,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ImageAlign = CalendarItemImageAlign.North;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -937,10 +1010,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ImageAlign = CalendarItemImageAlign.East;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -952,10 +1025,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ImageAlign = CalendarItemImageAlign.South;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -967,10 +1040,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                foreach (CalendarItem item in calendar1.GetSelectedItems())
+                foreach (CalendarItem item in calendar.GetSelectedItems())
                 {
                     item.ImageAlign = CalendarItemImageAlign.West;
-                    calendar1.Invalidate(item);
+                    calendar.Invalidate(item);
                 }
             }
             catch (Exception ex)
@@ -990,10 +1063,10 @@ namespace WinSBSchool.Forms
                     {
                         Image img = Image.FromFile(dlg.FileName);
 
-                        foreach (CalendarItem item in calendar1.GetSelectedItems())
+                        foreach (CalendarItem item in calendar.GetSelectedItems())
                         {
                             item.Image = img;
-                            calendar1.Invalidate(item);
+                            calendar.Invalidate(item);
                         }
                     }
                 }
@@ -1033,21 +1106,21 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                Set_Activity_Venue(e._Activity_Venue,e._Object); 
+                Set_Activity_Venue(e._Activity_Venue, e._Object);
             }
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
             }
         }
-        private void Set_Activity_Venue(ItemInfo item,Object obj)
+        private void Set_Activity_Venue(ItemInfo item, Object obj)
         {
             try
             {
                 if (item != null)
                 {
                     _activity_venue = item.Text;
-                    CalendarItem cal = new CalendarItem(calendar1, item.StartTime, item.EndTime, item.Text);
+                    CalendarItem cal = new CalendarItem(calendar, item.StartTime, item.EndTime, item.Text);
                     if (!(item.R == 0 && item.G == 0 && item.B == 0))
                     {
                         cal.ApplyColor(Color.FromArgb(item.A, item.R, item.G, item.B));
@@ -1061,7 +1134,7 @@ namespace WinSBSchool.Forms
             {
                 Utils.ShowError(ex);
             }
-        } 
+        }
         private void btnSearchClassStream_Click(object sender, EventArgs e)
         {
             try
@@ -1162,25 +1235,25 @@ namespace WinSBSchool.Forms
                 /* picks an activity*/
                 ClassStream clsstrm = (ClassStream)cboClassStreams.SelectedItem;
                 DateTime _startDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _startDate = monthView1.SelectionStart;
+                    _startDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _startDate = DateTime.Today;
                 }
                 DateTime _endDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _endDate = monthView1.SelectionStart;
+                    _endDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _endDate = DateTime.Today;
                 }
                 string _type = "lesson";
-                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type,_startDate, _endDate, clsstrm, connection) { Owner = this };
+                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type, _startDate, _endDate, clsstrm, connection) { Owner = this };
                 ttdf.On_Activity_Venue_Selected += new TimeTableDetailsForm.Activity_Venue_SelectHandler(ttdf_On_Activity_Venue_Selected);
                 ttdf.ShowDialog();
             }
@@ -1196,25 +1269,25 @@ namespace WinSBSchool.Forms
                 /* picks an activity*/
                 ClassStream clsstrm = (ClassStream)cboClassStreams.SelectedItem;
                 DateTime _startDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _startDate = monthView1.SelectionStart;
+                    _startDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _startDate = DateTime.Today;
                 }
                 DateTime _endDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _endDate = monthView1.SelectionStart;
+                    _endDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _endDate = DateTime.Today;
                 }
                 string _type = "break";
-                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type,_startDate, _endDate, clsstrm, connection) { Owner = this };
+                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type, _startDate, _endDate, clsstrm, connection) { Owner = this };
                 ttdf.On_Activity_Venue_Selected += new TimeTableDetailsForm.Activity_Venue_SelectHandler(ttdf_On_Activity_Venue_Selected);
                 ttdf.ShowDialog();
             }
@@ -1230,25 +1303,25 @@ namespace WinSBSchool.Forms
                 /* picks an activity*/
                 ClassStream clsstrm = (ClassStream)cboClassStreams.SelectedItem;
                 DateTime _startDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _startDate = monthView1.SelectionStart;
+                    _startDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _startDate = DateTime.Today;
                 }
                 DateTime _endDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _endDate = monthView1.SelectionStart;
+                    _endDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _endDate = DateTime.Today;
                 }
                 string _type = "extracurricular";
-                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type,_startDate, _endDate, clsstrm, connection) { Owner = this };
+                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type, _startDate, _endDate, clsstrm, connection) { Owner = this };
                 ttdf.On_Activity_Venue_Selected += new TimeTableDetailsForm.Activity_Venue_SelectHandler(ttdf_On_Activity_Venue_Selected);
                 ttdf.ShowDialog();
             }
@@ -1264,25 +1337,25 @@ namespace WinSBSchool.Forms
                 /* picks an activity*/
                 ClassStream clsstrm = (ClassStream)cboClassStreams.SelectedItem;
                 DateTime _startDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _startDate = monthView1.SelectionStart;
+                    _startDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _startDate = DateTime.Today;
                 }
                 DateTime _endDate;
-                if (monthView1.SelectionStart != new DateTime())
+                if (monthView.SelectionStart != new DateTime())
                 {
-                    _endDate = monthView1.SelectionStart;
+                    _endDate = monthView.SelectionStart;
                 }
                 else
                 {
                     _endDate = DateTime.Today;
                 }
                 string _type = "meeting";
-                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type,_startDate, _endDate, clsstrm, connection) { Owner = this };
+                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type, _startDate, _endDate, clsstrm, connection) { Owner = this };
                 ttdf.On_Activity_Venue_Selected += new TimeTableDetailsForm.Activity_Venue_SelectHandler(ttdf_On_Activity_Venue_Selected);
                 ttdf.ShowDialog();
             }
@@ -1368,7 +1441,7 @@ namespace WinSBSchool.Forms
             try
             {
                 base.OnMouseWheel(e);
-                if (calendar1.Focused)
+                if (calendar.Focused)
                 {
                     //monthView1.ViewStart = calendar1.ViewStart.Subtract(
                     //    new TimeSpan(DateTime.DaysInMonth(calendar1.ViewStart.Year,
@@ -1395,25 +1468,25 @@ namespace WinSBSchool.Forms
                 {
                     DateTime firstMonthDay = new DateTime(today.Year, today.Month, 1);
                     DateTime lastMonthDay = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-                    calendar1.SetViewRange(firstMonthDay, lastMonthDay);
-                    monthView1.ViewStart = calendar1.ViewStart.Subtract(
-                        new TimeSpan(DateTime.DaysInMonth(calendar1.ViewStart.Year, (calendar1.ViewStart.Month - 1)), 0, 0, 0)
+                    calendar.SetViewRange(firstMonthDay, lastMonthDay);
+                    monthView.ViewStart = calendar.ViewStart.Subtract(
+                        new TimeSpan(DateTime.DaysInMonth(calendar.ViewStart.Year, (calendar.ViewStart.Month - 1)), 0, 0, 0)
                         );
                 }
                 if (CurrentCalendarMode == CalendarMode.WEEK_MODE)
                 {
                     DateTime firstWeekDay = today.Subtract(new TimeSpan(((int)today.DayOfWeek - 1), 0, 0, 0));
                     DateTime lastWeekDay = today.AddDays(daysInWeek - (int)today.DayOfWeek + 1);
-                    calendar1.SetViewRange(firstWeekDay, lastWeekDay);
-                    monthView1.ViewStart = calendar1.ViewStart.Subtract(
-                        new TimeSpan(DateTime.DaysInMonth(calendar1.ViewStart.Year, (calendar1.ViewStart.Month - 1)), 0, 0, 0)
+                    calendar.SetViewRange(firstWeekDay, lastWeekDay);
+                    monthView.ViewStart = calendar.ViewStart.Subtract(
+                        new TimeSpan(DateTime.DaysInMonth(calendar.ViewStart.Year, (calendar.ViewStart.Month - 1)), 0, 0, 0)
                         );
                 }
                 if (CurrentCalendarMode == CalendarMode.DAY_MODE)
                 {
-                    calendar1.SetViewRange(today, today);
-                    monthView1.ViewStart = calendar1.ViewStart.Subtract(
-                        new TimeSpan(DateTime.DaysInMonth(calendar1.ViewStart.Year, (calendar1.ViewStart.Month - 1)), 0, 0, 0)
+                    calendar.SetViewRange(today, today);
+                    monthView.ViewStart = calendar.ViewStart.Subtract(
+                        new TimeSpan(DateTime.DaysInMonth(calendar.ViewStart.Year, (calendar.ViewStart.Month - 1)), 0, 0, 0)
                         );
                 }
                 ShowDateInToolbox();
@@ -1435,48 +1508,48 @@ namespace WinSBSchool.Forms
 
                 if (CurrentCalendarMode == CalendarMode.MONTH_MODE)
                 {
-                    dateStart.Append(myInvariantInfo.GetMonthName(calendar1.ViewStart.Month));
-                    if (calendar1.ViewStart.Year == calendar1.ViewEnd.Year)
+                    dateStart.Append(myInvariantInfo.GetMonthName(calendar.ViewStart.Month));
+                    if (calendar.ViewStart.Year == calendar.ViewEnd.Year)
                     {
-                        if (calendar1.ViewStart.Month != calendar1.ViewEnd.Month)
+                        if (calendar.ViewStart.Month != calendar.ViewEnd.Month)
                         {
-                            dateFinish.Append(" - " + myInvariantInfo.GetMonthName(calendar1.ViewEnd.Month));
+                            dateFinish.Append(" - " + myInvariantInfo.GetMonthName(calendar.ViewEnd.Month));
                         }
                     }
                     else
                     {
-                        dateStart.Append("  " + calendar1.ViewStart.Year + " - ");
-                        dateFinish.Append(myInvariantInfo.GetMonthName(calendar1.ViewEnd.Month));
+                        dateStart.Append("  " + calendar.ViewStart.Year + " - ");
+                        dateFinish.Append(myInvariantInfo.GetMonthName(calendar.ViewEnd.Month));
                     }
 
-                    dateFinish.Append("  " + calendar1.ViewEnd.Year);
+                    dateFinish.Append("  " + calendar.ViewEnd.Year);
                 }
                 if ((CurrentCalendarMode == CalendarMode.WEEK_MODE) || (CurrentCalendarMode == CalendarMode.DAY_MODE))
                 {
-                    if (calendar1.ViewStart.Date == calendar1.ViewEnd.Date)
+                    if (calendar.ViewStart.Date == calendar.ViewEnd.Date)
                     {
-                        dateFinish.Append(calendar1.ViewEnd.Day.ToString());
-                        dateFinish.Append("  " + myInvariantInfo.GetMonthName(calendar1.ViewEnd.Month));
-                        dateFinish.Append("  " + calendar1.ViewEnd.Year);
+                        dateFinish.Append(calendar.ViewEnd.Day.ToString());
+                        dateFinish.Append("  " + myInvariantInfo.GetMonthName(calendar.ViewEnd.Month));
+                        dateFinish.Append("  " + calendar.ViewEnd.Year);
                     }
                     else
                     {
-                        dateStart.Append(calendar1.ViewStart.Day.ToString());
-                        if (calendar1.ViewStart.Year == calendar1.ViewEnd.Year)
+                        dateStart.Append(calendar.ViewStart.Day.ToString());
+                        if (calendar.ViewStart.Year == calendar.ViewEnd.Year)
                         {
-                            if (calendar1.ViewStart.Month != calendar1.ViewEnd.Month)
+                            if (calendar.ViewStart.Month != calendar.ViewEnd.Month)
                             {
-                                dateStart.Append("  " + myInvariantInfo.GetMonthName(calendar1.ViewStart.Month));
+                                dateStart.Append("  " + myInvariantInfo.GetMonthName(calendar.ViewStart.Month));
                             }
                         }
                         else
                         {
-                            dateStart.Append("  " + myInvariantInfo.GetMonthName(calendar1.ViewStart.Month));
-                            dateStart.Append("  " + calendar1.ViewStart.Year + " - ");
+                            dateStart.Append("  " + myInvariantInfo.GetMonthName(calendar.ViewStart.Month));
+                            dateStart.Append("  " + calendar.ViewStart.Year + " - ");
                         }
-                        dateFinish.Append(" - " + calendar1.ViewEnd.Day.ToString());
-                        dateFinish.Append("  " + myInvariantInfo.GetMonthName(calendar1.ViewEnd.Month));
-                        dateFinish.Append("  " + calendar1.ViewEnd.Year);
+                        dateFinish.Append(" - " + calendar.ViewEnd.Day.ToString());
+                        dateFinish.Append("  " + myInvariantInfo.GetMonthName(calendar.ViewEnd.Month));
+                        dateFinish.Append("  " + calendar.ViewEnd.Year);
                     }
                 }
                 this.Text = dateStart.ToString() + dateFinish.ToString();
@@ -1569,6 +1642,41 @@ namespace WinSBSchool.Forms
             return dtTo;
         }
         #endregion "private methods"
+
+        private void btnaddtimetabledetails_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                /* picks an activity*/
+                ClassStream clsstrm = (ClassStream)cboClassStreams.SelectedItem;
+                DateTime _startDate;
+                if (monthView.SelectionStart != new DateTime())
+                {
+                    _startDate = monthView.SelectionStart;
+                }
+                else
+                {
+                    _startDate = DateTime.Today;
+                }
+                DateTime _endDate;
+                if (monthView.SelectionStart != new DateTime())
+                {
+                    _endDate = monthView.SelectionStart;
+                }
+                else
+                {
+                    _endDate = DateTime.Today;
+                }
+                string _type = "lesson";
+                TimeTableDetailsForm ttdf = new TimeTableDetailsForm(_type, _startDate, _endDate, clsstrm, connection) { Owner = this };
+                ttdf.On_Activity_Venue_Selected += new TimeTableDetailsForm.Activity_Venue_SelectHandler(ttdf_On_Activity_Venue_Selected);
+                ttdf.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
 
 
 

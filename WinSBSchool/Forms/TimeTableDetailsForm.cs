@@ -15,7 +15,7 @@ namespace WinSBSchool.Forms
     {
         string connection;
         ItemInfo _ItemInfo;
-        SBSchoolDBEntities db; 
+        SBSchoolDBEntities db;
         //delegate
         public delegate void Activity_Venue_SelectHandler(object sender, Activity_Venue_SelectEventArgs e);
         //event
@@ -27,7 +27,7 @@ namespace WinSBSchool.Forms
         DateTime _endDate;
         string _type;
 
-        public TimeTableDetailsForm(string type,DateTime startDate, DateTime endDate, ClassStream clsstrm, string Conn)
+        public TimeTableDetailsForm(string type, DateTime startDate, DateTime endDate, ClassStream clsstrm, string Conn)
         {
             InitializeComponent();
 
@@ -50,11 +50,78 @@ namespace WinSBSchool.Forms
         {
             this.Close();
         }
+
+        private void TimeTableDetailsForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                _venues = new List<Venue>();
+                _activities = new List<Activity>();
+
+                var recurrent = new BindingList<KeyValuePair<string, string>>();
+                recurrent.Add(new KeyValuePair<string, string>("N", "None"));
+                recurrent.Add(new KeyValuePair<string, string>("D", "Daily"));
+                recurrent.Add(new KeyValuePair<string, string>("W", "Weekly"));
+                recurrent.Add(new KeyValuePair<string, string>("M", "Monthly"));
+                recurrent.Add(new KeyValuePair<string, string>("Y", "Yearly"));
+                cboRecurrent.DataSource = recurrent;
+                cboRecurrent.ValueMember = "Key";
+                cboRecurrent.DisplayMember = "Value";
+
+                InitializeControls();
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+        private void InitializeControls()
+        {
+            try
+            {
+                var cls = (from sc in db.SchoolClasses
+                           where sc.Id == _ClassStream.ClassId
+                           select sc).SingleOrDefault();
+
+                var clssbjcts = from csbjts in db.ClassSubjects.OrderBy(i => i.SubjectCode)
+                                where csbjts.ClassId == cls.Id
+                                select csbjts;
+                List<ClassSubject> _classsubjects = clssbjcts.ToList();
+                foreach (var sub in _classsubjects)
+                {
+                    _activities.Add(new Activity(sub.Subject.ShortCode, ActivityType.SchoolActivity, sub));
+                }
+                bindingSourceActivities.DataSource = _activities;
+                _lstActivities.DataSource = bindingSourceActivities;
+                _lstActivities.ValueMember = "Name";
+                _lstActivities.DisplayMember = "Name";
+
+                var _roomsquery = from rm in db.Rooms.OrderBy(i => i.Description)
+                                  select rm;
+                List<Room> _rooms = _roomsquery.ToList();
+                foreach (var rm in _rooms)
+                {
+                    _venues.Add(new Venue(rm.Description, VenueType.SchoolRoom, rm));
+                }
+                bindingSourceVenues.DataSource = _venues;
+                _lstVenues.DataSource = bindingSourceVenues;
+                _lstVenues.ValueMember = "Name";
+                _lstVenues.DisplayMember = "Name";
+
+                dtpStartDate.Value = _startDate;
+                dtpEndDate.Value = _endDate;
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                errorProvider1.Clear();
+                errorProvider.Clear();
                 if (IsTimeTableDetailValid())
                 {
                     TimeTableDet _ttDet = new TimeTableDet();
@@ -74,8 +141,8 @@ namespace WinSBSchool.Forms
                                 _ttDet.RoomId = _room.Id;
                             }
                             var _recurrent = (KeyValuePair<string, string>)cboRecurrent.SelectedItem;
-                            _ttDet.Recurrent = _recurrent.Key; 
-                            _ttDet.Activity = _activity.Name; 
+                            _ttDet.Recurrent = _recurrent.Key;
+                            _ttDet.Activity = _activity.Name;
                             _ttDet.Venue = _venue.Name;
                             string _text = _lstActivities.SelectedValue.ToString() + " - " + _lstVenues.SelectedValue.ToString() + " - " + dtpStartDate.Value.TimeOfDay.ToString() + " - " + dtpEndDate.Value.TimeOfDay.ToString();
                             _ttDet.Text = _text;
@@ -158,92 +225,23 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
-        private void TimeTableDetailsForm_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                _venues = new List<Venue>();
-                _activities = new List<Activity>();
-
-                var recurrent = new BindingList<KeyValuePair<string, string>>();
-                recurrent.Add(new KeyValuePair<string, string>("N", "None"));
-                recurrent.Add(new KeyValuePair<string, string>("D", "Daily"));
-                recurrent.Add(new KeyValuePair<string, string>("W", "Weekly"));
-                recurrent.Add(new KeyValuePair<string, string>("M", "Monthly"));
-                recurrent.Add(new KeyValuePair<string, string>("Y", "Yearly"));
-                cboRecurrent.DataSource = recurrent;
-                cboRecurrent.ValueMember = "Key";
-                cboRecurrent.DisplayMember = "Value";
-
-                InitializeControls();
-
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
-        }
-        private void InitializeControls()
-        {
-            try
-            {
-                var cls = (from sc in db.SchoolClasses
-                           where sc.Id == _ClassStream.ClassId
-                           select sc).SingleOrDefault();
-
-                var clssbjcts = from csbjts in db.ClassSubjects.OrderBy(i => i.SubjectCode)
-                                where csbjts.ClassId == cls.Id
-                                select csbjts;
-                List<ClassSubject> _classsubjects = clssbjcts.ToList();
-                foreach (var sub in _classsubjects)
-                {
-                    _activities.Add(new Activity(sub.Subject.ShortCode, ActivityType.SchoolActivity,sub));
-                }
-                bindingSourceActivities.DataSource = _activities;
-                _lstActivities.DataSource = bindingSourceActivities;
-                _lstActivities.ValueMember = "Name";
-                _lstActivities.DisplayMember = "Name";
-
-                var _roomsquery = from rm in db.Rooms.OrderBy(i => i.Description)
-                                  select rm;
-                List<Room> _rooms = _roomsquery.ToList();
-                foreach (var rm in _rooms)
-                {
-                    _venues.Add(new Venue(rm.Description, VenueType.SchoolRoom, rm));
-                }
-                bindingSourceVenues.DataSource = _venues;
-                _lstVenues.DataSource = bindingSourceVenues;
-                _lstVenues.ValueMember = "Name";
-                _lstVenues.DisplayMember = "Name";
-
-                dtpStartDate.Value = _startDate;
-                dtpEndDate.Value = _endDate;
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
-        }
         public bool IsTimeTableDetailValid()
         {
             bool noerror = true;
             if (_lstActivities.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(_lstActivities, "Select Activity!");
-                return false;
+                errorProvider.SetError(_lstActivities, "Select Activity!");
+                noerror = false;
             }
             if (_lstVenues.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(_lstVenues, "Select Venue!");
-                return false;
+                errorProvider.SetError(_lstVenues, "Select Venue!");
+                noerror = false;
             }
             if (cboRecurrent.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboRecurrent, "Select Recurrent!");
-                return false;
+                errorProvider.SetError(cboRecurrent, "Select Recurrent!");
+                noerror = false;
             }
             return noerror;
         }
@@ -281,11 +279,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                errorProvider1.Clear();
+                errorProvider.Clear();
                 if (string.IsNullOrEmpty(txtActivity.Text))
                 {
-                    errorProvider1.Clear();
-                    errorProvider1.SetError(txtActivity, "Activity cannot be null!");
+                    errorProvider.SetError(txtActivity, "Activity cannot be null!");
                 }
                 if (!string.IsNullOrEmpty(txtActivity.Text))
                 {
@@ -302,15 +299,14 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                errorProvider1.Clear();
+                errorProvider.Clear();
                 if (string.IsNullOrEmpty(txtVenue.Text))
                 {
-                    errorProvider1.Clear();
-                    errorProvider1.SetError(txtVenue, "Venue cannot be null!");
+                    errorProvider.SetError(txtVenue, "Venue cannot be null!");
                 }
                 if (!string.IsNullOrEmpty(txtVenue.Text))
                 {
-                    _venues.Add(new Venue(txtVenue.Text, VenueType.Others,new object()));
+                    _venues.Add(new Venue(txtVenue.Text, VenueType.Others, new object()));
                     RefreshVenuesGrid();
                 }
             }
@@ -330,7 +326,7 @@ namespace WinSBSchool.Forms
         public int RoomId { get; set; }
         public object _object { get; set; }
 
-        public Venue(string name, VenueType venuetype,object _obj)
+        public Venue(string name, VenueType venuetype, object _obj)
         {
             Name = name;
             VenueType = venuetype;
@@ -371,7 +367,7 @@ namespace WinSBSchool.Forms
         private Object _object;
 
         // class constructor
-        public Activity_Venue_SelectEventArgs(ItemInfo activityvenue,Object obj)
+        public Activity_Venue_SelectEventArgs(ItemInfo activityvenue, Object obj)
         {
             this._activity_venue = activityvenue;
             this._object = obj;
