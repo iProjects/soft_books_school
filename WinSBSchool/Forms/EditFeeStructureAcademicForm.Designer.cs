@@ -33,8 +33,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnUpdate = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.LinkLabel();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblAccountDetails = new System.Windows.Forms.Label();
             this.txtTerm = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtAccountId = new System.Windows.Forms.TextBox();
@@ -50,9 +51,8 @@
             this.txtAmount = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblAccountDetails = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,9 +93,9 @@
             this.btnClose.Text = "Close";
             this.btnClose.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnClose_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // groupBox2
             // 
@@ -121,6 +121,15 @@
             this.groupBox2.Size = new System.Drawing.Size(520, 276);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // lblAccountDetails
+            // 
+            this.lblAccountDetails.AutoSize = true;
+            this.lblAccountDetails.Location = new System.Drawing.Point(130, 153);
+            this.lblAccountDetails.Name = "lblAccountDetails";
+            this.lblAccountDetails.Size = new System.Drawing.Size(19, 13);
+            this.lblAccountDetails.TabIndex = 31;
+            this.lblAccountDetails.Text = "::::";
             // 
             // txtTerm
             // 
@@ -273,15 +282,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Amount*";
             // 
-            // lblAccountDetails
-            // 
-            this.lblAccountDetails.AutoSize = true;
-            this.lblAccountDetails.Location = new System.Drawing.Point(130, 153);
-            this.lblAccountDetails.Name = "lblAccountDetails";
-            this.lblAccountDetails.Size = new System.Drawing.Size(19, 13);
-            this.lblAccountDetails.TabIndex = 31;
-            this.lblAccountDetails.Text = "::::";
-            // 
             // EditFeeStructureAcademicForm
             // 
             this.AcceptButton = this.btnUpdate;
@@ -298,7 +298,7 @@
             this.Load += new System.EventHandler(this.EditFeeStructureOthersForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
@@ -310,7 +310,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.LinkLabel btnUpdate;
         private System.Windows.Forms.LinkLabel btnClose;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtTerm;
         private System.Windows.Forms.Label label7;

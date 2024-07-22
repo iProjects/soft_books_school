@@ -92,7 +92,7 @@
             // classIdLabel
             // 
             classIdLabel.AutoSize = true;
-            classIdLabel.Location = new System.Drawing.Point(19, 42);
+            classIdLabel.Location = new System.Drawing.Point(43, 42);
             classIdLabel.Name = "classIdLabel";
             classIdLabel.Size = new System.Drawing.Size(75, 13);
             classIdLabel.TabIndex = 0;
@@ -101,7 +101,7 @@
             // classNameLabel
             // 
             classNameLabel.AutoSize = true;
-            classNameLabel.Location = new System.Drawing.Point(19, 68);
+            classNameLabel.Location = new System.Drawing.Point(24, 68);
             classNameLabel.Name = "classNameLabel";
             classNameLabel.Size = new System.Drawing.Size(94, 13);
             classNameLabel.TabIndex = 2;
@@ -110,7 +110,7 @@
             // classTeacherLabel
             // 
             classTeacherLabel.AutoSize = true;
-            classTeacherLabel.Location = new System.Drawing.Point(19, 94);
+            classTeacherLabel.Location = new System.Drawing.Point(12, 94);
             classTeacherLabel.Name = "classTeacherLabel";
             classTeacherLabel.Size = new System.Drawing.Size(106, 13);
             classTeacherLabel.TabIndex = 4;
@@ -119,7 +119,7 @@
             // remarksLabel
             // 
             remarksLabel.AutoSize = true;
-            remarksLabel.Location = new System.Drawing.Point(19, 120);
+            remarksLabel.Location = new System.Drawing.Point(66, 120);
             remarksLabel.Name = "remarksLabel";
             remarksLabel.Size = new System.Drawing.Size(52, 13);
             remarksLabel.TabIndex = 6;
@@ -172,34 +172,32 @@
             // 
             // classTeacherComboBox
             // 
-            this.classTeacherComboBox.DisplayMember = "Name";
             this.classTeacherComboBox.FormattingEnabled = true;
-            this.classTeacherComboBox.Location = new System.Drawing.Point(103, 90);
+            this.classTeacherComboBox.Location = new System.Drawing.Point(124, 90);
             this.classTeacherComboBox.Name = "classTeacherComboBox";
-            this.classTeacherComboBox.Size = new System.Drawing.Size(144, 21);
+            this.classTeacherComboBox.Size = new System.Drawing.Size(283, 21);
             this.classTeacherComboBox.TabIndex = 8;
-            this.classTeacherComboBox.ValueMember = "TeacherId";
             // 
             // classIdTextBox
             // 
-            this.classIdTextBox.Location = new System.Drawing.Point(103, 39);
+            this.classIdTextBox.Location = new System.Drawing.Point(124, 39);
             this.classIdTextBox.Name = "classIdTextBox";
-            this.classIdTextBox.Size = new System.Drawing.Size(144, 20);
+            this.classIdTextBox.Size = new System.Drawing.Size(283, 20);
             this.classIdTextBox.TabIndex = 1;
             // 
             // classNameTextBox
             // 
-            this.classNameTextBox.Location = new System.Drawing.Point(103, 65);
+            this.classNameTextBox.Location = new System.Drawing.Point(124, 65);
             this.classNameTextBox.Name = "classNameTextBox";
-            this.classNameTextBox.Size = new System.Drawing.Size(144, 20);
+            this.classNameTextBox.Size = new System.Drawing.Size(283, 20);
             this.classNameTextBox.TabIndex = 3;
             // 
             // remarksTextBox
             // 
-            this.remarksTextBox.Location = new System.Drawing.Point(103, 117);
+            this.remarksTextBox.Location = new System.Drawing.Point(124, 117);
             this.remarksTextBox.Multiline = true;
             this.remarksTextBox.Name = "remarksTextBox";
-            this.remarksTextBox.Size = new System.Drawing.Size(144, 78);
+            this.remarksTextBox.Size = new System.Drawing.Size(283, 78);
             this.remarksTextBox.TabIndex = 7;
             // 
             // tbpSubjects
@@ -465,6 +463,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "ucClass";
             this.Size = new System.Drawing.Size(661, 343);
+            this.Load += new System.EventHandler(this.ucClass_Load);
             this.tabControl1.ResumeLayout(false);
             this.tbpDetails.ResumeLayout(false);
             this.grpAdmission.ResumeLayout(false);

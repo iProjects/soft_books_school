@@ -33,7 +33,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPost = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.LinkLabel();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBoxMpesa = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -70,7 +70,7 @@
             this.txtAmount = new System.Windows.Forms.TextBox();
             this.cboTransactionType = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBoxMpesa.SuspendLayout();
             this.groupBoxBankSlip.SuspendLayout();
@@ -114,9 +114,9 @@
             this.btnClose.Text = "Close";
             this.btnClose.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnClose_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // groupBox2
             // 
@@ -151,7 +151,7 @@
             this.groupBoxMpesa.Controls.Add(this.txtMpesaReceiptNo);
             this.groupBoxMpesa.Controls.Add(this.label2);
             this.groupBoxMpesa.Controls.Add(this.txtMpesaAmountPaid);
-            this.groupBoxMpesa.Location = new System.Drawing.Point(34, 127);
+            this.groupBoxMpesa.Location = new System.Drawing.Point(189, 176);
             this.groupBoxMpesa.Name = "groupBoxMpesa";
             this.groupBoxMpesa.Size = new System.Drawing.Size(311, 146);
             this.groupBoxMpesa.TabIndex = 4;
@@ -503,6 +503,7 @@
             this.cboTransactionType.Name = "cboTransactionType";
             this.cboTransactionType.Size = new System.Drawing.Size(261, 21);
             this.cboTransactionType.TabIndex = 0;
+            this.cboTransactionType.SelectedIndexChanged += new System.EventHandler(this.cboTransactionType_SelectedIndexChanged);
             // 
             // PayFeesForm
             // 
@@ -521,7 +522,7 @@
             this.Load += new System.EventHandler(this.PayFeesForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBoxMpesa.ResumeLayout(false);
@@ -539,7 +540,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.LinkLabel btnPost;
         private System.Windows.Forms.LinkLabel btnClose;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;

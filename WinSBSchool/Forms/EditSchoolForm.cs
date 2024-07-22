@@ -8,187 +8,66 @@ using System.Text;
 using System.Windows.Forms;
 using DAL;
 using CommonLib;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class EditSchoolForm : Form
     {
         Repository rep;
-        DAL.School _school;
         SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
+        DAL.School _school;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
 
-        public EditSchoolForm(DAL.School school, string Conn)
+        public EditSchoolForm(DAL.School school, string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
-            _school = school;
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished EditSchoolForm initialization", TAG));
+
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void buttonClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Close();
-        }
-        public bool IsSchoolValid()
-        {
-            bool noerror = true;
-
-            if (string.IsNullOrEmpty(txtIndex.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtIndex, "School Index cannot be null!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtSchoolName.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtSchoolName, "School Name cannot be null!");
-                return false;
-            }
-            if (cboSchoolType.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboSchoolType, "Select School Type!");
-                return false;
-            }
-            if (cboGradingSystem.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboGradingSystem, "Select Grading System!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtAccountId.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Customer Id cannot be null!");
-                return false;
-            }
-            int _customerid;
-            if (!int.TryParse(txtAccountId.Text, out _customerid))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Customer Id must be integer!");
-                return false;
-            }
-            Customer customer = rep.GetCustomer(_customerid);
-            if (customer == null)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Error Retrieving Customer!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtAddress1.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAddress1, "Address 1 cannot be null!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtSlogan.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtSlogan, "Slogan cannot be null!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtLogo.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtLogo, "Logo cannot be null!");
-                return false;
-            }
-            return noerror;
-        }
-        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            errorProvider1.Clear();
-            if (IsSchoolValid())
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(txtIndex.Text))
-                    {
-                        _school.SchoolIndex = Utils.ConvertFirstLetterToUpper(txtIndex.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtSchoolName.Text))
-                    {
-                        _school.SchoolName = Utils.ConvertFirstLetterToUpper(txtSchoolName.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtTelephone.Text))
-                    {
-                        _school.Telephone = Utils.ConvertFirstLetterToUpper(txtTelephone.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtCellPhone.Text))
-                    {
-                        _school.Cellphone = Utils.ConvertFirstLetterToUpper(txtCellPhone.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtEmail.Text))
-                    {
-                        _school.Email = txtEmail.Text.ToString().ToLower().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtAddress1.Text))
-                    {
-                        _school.Address1 = Utils.ConvertFirstLetterToUpper(txtAddress1.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtAddress2.Text))
-                    {
-                        _school.Address2 = Utils.ConvertFirstLetterToUpper(txtAddress2.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtSlogan.Text))
-                    {
-                        _school.Slogan = Utils.ConvertFirstLetterToUpper(txtSlogan.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtLogo.Text))
-                    {
-                        _school.Logo = txtLogo.Text.ToString().Trim();
-                    }
-                    if (cboSchoolType.SelectedIndex != -1)
-                    {
-                        _school.SchoolType = cboSchoolType.SelectedValue.ToString();
-                    }
-                    if (cboGradingSystem.SelectedIndex != -1)
-                    {
-                        _school.GradingSystem = int.Parse(cboGradingSystem.SelectedValue.ToString());
-                    }
-                    if (cboStatus.SelectedIndex != -1)
-                    {
-                        _school.Status = cboStatus.SelectedValue.ToString();
-                    }
-                    _school.DefaultSchool = chkIsDefaultSchool.Checked;
-                    if (!string.IsNullOrEmpty(txtSMSGateway.Text))
-                    {
-                        _school.SMSGateway = Utils.ConvertFirstLetterToUpper(txtSMSGateway.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtSMTPServer.Text))
-                    {
-                        _school.SMTPServer = Utils.ConvertFirstLetterToUpper(txtSMTPServer.Text.ToString().Trim());
-                    }
-                    int _customerid;
-                    if (!string.IsNullOrEmpty(txtAccountId.Text) && int.TryParse(txtAccountId.Text, out _customerid))
-                    {
-                        _school.GLCustomerId = int.Parse(txtAccountId.Text);
-                    }
-
-                    rep.UpdateSchool(_school);
-
-                    if (this.Owner is SchoolsForm)
-                    {
-                        SchoolsForm f = (SchoolsForm)this.Owner;
-                        f.RefreshGrid();
-                        this.Close();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
-            }
         }
         private void EditSchoolForm_Load(object sender, EventArgs e)
         {
@@ -337,6 +216,150 @@ namespace WinSBSchool.Forms
             }
 
         }
+        public bool IsSchoolValid()
+        {
+            bool noerror = true;
+
+            if (string.IsNullOrEmpty(txtIndex.Text))
+            { 
+                errorProvider.SetError(txtIndex, "School Index cannot be null!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtSchoolName.Text))
+            { 
+                errorProvider.SetError(txtSchoolName, "School Name cannot be null!");
+                noerror = false;
+            }
+            if (cboSchoolType.SelectedIndex == -1)
+            { 
+                errorProvider.SetError(cboSchoolType, "Select School Type!");
+                noerror = false;
+            }
+            if (cboGradingSystem.SelectedIndex == -1)
+            { 
+                errorProvider.SetError(cboGradingSystem, "Select Grading System!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtAccountId.Text))
+            { 
+                errorProvider.SetError(txtAccountId, "Customer Id cannot be null!");
+                noerror = false;
+            }
+            int _customerid;
+            if (!int.TryParse(txtAccountId.Text, out _customerid))
+            { 
+                errorProvider.SetError(txtAccountId, "Customer Id must be integer!");
+                noerror = false;
+            }
+            Customer customer = rep.GetCustomer(_customerid);
+            if (customer == null)
+            { 
+                errorProvider.SetError(txtAccountId, "Error Retrieving Customer!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtAddress1.Text))
+            { 
+                errorProvider.SetError(txtAddress1, "Address 1 cannot be null!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtSlogan.Text))
+            { 
+                errorProvider.SetError(txtSlogan, "Slogan cannot be null!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtLogo.Text))
+            { 
+                errorProvider.SetError(txtLogo, "Logo cannot be null!");
+                noerror = false;
+            }
+            return noerror;
+        }
+        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            errorProvider.Clear();
+            if (IsSchoolValid())
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(txtIndex.Text))
+                    {
+                        _school.SchoolIndex = Utils.ConvertFirstLetterToUpper(txtIndex.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtSchoolName.Text))
+                    {
+                        _school.SchoolName = Utils.ConvertFirstLetterToUpper(txtSchoolName.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtTelephone.Text))
+                    {
+                        _school.Telephone = Utils.ConvertFirstLetterToUpper(txtTelephone.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtCellPhone.Text))
+                    {
+                        _school.Cellphone = Utils.ConvertFirstLetterToUpper(txtCellPhone.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtEmail.Text))
+                    {
+                        _school.Email = txtEmail.Text.ToString().ToLower().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtAddress1.Text))
+                    {
+                        _school.Address1 = Utils.ConvertFirstLetterToUpper(txtAddress1.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtAddress2.Text))
+                    {
+                        _school.Address2 = Utils.ConvertFirstLetterToUpper(txtAddress2.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtSlogan.Text))
+                    {
+                        _school.Slogan = Utils.ConvertFirstLetterToUpper(txtSlogan.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtLogo.Text))
+                    {
+                        _school.Logo = txtLogo.Text.ToString().Trim();
+                    }
+                    if (cboSchoolType.SelectedIndex != -1)
+                    {
+                        _school.SchoolType = cboSchoolType.SelectedValue.ToString();
+                    }
+                    if (cboGradingSystem.SelectedIndex != -1)
+                    {
+                        _school.GradingSystem = int.Parse(cboGradingSystem.SelectedValue.ToString());
+                    }
+                    if (cboStatus.SelectedIndex != -1)
+                    {
+                        _school.Status = cboStatus.SelectedValue.ToString();
+                    }
+                    _school.DefaultSchool = chkIsDefaultSchool.Checked;
+                    if (!string.IsNullOrEmpty(txtSMSGateway.Text))
+                    {
+                        _school.SMSGateway = Utils.ConvertFirstLetterToUpper(txtSMSGateway.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtSMTPServer.Text))
+                    {
+                        _school.SMTPServer = Utils.ConvertFirstLetterToUpper(txtSMTPServer.Text.ToString().Trim());
+                    }
+                    int _customerid;
+                    if (!string.IsNullOrEmpty(txtAccountId.Text) && int.TryParse(txtAccountId.Text, out _customerid))
+                    {
+                        _school.GLCustomerId = int.Parse(txtAccountId.Text);
+                    }
+
+                    rep.UpdateSchool(_school);
+
+                    if (this.Owner is SchoolsForm)
+                    {
+                        SchoolsForm f = (SchoolsForm)this.Owner;
+                        f.RefreshGrid();
+                        this.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utils.ShowError(ex);
+                }
+            }
+        }
+        
         /*public method to diable all controls when form is called by parent from 'View Details' button*/
         public void DisableControls()
         {
@@ -375,7 +398,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                SearchCustomersSimpleForm scf = new SearchCustomersSimpleForm(connection) { Owner = this };
+                SearchCustomersSimpleForm scf = new SearchCustomersSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
                 scf.OnCustomerListSelected += new SearchCustomersSimpleForm.CustomerSelectHandler(scf_OnCustomerListSelected);
                 scf.ShowDialog();
             }

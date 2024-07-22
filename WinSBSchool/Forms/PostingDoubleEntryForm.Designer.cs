@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostingDoubleEntryForm));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,7 +41,7 @@
             this.cboTransactionType = new System.Windows.Forms.ComboBox();
             this.txtCrNarrative = new System.Windows.Forms.TextBox();
             this.txtAmount = new System.Windows.Forms.TextBox();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnPost = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
@@ -48,11 +49,13 @@
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtCAccountId = new System.Windows.Forms.TextBox();
-            this.btnSearchCAccount = new System.Windows.Forms.Button();
+            this.lblcreditaccountdetails = new System.Windows.Forms.Label();
+            this.lbldebitaccountdetails = new System.Windows.Forms.Label();
             this.txtDAccountId = new System.Windows.Forms.TextBox();
             this.btnSearchDAccount = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.txtCAccountId = new System.Windows.Forms.TextBox();
+            this.btnSearchCAccount = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +63,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(76, 253);
+            this.label1.Location = new System.Drawing.Point(76, 298);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 0;
@@ -69,7 +72,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(74, 290);
+            this.label2.Location = new System.Drawing.Point(74, 335);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 1;
@@ -87,7 +90,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(43, 105);
+            this.label4.Location = new System.Drawing.Point(41, 126);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 13);
             this.label4.TabIndex = 3;
@@ -96,7 +99,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(50, 216);
+            this.label5.Location = new System.Drawing.Point(50, 261);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
             this.label5.TabIndex = 4;
@@ -105,7 +108,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(87, 142);
+            this.label6.Location = new System.Drawing.Point(87, 187);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(47, 13);
             this.label6.TabIndex = 5;
@@ -113,14 +116,14 @@
             // 
             // dpPostDate
             // 
-            this.dpPostDate.Location = new System.Drawing.Point(139, 251);
+            this.dpPostDate.Location = new System.Drawing.Point(139, 296);
             this.dpPostDate.Name = "dpPostDate";
             this.dpPostDate.Size = new System.Drawing.Size(304, 20);
             this.dpPostDate.TabIndex = 6;
             // 
             // dpValueDate
             // 
-            this.dpValueDate.Location = new System.Drawing.Point(139, 288);
+            this.dpValueDate.Location = new System.Drawing.Point(139, 333);
             this.dpValueDate.Name = "dpValueDate";
             this.dpValueDate.Size = new System.Drawing.Size(304, 20);
             this.dpValueDate.TabIndex = 7;
@@ -138,7 +141,7 @@
             // txtCrNarrative
             // 
             this.txtCrNarrative.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCrNarrative.Location = new System.Drawing.Point(139, 214);
+            this.txtCrNarrative.Location = new System.Drawing.Point(139, 259);
             this.txtCrNarrative.MaxLength = 100;
             this.txtCrNarrative.Name = "txtCrNarrative";
             this.txtCrNarrative.Size = new System.Drawing.Size(304, 20);
@@ -147,24 +150,24 @@
             // txtAmount
             // 
             this.txtAmount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAmount.Location = new System.Drawing.Point(139, 140);
+            this.txtAmount.Location = new System.Drawing.Point(139, 185);
             this.txtAmount.MaxLength = 8;
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(304, 20);
             this.txtAmount.TabIndex = 3;
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // btnPost
             // 
             this.btnPost.AutoSize = true;
-            this.btnPost.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPost.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPost.LinkColor = System.Drawing.Color.Yellow;
-            this.btnPost.Location = new System.Drawing.Point(183, 16);
+            this.btnPost.Location = new System.Drawing.Point(190, 16);
             this.btnPost.Name = "btnPost";
-            this.btnPost.Size = new System.Drawing.Size(59, 25);
+            this.btnPost.Size = new System.Drawing.Size(50, 24);
             this.btnPost.TabIndex = 0;
             this.btnPost.TabStop = true;
             this.btnPost.Text = "Post";
@@ -173,11 +176,11 @@
             // btnClose
             // 
             this.btnClose.AutoSize = true;
-            this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClose.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose.LinkColor = System.Drawing.Color.Yellow;
-            this.btnClose.Location = new System.Drawing.Point(313, 16);
+            this.btnClose.Location = new System.Drawing.Point(265, 16);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(72, 25);
+            this.btnClose.Size = new System.Drawing.Size(59, 24);
             this.btnClose.TabIndex = 1;
             this.btnClose.TabStop = true;
             this.btnClose.Text = "Close";
@@ -195,7 +198,7 @@
             // txtDrNarrative
             // 
             this.txtDrNarrative.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDrNarrative.Location = new System.Drawing.Point(139, 177);
+            this.txtDrNarrative.Location = new System.Drawing.Point(139, 222);
             this.txtDrNarrative.MaxLength = 100;
             this.txtDrNarrative.Name = "txtDrNarrative";
             this.txtDrNarrative.Size = new System.Drawing.Size(304, 20);
@@ -204,7 +207,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(52, 179);
+            this.label8.Location = new System.Drawing.Point(52, 224);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(82, 13);
             this.label8.TabIndex = 35;
@@ -215,7 +218,7 @@
             this.groupBox1.Controls.Add(this.btnPost);
             this.groupBox1.Controls.Add(this.btnClose);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 336);
+            this.groupBox1.Location = new System.Drawing.Point(0, 391);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(510, 49);
             this.groupBox1.TabIndex = 1;
@@ -223,6 +226,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lblcreditaccountdetails);
+            this.groupBox2.Controls.Add(this.lbldebitaccountdetails);
             this.groupBox2.Controls.Add(this.txtDAccountId);
             this.groupBox2.Controls.Add(this.btnSearchDAccount);
             this.groupBox2.Controls.Add(this.txtCAccountId);
@@ -244,9 +249,49 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(510, 336);
+            this.groupBox2.Size = new System.Drawing.Size(510, 391);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // lblcreditaccountdetails
+            // 
+            this.lblcreditaccountdetails.AutoSize = true;
+            this.lblcreditaccountdetails.Location = new System.Drawing.Point(139, 95);
+            this.lblcreditaccountdetails.Name = "lblcreditaccountdetails";
+            this.lblcreditaccountdetails.Size = new System.Drawing.Size(82, 13);
+            this.lblcreditaccountdetails.TabIndex = 41;
+            this.lblcreditaccountdetails.Text = "Account Details";
+            // 
+            // lbldebitaccountdetails
+            // 
+            this.lbldebitaccountdetails.AutoSize = true;
+            this.lbldebitaccountdetails.Location = new System.Drawing.Point(136, 157);
+            this.lbldebitaccountdetails.Name = "lbldebitaccountdetails";
+            this.lbldebitaccountdetails.Size = new System.Drawing.Size(82, 13);
+            this.lbldebitaccountdetails.TabIndex = 40;
+            this.lbldebitaccountdetails.Text = "Account Details";
+            // 
+            // txtDAccountId
+            // 
+            this.txtDAccountId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDAccountId.Location = new System.Drawing.Point(139, 124);
+            this.txtDAccountId.MaxLength = 4;
+            this.txtDAccountId.Name = "txtDAccountId";
+            this.txtDAccountId.Size = new System.Drawing.Size(190, 20);
+            this.txtDAccountId.TabIndex = 38;
+            this.txtDAccountId.TextChanged += new System.EventHandler(this.txtDAccountId_TextChanged);
+            // 
+            // btnSearchDAccount
+            // 
+            this.btnSearchDAccount.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnSearchDAccount.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearchDAccount.Location = new System.Drawing.Point(357, 121);
+            this.btnSearchDAccount.Name = "btnSearchDAccount";
+            this.btnSearchDAccount.Size = new System.Drawing.Size(36, 23);
+            this.btnSearchDAccount.TabIndex = 39;
+            this.btnSearchDAccount.Text = ":::";
+            this.btnSearchDAccount.UseVisualStyleBackColor = false;
+            this.btnSearchDAccount.Click += new System.EventHandler(this.btnSearchbyDAccount_Click);
             // 
             // txtCAccountId
             // 
@@ -256,39 +301,19 @@
             this.txtCAccountId.Name = "txtCAccountId";
             this.txtCAccountId.Size = new System.Drawing.Size(190, 20);
             this.txtCAccountId.TabIndex = 36;
+            this.txtCAccountId.TextChanged += new System.EventHandler(this.txtCAccountId_TextChanged);
             // 
             // btnSearchCAccount
             // 
             this.btnSearchCAccount.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnSearchCAccount.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearchCAccount.Location = new System.Drawing.Point(359, 60);
+            this.btnSearchCAccount.Location = new System.Drawing.Point(357, 63);
             this.btnSearchCAccount.Name = "btnSearchCAccount";
             this.btnSearchCAccount.Size = new System.Drawing.Size(36, 23);
             this.btnSearchCAccount.TabIndex = 37;
             this.btnSearchCAccount.Text = ":::";
             this.btnSearchCAccount.UseVisualStyleBackColor = false;
             this.btnSearchCAccount.Click += new System.EventHandler(this.btnSearchCAccount_Click);
-            // 
-            // txtDAccountId
-            // 
-            this.txtDAccountId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDAccountId.Location = new System.Drawing.Point(141, 103);
-            this.txtDAccountId.MaxLength = 4;
-            this.txtDAccountId.Name = "txtDAccountId";
-            this.txtDAccountId.Size = new System.Drawing.Size(190, 20);
-            this.txtDAccountId.TabIndex = 38;
-            // 
-            // btnSearchDAccount
-            // 
-            this.btnSearchDAccount.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnSearchDAccount.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearchDAccount.Location = new System.Drawing.Point(359, 104);
-            this.btnSearchDAccount.Name = "btnSearchDAccount";
-            this.btnSearchDAccount.Size = new System.Drawing.Size(36, 23);
-            this.btnSearchDAccount.TabIndex = 39;
-            this.btnSearchDAccount.Text = ":::";
-            this.btnSearchDAccount.UseVisualStyleBackColor = false;
-            this.btnSearchDAccount.Click += new System.EventHandler(this.btnSearchbyDAccount_Click);
             // 
             // PostingDoubleEntryForm
             // 
@@ -297,14 +322,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(510, 385);
+            this.ClientSize = new System.Drawing.Size(510, 440);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PostingDoubleEntryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Double Entry";
             this.Load += new System.EventHandler(this.PostingDoubleEntryForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -326,7 +352,7 @@
         private System.Windows.Forms.ComboBox cboTransactionType;
         private System.Windows.Forms.TextBox txtCrNarrative;
         private System.Windows.Forms.TextBox txtAmount;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.LinkLabel btnClose;
         private System.Windows.Forms.LinkLabel btnPost;
         private System.Windows.Forms.Label label7;
@@ -338,5 +364,7 @@
         private System.Windows.Forms.Button btnSearchDAccount;
         private System.Windows.Forms.TextBox txtCAccountId;
         private System.Windows.Forms.Button btnSearchCAccount;
+        private System.Windows.Forms.Label lblcreditaccountdetails;
+        private System.Windows.Forms.Label lbldebitaccountdetails;
     }
 }

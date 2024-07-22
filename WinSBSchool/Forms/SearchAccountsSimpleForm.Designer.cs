@@ -32,16 +32,11 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchAccountsSimpleForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridViewAccounts = new System.Windows.Forms.DataGridView();
-            this.ColumnAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnAccountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnAccountNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCustomerId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnBookBalance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,14 +46,20 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnloadall = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtCustomerId = new System.Windows.Forms.TextBox();
+            this.txtCustomerName = new System.Windows.Forms.TextBox();
             this.bindingSourceAccounts = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnAccountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnAccountNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnBookBalance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnaddaccount = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAccounts)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -69,9 +70,9 @@
             // 
             this.groupBox1.Controls.Add(this.dataGridViewAccounts);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 78);
+            this.groupBox1.Location = new System.Drawing.Point(0, 104);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(833, 295);
+            this.groupBox1.Size = new System.Drawing.Size(833, 269);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -92,7 +93,6 @@
             this.ColumnAccountID,
             this.ColumnAccountName,
             this.ColumnAccountNo,
-            this.ColumnCustomerId,
             this.ColumnBookBalance});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
@@ -115,60 +115,15 @@
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewAccounts.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridViewAccounts.Size = new System.Drawing.Size(827, 276);
+            this.dataGridViewAccounts.Size = new System.Drawing.Size(827, 250);
             this.dataGridViewAccounts.TabIndex = 0;
             this.dataGridViewAccounts.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAccounts_CellContentDoubleClick);
             this.dataGridViewAccounts.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewAccounts_DataError);
             // 
-            // ColumnAccountID
-            // 
-            this.ColumnAccountID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnAccountID.DataPropertyName = "Id";
-            this.ColumnAccountID.HeaderText = "Id";
-            this.ColumnAccountID.Name = "ColumnAccountID";
-            this.ColumnAccountID.ReadOnly = true;
-            this.ColumnAccountID.Width = 50;
-            // 
-            // ColumnAccountName
-            // 
-            this.ColumnAccountName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnAccountName.DataPropertyName = "AccountName";
-            this.ColumnAccountName.HeaderText = "Name";
-            this.ColumnAccountName.Name = "ColumnAccountName";
-            this.ColumnAccountName.ReadOnly = true;
-            this.ColumnAccountName.Width = 140;
-            // 
-            // ColumnAccountNo
-            // 
-            this.ColumnAccountNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnAccountNo.DataPropertyName = "AccountNo";
-            this.ColumnAccountNo.HeaderText = "Number";
-            this.ColumnAccountNo.Name = "ColumnAccountNo";
-            this.ColumnAccountNo.ReadOnly = true;
-            this.ColumnAccountNo.Width = 80;
-            // 
-            // ColumnCustomerId
-            // 
-            this.ColumnCustomerId.DataPropertyName = "CustomerId";
-            this.ColumnCustomerId.HeaderText = "Customer Id";
-            this.ColumnCustomerId.Name = "ColumnCustomerId";
-            this.ColumnCustomerId.ReadOnly = true;
-            // 
-            // ColumnBookBalance
-            // 
-            this.ColumnBookBalance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnBookBalance.DataPropertyName = "BookBalance";
-            dataGridViewCellStyle2.Format = "C2";
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnBookBalance.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnBookBalance.HeaderText = "Book Balance";
-            this.ColumnBookBalance.Name = "ColumnBookBalance";
-            this.ColumnBookBalance.ReadOnly = true;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 34);
+            this.label3.Location = new System.Drawing.Point(11, 25);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(19, 13);
             this.label3.TabIndex = 15;
@@ -177,25 +132,25 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(104, 34);
+            this.label2.Location = new System.Drawing.Point(104, 25);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 13);
+            this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 14;
-            this.label2.Text = "No:";
+            this.label2.Text = "Account No:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(239, 34);
+            this.label1.Location = new System.Drawing.Point(279, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 13;
-            this.label1.Text = "Name:";
+            this.label1.Text = "Account Name:";
             // 
             // txtAccountId
             // 
             this.txtAccountId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAccountId.Location = new System.Drawing.Point(36, 30);
+            this.txtAccountId.Location = new System.Drawing.Point(36, 21);
             this.txtAccountId.Name = "txtAccountId";
             this.txtAccountId.Size = new System.Drawing.Size(54, 20);
             this.txtAccountId.TabIndex = 0;
@@ -206,7 +161,7 @@
             // txtAccountNo
             // 
             this.txtAccountNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAccountNo.Location = new System.Drawing.Point(134, 30);
+            this.txtAccountNo.Location = new System.Drawing.Point(177, 21);
             this.txtAccountNo.Name = "txtAccountNo";
             this.txtAccountNo.Size = new System.Drawing.Size(81, 20);
             this.txtAccountNo.TabIndex = 1;
@@ -216,7 +171,7 @@
             // txtAccountName
             // 
             this.txtAccountName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAccountName.Location = new System.Drawing.Point(283, 30);
+            this.txtAccountName.Location = new System.Drawing.Point(366, 21);
             this.txtAccountName.Name = "txtAccountName";
             this.txtAccountName.Size = new System.Drawing.Size(152, 20);
             this.txtAccountName.TabIndex = 2;
@@ -228,10 +183,10 @@
             this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(742, 29);
+            this.btnClose.Location = new System.Drawing.Point(746, 58);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 5;
+            this.btnClose.TabIndex = 6;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -240,18 +195,20 @@
             // 
             this.btnSubmit.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubmit.Location = new System.Drawing.Point(649, 29);
+            this.btnSubmit.Location = new System.Drawing.Point(653, 58);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
-            this.btnSubmit.TabIndex = 4;
+            this.btnSubmit.TabIndex = 5;
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = false;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnaddaccount);
+            this.groupBox2.Controls.Add(this.btnloadall);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.txtCustomerId);
+            this.groupBox2.Controls.Add(this.txtCustomerName);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
@@ -263,29 +220,41 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(833, 78);
+            this.groupBox2.Size = new System.Drawing.Size(833, 104);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // btnloadall
+            // 
+            this.btnloadall.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnloadall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnloadall.Location = new System.Drawing.Point(560, 58);
+            this.btnloadall.Name = "btnloadall";
+            this.btnloadall.Size = new System.Drawing.Size(75, 23);
+            this.btnloadall.TabIndex = 4;
+            this.btnloadall.Text = "Load All";
+            this.btnloadall.UseVisualStyleBackColor = false;
+            this.btnloadall.Click += new System.EventHandler(this.btnloadall_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(463, 34);
+            this.label4.Location = new System.Drawing.Point(565, 25);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(63, 13);
+            this.label4.Size = new System.Drawing.Size(82, 13);
             this.label4.TabIndex = 17;
-            this.label4.Text = "CustomerId:";
+            this.label4.Text = "Customer Name";
             // 
-            // txtCustomerId
+            // txtCustomerName
             // 
-            this.txtCustomerId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCustomerId.Location = new System.Drawing.Point(532, 30);
-            this.txtCustomerId.Name = "txtCustomerId";
-            this.txtCustomerId.Size = new System.Drawing.Size(53, 20);
-            this.txtCustomerId.TabIndex = 3;
-            this.txtCustomerId.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCustomerId_KeyDown);
-            this.txtCustomerId.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCustomerId_KeyPress);
-            this.txtCustomerId.Validated += new System.EventHandler(this.txtCustomerId_Validated);
+            this.txtCustomerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCustomerName.Location = new System.Drawing.Point(653, 21);
+            this.txtCustomerName.Name = "txtCustomerName";
+            this.txtCustomerName.Size = new System.Drawing.Size(145, 20);
+            this.txtCustomerName.TabIndex = 3;
+            this.txtCustomerName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCustomerId_KeyDown);
+            this.txtCustomerName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCustomerId_KeyPress);
+            this.txtCustomerName.Validated += new System.EventHandler(this.txtCustomerId_Validated);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -326,6 +295,44 @@
             this.dataGridViewTextBoxColumn4.ReadOnly = true;
             this.dataGridViewTextBoxColumn4.Width = 200;
             // 
+            // ColumnAccountID
+            // 
+            this.ColumnAccountID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnAccountID.DataPropertyName = "Id";
+            this.ColumnAccountID.HeaderText = "Id";
+            this.ColumnAccountID.Name = "ColumnAccountID";
+            this.ColumnAccountID.ReadOnly = true;
+            this.ColumnAccountID.Width = 50;
+            // 
+            // ColumnAccountName
+            // 
+            this.ColumnAccountName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnAccountName.DataPropertyName = "AccountName";
+            this.ColumnAccountName.HeaderText = "Name";
+            this.ColumnAccountName.Name = "ColumnAccountName";
+            this.ColumnAccountName.ReadOnly = true;
+            this.ColumnAccountName.Width = 140;
+            // 
+            // ColumnAccountNo
+            // 
+            this.ColumnAccountNo.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnAccountNo.DataPropertyName = "AccountNo";
+            this.ColumnAccountNo.HeaderText = "Number";
+            this.ColumnAccountNo.Name = "ColumnAccountNo";
+            this.ColumnAccountNo.ReadOnly = true;
+            this.ColumnAccountNo.Width = 80;
+            // 
+            // ColumnBookBalance
+            // 
+            this.ColumnBookBalance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnBookBalance.DataPropertyName = "BookBalance";
+            dataGridViewCellStyle2.Format = "C2";
+            dataGridViewCellStyle2.NullValue = null;
+            this.ColumnBookBalance.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnBookBalance.HeaderText = "Book Balance";
+            this.ColumnBookBalance.Name = "ColumnBookBalance";
+            this.ColumnBookBalance.ReadOnly = true;
+            // 
             // dataGridViewTextBoxColumn5
             // 
             this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -334,9 +341,21 @@
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             this.dataGridViewTextBoxColumn5.ReadOnly = true;
             // 
+            // btnaddaccount
+            // 
+            this.btnaddaccount.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnaddaccount.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnaddaccount.Location = new System.Drawing.Point(447, 58);
+            this.btnaddaccount.Name = "btnaddaccount";
+            this.btnaddaccount.Size = new System.Drawing.Size(93, 23);
+            this.btnaddaccount.TabIndex = 18;
+            this.btnaddaccount.Text = "Add Account";
+            this.btnaddaccount.UseVisualStyleBackColor = false;
+            this.btnaddaccount.Click += new System.EventHandler(this.btnaddaccount_Click);
+            // 
             // SearchAccountsSimpleForm
             // 
-            this.AcceptButton = this.btnSubmit;
+            this.AcceptButton = this.btnloadall;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
@@ -378,11 +397,12 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dataGridViewAccounts;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtCustomerId;
+        private System.Windows.Forms.TextBox txtCustomerName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAccountID;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAccountName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAccountNo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCustomerId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBookBalance;
+        private System.Windows.Forms.Button btnloadall;
+        private System.Windows.Forms.Button btnaddaccount;
     }
 }

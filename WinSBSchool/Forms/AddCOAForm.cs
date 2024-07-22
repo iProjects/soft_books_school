@@ -76,7 +76,7 @@ namespace WinSBSchool.Forms
                         db.SaveChanges();
 
                         COAForm f = (COAForm)this.Owner;
-                        f.RefreshGrid();
+                        f.RefreshGrid(_Coa);
                         this.Close();
                     } 
                 }
@@ -222,6 +222,7 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
+         
 
 
 

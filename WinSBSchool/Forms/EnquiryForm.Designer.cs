@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.cboAccountNumber = new System.Windows.Forms.ComboBox();
             this.cboAdmissionNumber = new System.Windows.Forms.ComboBox();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
@@ -48,13 +49,13 @@
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridViewTransactions = new System.Windows.Forms.DataGridView();
             this.ColumnTransactionTypeId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNarrative = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btntransactions = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceTransactions)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -63,6 +64,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btntransactions);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cboAccountNumber);
             this.groupBox1.Controls.Add(this.cboAdmissionNumber);
@@ -79,6 +81,15 @@
             this.groupBox1.Size = new System.Drawing.Size(810, 107);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(309, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(55, 13);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Start Date";
             // 
             // cboAccountNumber
             // 
@@ -120,7 +131,7 @@
             this.btnSearchAccount.AutoSize = true;
             this.btnSearchAccount.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
             this.btnSearchAccount.LinkColor = System.Drawing.Color.Yellow;
-            this.btnSearchAccount.Location = new System.Drawing.Point(615, 24);
+            this.btnSearchAccount.Location = new System.Drawing.Point(602, 16);
             this.btnSearchAccount.Name = "btnSearchAccount";
             this.btnSearchAccount.Size = new System.Drawing.Size(127, 18);
             this.btnSearchAccount.TabIndex = 5;
@@ -133,7 +144,7 @@
             this.btnSearch.AutoSize = true;
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
             this.btnSearch.LinkColor = System.Drawing.Color.Yellow;
-            this.btnSearch.Location = new System.Drawing.Point(615, 63);
+            this.btnSearch.Location = new System.Drawing.Point(602, 44);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(61, 18);
             this.btnSearch.TabIndex = 4;
@@ -212,15 +223,6 @@
             this.dataGridViewTextBoxColumn4.MinimumWidth = 100;
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(309, 68);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 13);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Start Date";
             // 
             // groupBox2
             // 
@@ -306,6 +308,19 @@
             this.ColumnAmount.Name = "ColumnAmount";
             this.ColumnAmount.ReadOnly = true;
             // 
+            // btntransactions
+            // 
+            this.btntransactions.AutoSize = true;
+            this.btntransactions.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.btntransactions.LinkColor = System.Drawing.Color.Yellow;
+            this.btntransactions.Location = new System.Drawing.Point(602, 74);
+            this.btntransactions.Name = "btntransactions";
+            this.btntransactions.Size = new System.Drawing.Size(106, 18);
+            this.btntransactions.TabIndex = 13;
+            this.btntransactions.TabStop = true;
+            this.btntransactions.Text = "Transactions";
+            this.btntransactions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btntransactions_LinkClicked);
+            // 
             // EnquiryForm
             // 
             this.AcceptButton = this.btnSearch;
@@ -356,5 +371,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAccountID;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNarrative;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAmount;
+        private System.Windows.Forms.LinkLabel btntransactions;
     }
 }

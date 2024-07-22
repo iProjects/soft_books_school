@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -17,10 +18,24 @@ namespace WinSBSchool.Forms
         string connection;
         IQueryable<Student> _students;
         string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-        public StudentsForm(string _user, string Conn)
+        public StudentsForm(string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
@@ -30,34 +45,25 @@ namespace WinSBSchool.Forms
             rep = new Repository(connection);
 
             user = _user;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished StudentsForm initialization", TAG));
+
         }
 
-        private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            try
-            {
-                var _defaultSchoolquery = (from sub in db.Schools
-                                           where sub.DefaultSchool == true
-                                           where sub.IsDeleted == false
-                                           where sub.Status == "A"
-                                           select sub).FirstOrDefault();
-                School _defaultSchool = _defaultSchoolquery;
-                if (_defaultSchool == null)
-                {
-                    MessageBox.Show("No Default School is Set!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                if (_defaultSchool != null)
-                {
-                    Forms.AddStudentForm asf = new Forms.AddStudentForm(connection) { Owner = this };
-                    asf.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
         private void StudentsForm_Load(object sender, EventArgs e)
         {
             try
@@ -140,6 +146,7 @@ namespace WinSBSchool.Forms
                             where s.Status == "A"
                             where s.IsDeleted == false
                             select s;
+
                 bindingSourceStudents.DataSource = _students;
                 dataGridViewStudents.AutoGenerateColumns = false;
                 this.dataGridViewStudents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -185,6 +192,9 @@ namespace WinSBSchool.Forms
                     AutoCompleteMode.SuggestAppend;
                 txtOtherNames.AutoCompleteSource =
                      AutoCompleteSource.CustomSource;
+
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished StudentsForm load", TAG));
+
             }
             catch (Exception ex)
             {
@@ -269,6 +279,33 @@ namespace WinSBSchool.Forms
                 return null;
             }
         }
+
+        private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                var _defaultSchoolquery = (from sub in db.Schools
+                                           where sub.DefaultSchool == true
+                                           where sub.IsDeleted == false
+                                           where sub.Status == "A"
+                                           select sub).FirstOrDefault();
+                School _defaultSchool = _defaultSchoolquery;
+                if (_defaultSchool == null)
+                {
+                    MessageBox.Show("No Default School is Set!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                if (_defaultSchool != null)
+                {
+                    Forms.AddStudentForm asf = new Forms.AddStudentForm(connection) { Owner = this };
+                    asf.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
         public void RefreshGrid()
         {
             try
@@ -319,7 +356,7 @@ namespace WinSBSchool.Forms
                 {
 
                     DAL.Student student = (DAL.Student)bindingSourceStudents.Current;
-                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection) { Owner = this };
+                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = student.StudentOtherNames.ToUpper().Trim() + " " + student.StudentSurName.ToUpper().Trim();
                     es.ShowDialog();
                 }
@@ -335,6 +372,12 @@ namespace WinSBSchool.Forms
             this.Close();
         }
 
+        /*before deleting a student check if
+        1. no account linked to this student
+         2. no customer linked to this student
+         3. no exam records linked to this student
+         
+         * */
         private void btnDelete_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (dataGridViewStudents.SelectedRows.Count != 0)
@@ -390,7 +433,7 @@ namespace WinSBSchool.Forms
                 {
 
                     DAL.Student student = (DAL.Student)bindingSourceStudents.Current;
-                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection) { Owner = this };
+                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection, _notificationmessageEventname) { Owner = this };
                     es.DisableControls();
                     es.Text = student.StudentOtherNames.ToUpper().Trim() + " " + student.StudentSurName.ToUpper().Trim();
                     es.ShowDialog();
@@ -410,7 +453,7 @@ namespace WinSBSchool.Forms
                 {
 
                     DAL.Student student = (DAL.Student)bindingSourceStudents.Current;
-                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection) { Owner = this };
+                    Forms.EditStudentForm es = new Forms.EditStudentForm(student, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = student.StudentOtherNames.ToUpper().Trim() + " " + student.StudentSurName.ToUpper().Trim();
                     es.ShowDialog();
                 }
@@ -1197,12 +1240,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-
-
+                e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
 
         }

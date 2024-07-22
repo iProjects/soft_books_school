@@ -51,6 +51,8 @@
             this.ColumnTelephone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnaddnew = new System.Windows.Forms.Button();
+            this.btnloadall = new System.Windows.Forms.Button();
             this.bindingSourceCustomers = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -85,7 +87,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(269, 18);
+            this.label1.Location = new System.Drawing.Point(10, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 13;
@@ -115,7 +117,7 @@
             // txtCustomerName
             // 
             this.txtCustomerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCustomerName.Location = new System.Drawing.Point(307, 14);
+            this.txtCustomerName.Location = new System.Drawing.Point(48, 46);
             this.txtCustomerName.Name = "txtCustomerName";
             this.txtCustomerName.Size = new System.Drawing.Size(246, 20);
             this.txtCustomerName.TabIndex = 2;
@@ -127,7 +129,7 @@
             this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(735, 13);
+            this.btnClose.Location = new System.Drawing.Point(732, 30);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 4;
@@ -139,7 +141,7 @@
             // 
             this.btnSubmit.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubmit.Location = new System.Drawing.Point(628, 13);
+            this.btnSubmit.Location = new System.Drawing.Point(639, 30);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
             this.btnSubmit.TabIndex = 3;
@@ -151,9 +153,9 @@
             // 
             this.groupBox1.Controls.Add(this.dataGridViewCustomers);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 46);
+            this.groupBox1.Location = new System.Drawing.Point(0, 81);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(833, 327);
+            this.groupBox1.Size = new System.Drawing.Size(833, 292);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -198,7 +200,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewCustomers.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridViewCustomers.Size = new System.Drawing.Size(827, 308);
+            this.dataGridViewCustomers.Size = new System.Drawing.Size(827, 273);
             this.dataGridViewCustomers.TabIndex = 0;
             this.dataGridViewCustomers.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCustomers_CellContentDoubleClick);
             this.dataGridViewCustomers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewCustomers_DataError);
@@ -257,6 +259,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnaddnew);
+            this.groupBox2.Controls.Add(this.btnloadall);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
@@ -268,9 +272,33 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(833, 46);
+            this.groupBox2.Size = new System.Drawing.Size(833, 81);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // btnaddnew
+            // 
+            this.btnaddnew.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnaddnew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnaddnew.Location = new System.Drawing.Point(453, 30);
+            this.btnaddnew.Name = "btnaddnew";
+            this.btnaddnew.Size = new System.Drawing.Size(75, 23);
+            this.btnaddnew.TabIndex = 17;
+            this.btnaddnew.Text = "Add New";
+            this.btnaddnew.UseVisualStyleBackColor = false;
+            this.btnaddnew.Click += new System.EventHandler(this.btnaddnew_Click);
+            // 
+            // btnloadall
+            // 
+            this.btnloadall.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnloadall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnloadall.Location = new System.Drawing.Point(546, 30);
+            this.btnloadall.Name = "btnloadall";
+            this.btnloadall.Size = new System.Drawing.Size(75, 23);
+            this.btnloadall.TabIndex = 16;
+            this.btnloadall.Text = "Load All";
+            this.btnloadall.UseVisualStyleBackColor = false;
+            this.btnloadall.Click += new System.EventHandler(this.btnloadall_Click);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -330,7 +358,7 @@
             // 
             // SearchCustomersSimpleForm
             // 
-            this.AcceptButton = this.btnSubmit;
+            this.AcceptButton = this.btnloadall;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
@@ -378,5 +406,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTelephone;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEmail;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.Button btnaddnew;
+        private System.Windows.Forms.Button btnloadall;
     }
 }

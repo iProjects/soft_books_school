@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -17,11 +18,26 @@ namespace WinSBSchool.Forms
         SBSchoolDBEntities db;
         string user;
         string connection;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
+        string receiptNo;
+        Account _account;
 
-
-        public PostingMuiltiEntryForm(string s, string Conn)
+        public PostingMuiltiEntryForm(string s, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
@@ -29,36 +45,53 @@ namespace WinSBSchool.Forms
             rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
             user = s;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished PostingMuiltiEntryForm initialization", TAG));
+
             observableTransactions = new BindingList<Transaction>();
 
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void PostingMuiltiEntryForm_Load(object sender, EventArgs e)
         {
             try
             {
-                
-                List<TransactionType> transactiontypes = rep.GetAllTransactionTypes();
+                lblaccountdetails.Text = string.Empty;
+
+                var _TransactionTypesquery = from ttype in rep.GetAllTransactionTypes()
+                                             where ttype.IsDeleted == false
+                                             select ttype;
+                List<TransactionType> transactiontypes = _TransactionTypesquery.ToList();
+
                 cboTransactionType.DataSource = transactiontypes;
-                cboTransactionType.ValueMember = "TransactionTypeID";
+                cboTransactionType.ValueMember = "Id";
                 cboTransactionType.DisplayMember = "Description";
 
-                bindingSourceTransactions.DataSource = observableTransactions;
                 dataGridViewTransactions.AutoGenerateColumns = false;
                 dataGridViewTransactions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                bindingSourceTransactions.DataSource = observableTransactions;
                 dataGridViewTransactions.DataSource = bindingSourceTransactions;
-
-                var _TransactionTypesquery = from dc in db.TransactionTypes
-                                         select dc;
-                List<TransactionType> _TransactionTypes = _TransactionTypesquery.ToList();
 
                 DataGridViewComboBoxColumn colTransactionType = new DataGridViewComboBoxColumn();
                 colTransactionType.HeaderText = "Transaction Type";
                 colTransactionType.Name = "cbTransactionType";
-                colTransactionType.DataSource = _TransactionTypes;
+                colTransactionType.DataSource = transactiontypes;
                 colTransactionType.DisplayMember = "Description";
                 colTransactionType.DataPropertyName = "TransactionTypeId";
-                colTransactionType.ValueMember = "TransactionTypeID";
+                colTransactionType.ValueMember = "Id";
                 colTransactionType.MaxDropDownItems = 10;
                 colTransactionType.DisplayIndex = 0;
                 colTransactionType.MinimumWidth = 5;
@@ -72,8 +105,9 @@ namespace WinSBSchool.Forms
                     dataGridViewTransactions.Columns.Add(colTransactionType);
                 }
 
-                var _Accountsquery = from dc in db.Accounts
-                                             select dc;
+                var _Accountsquery = from acc in db.Accounts
+                                     where acc.IsDeleted == false && acc.Closed == false
+                                     select acc;
                 List<Account> _Accounts = _Accountsquery.ToList();
 
                 DataGridViewComboBoxColumn colAccount = new DataGridViewComboBoxColumn();
@@ -81,8 +115,8 @@ namespace WinSBSchool.Forms
                 colAccount.Name = "cbAccount";
                 colAccount.DataSource = _Accounts;
                 colAccount.DisplayMember = "AccountName";
-                colAccount.DataPropertyName = "AccountID";
-                colAccount.ValueMember = "AccountID";
+                colAccount.DataPropertyName = "AccountId";
+                colAccount.ValueMember = "Id";
                 colAccount.MaxDropDownItems = 10;
                 colAccount.DisplayIndex = 1;
                 colAccount.MinimumWidth = 5;
@@ -95,55 +129,13 @@ namespace WinSBSchool.Forms
                     dataGridViewTransactions.Columns.Add(colAccount);
                 }
 
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished PostingMuiltiEntryForm load", TAG));
+
             }
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
             }
-        }
-        public bool IsTransactionValid()
-        {
-            bool noerror = true;
-            if (string.IsNullOrEmpty(txtAccountID.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountID, "Account id cannot be null!");
-                return false;
-            }
-            int accountid;
-            if (!int.TryParse(txtAccountID.Text,out accountid))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountID, "Account id must be integer!");
-                return false;
-            }
-            if (cboTransactionType.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboTransactionType, "Select Transaction Type!");
-                return false;
-            } 
-            if (string.IsNullOrEmpty(txtAmount.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount cannot be null!");
-                return false;
-            }
-            decimal amt;
-            if (!decimal.TryParse(txtAmount.Text, out amt))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount must be decimal!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtNarrative.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtNarrative, "Narrative cannot be null!");
-                return false;
-            }
-            return noerror;
-
         }
 
         private void btnPostTransaction_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -151,8 +143,16 @@ namespace WinSBSchool.Forms
             try
             {
                 rep.PostTransactions(observableTransactions.ToList());
+
                 MessageBox.Show("Post Successful!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+
+                if (this.Owner is TransactionsForm)
+                {
+                    TransactionsForm f = (TransactionsForm)this.Owner;
+                    f.RefreshGrid();
+                    this.Close();
+                }
+
             }
             catch (Exception ex)
             {
@@ -166,30 +166,34 @@ namespace WinSBSchool.Forms
         }
         private void btnAddTransaction_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider1.Clear();
+            errorProvider.Clear();
             if (IsTransactionValid())
             {
                 try
                 {
-                    string RawSalt = DateTime.Now.ToString("yMdHms");
-                    string HashSalt = HashHelper.CreateRandomSalt();
-                    int foundS1 = HashSalt.IndexOf("==");
-                    int foundS2 = HashSalt.IndexOf("+");
-                    int foundS3 = HashSalt.IndexOf("/");
-                    if (foundS1 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS1);
-                    }
-                    if (foundS2 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS2);
-                    }
-                    if (foundS3 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS3);
-                    }
-                    string SaltedHash = RawSalt.Insert(5, HashSalt);
-                    string _transRef = SaltedHash; 
+                    //Build up transactions 
+                    string RawSalt = Utils.create_random_salt();
+                    //string HashSalt = HashHelper.CreateRandomSalt();
+                    //int foundS1 = HashSalt.IndexOf("==");
+                    //int foundS2 = HashSalt.IndexOf("+");
+                    //int foundS3 = HashSalt.IndexOf("/");
+                    //if (foundS1 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS1);
+                    //}
+                    //if (foundS2 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS2);
+                    //}
+                    //if (foundS3 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS3);
+                    //}
+                    //string SaltedHash = RawSalt.Insert(RawSalt.Length, HashSalt);
+                    string _transRef = RawSalt;
+                    int no_of_characters_in_transaction_reference_no = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NO_OF_CHARACTERS_IN_TRANSACTION_REFERENCE_NO"]);
+                    _transRef = _transRef.ToUpper().Substring(0, no_of_characters_in_transaction_reference_no);
+                    receiptNo = _transRef;
 
                     Transaction t = new Transaction();
                     int accountid;
@@ -200,7 +204,7 @@ namespace WinSBSchool.Forms
                     if (cboTransactionType.SelectedIndex != -1)
                     {
                         t.TransactionTypeId = int.Parse(cboTransactionType.SelectedValue.ToString());
-                    } 
+                    }
                     decimal amount;
                     if (!string.IsNullOrEmpty(txtAmount.Text) && decimal.TryParse(txtAmount.Text, out amount))
                     {
@@ -209,6 +213,7 @@ namespace WinSBSchool.Forms
                     t.PostDate = dpPostDate.Value;
                     t.RecordDate = dpPostDate.Value;
                     t.ValueDate = dpValueDate.Value;
+                    t.TransRef = _transRef;
                     if (!string.IsNullOrEmpty(txtNarrative.Text))
                     {
                         t.Narrative = txtNarrative.Text;
@@ -217,9 +222,16 @@ namespace WinSBSchool.Forms
                     {
                         t.UserName = user;
                     }
+                    var txn_type = rep.GetTransactionType(t.TransactionTypeId);
+                    if (txn_type != null)
+                    {
+                        t.StatementFlag = txn_type.StatementFlag;
+                    }
+                    else
+                    {
+                        t.StatementFlag = "C";
+                    }
                     t.Authorizer = "SYSTEM";
-                    t.StatementFlag = "VALID";
-                    t.TransRef = _transRef;
 
                     observableTransactions.Add(t);
 
@@ -230,6 +242,45 @@ namespace WinSBSchool.Forms
                 }
             }
         }
+        public bool IsTransactionValid()
+        {
+            bool noerror = true;
+            if (string.IsNullOrEmpty(txtAccountID.Text))
+            {
+                errorProvider.SetError(txtAccountID, "Account id cannot be null!");
+                noerror = false;
+            }
+            int accountid;
+            if (!int.TryParse(txtAccountID.Text, out accountid))
+            {
+                errorProvider.SetError(txtAccountID, "Account id must be integer!");
+                noerror = false;
+            }
+            if (cboTransactionType.SelectedIndex == -1)
+            {
+                errorProvider.SetError(cboTransactionType, "Select Transaction Type!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtAmount.Text))
+            {
+                errorProvider.SetError(txtAmount, "Amount cannot be null!");
+                noerror = false;
+            }
+            decimal amt;
+            if (!decimal.TryParse(txtAmount.Text, out amt))
+            {
+                errorProvider.SetError(txtAmount, "Amount must be decimal!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtNarrative.Text))
+            {
+                errorProvider.SetError(txtNarrative, "Narrative cannot be null!");
+                noerror = false;
+            }
+            return noerror;
+
+        }
+
         private void btnDelete_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (dataGridViewTransactions.SelectedRows.Count != 0)
@@ -272,14 +323,24 @@ namespace WinSBSchool.Forms
         private void saf_OnAccountListSelected(object sender, AccountSelectEventArgs e)
         {
             SetAccountNos(e._Account);
+            txtAccountID_TextChanged(sender, e);
         }
         private void SetAccountNos(Account _Account)
         {
             if (_Account != null)
             {
                 txtAccountID.Text = _Account.Id.ToString();
+                _account = _Account;
             }
 
+        }
+
+        private void txtAccountID_TextChanged(object sender, EventArgs e)
+        {
+            if (_account != null)
+            {
+                lblaccountdetails.Text = "Name [ " + _account.AccountName + " ], No [ " + _account.AccountNo + " ] Book Balance [ " + _account.BookBalance + " ]";
+            }
         }
 
 

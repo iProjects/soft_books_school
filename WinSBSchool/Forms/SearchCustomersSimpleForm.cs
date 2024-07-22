@@ -6,13 +6,20 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class SearchCustomersSimpleForm : Form
     {
+        Repository rep;
         SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         IQueryable<Customer> _Customer;
         //delegate
         public delegate void CustomerSelectHandler(object sender, CustomerSelectEventArgs e);
@@ -21,38 +28,50 @@ namespace WinSBSchool.Forms
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
 
-        public SearchCustomersSimpleForm(string Conn)
+        public SearchCustomersSimpleForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished SearchCustomersSimpleForm initialization", TAG));
+
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-        private void btnSubmit_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewCustomers.SelectedRows.Count > 0)
-            {
-                try
-                {
-                    Customer selectedCustomer = (Customer)bindingSourceCustomers.Current;
-                    OnCustomerListSelected(this, new CustomerSelectEventArgs(selectedCustomer));
 
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
-            }
-        }
         private void SearchCustomersSimpleForm_Load(object sender, EventArgs e)
         {
             try
@@ -61,7 +80,7 @@ namespace WinSBSchool.Forms
                 this.dataGridViewCustomers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridViewCustomers.DataSource = bindingSourceCustomers;
 
-                _Customer = db.Customers.Where(i => i.Status == "A" && i.IsDeleted == false);
+                _Customer = db.Customers.Where(i => i.Status == "A" && i.IsDeleted == false).OrderByDescending(i => i.Id);
 
                 AutoCompleteStringCollection acscustid = new AutoCompleteStringCollection();
                 acscustid.AddRange(this.AutoComplete_CustomerIds());
@@ -148,7 +167,7 @@ namespace WinSBSchool.Forms
             }
         }
         // apply the filter
-        private void ApplyFilter()
+        public void ApplyFilter()
         {
             try
             {
@@ -261,7 +280,7 @@ namespace WinSBSchool.Forms
         private void txtCustomerName_Validated(object sender, EventArgs e)
         {
             ApplyFilter();
-        } 
+        }
         private void txtCustomerName_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
@@ -321,6 +340,23 @@ namespace WinSBSchool.Forms
                 nonNumberEntered = true;
             }
         }
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewCustomers.SelectedRows.Count > 0)
+            {
+                try
+                {
+                    Customer selectedCustomer = (Customer)bindingSourceCustomers.Current;
+                    OnCustomerListSelected(this, new CustomerSelectEventArgs(selectedCustomer));
+
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    Utils.ShowError(ex);
+                }
+            }
+        }
         private void dataGridViewCustomers_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dataGridViewCustomers.SelectedRows.Count != 0)
@@ -342,12 +378,23 @@ namespace WinSBSchool.Forms
         {
             try
             {
-
+                //e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
+        }
+
+        private void btnloadall_Click(object sender, EventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void btnaddnew_Click(object sender, EventArgs e)
+        {
+            AddCustomerForm acf = new AddCustomerForm(user, connection, _notificationmessageEventname) { Owner = this };
+            acf.ShowDialog();
         }
 
 

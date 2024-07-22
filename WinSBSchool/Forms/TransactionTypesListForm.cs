@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using DAL;
 using CommonLib;
 using System.Linq;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -16,17 +17,50 @@ namespace WinSBSchool.Forms
         Repository rep;
         SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-
-        public TransactionTypesListForm(string Conn)
+        public TransactionTypesListForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
-            rep = new Repository(connection);
+
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished TransactionTypesListForm initialization", TAG));
+
+        }
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
 
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -136,7 +170,7 @@ namespace WinSBSchool.Forms
                 if (dataGridViewTransactionTypes.SelectedRows.Count != 0)
                 {
                     DAL.TransactionType txntype = (DAL.TransactionType)bindingSourceTransactionTypes.Current;
-                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, connection) { Owner = this };
+                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, user, connection, _notificationmessageEventname) { Owner = this };
                     ettf.Text = txntype.Description.ToUpper().Trim();
                     ettf.ShowDialog();
                 }
@@ -157,7 +191,7 @@ namespace WinSBSchool.Forms
                 {
 
                     DAL.TransactionType t = (DAL.TransactionType)bindingSourceTransactionTypes.Current;
-                    
+
                     //first check if there are any transactions associated with this transaction type.
                     var txns = from txn in db.Transactions
                                join txntype in db.TransactionTypes on txn.TransactionTypeId equals txntype.Id
@@ -191,7 +225,7 @@ namespace WinSBSchool.Forms
                 if (dataGridViewTransactionTypes.SelectedRows.Count != 0)
                 {
                     DAL.TransactionType txntype = (DAL.TransactionType)bindingSourceTransactionTypes.Current;
-                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, connection) { Owner = this };
+                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, user, connection, _notificationmessageEventname) { Owner = this };
                     ettf.DisableControls();
                     ettf.Text = txntype.Description.ToUpper().Trim();
                     ettf.ShowDialog();
@@ -210,7 +244,7 @@ namespace WinSBSchool.Forms
                 if (dataGridViewTransactionTypes.SelectedRows.Count != 0)
                 {
                     DAL.TransactionType txntype = (DAL.TransactionType)bindingSourceTransactionTypes.Current;
-                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, connection) { Owner = this };
+                    Forms.EditTransactionTypeForm ettf = new Forms.EditTransactionTypeForm(txntype, user, connection, _notificationmessageEventname) { Owner = this };
                     ettf.Text = txntype.Description.ToUpper().Trim();
                     ettf.ShowDialog();
                 }
@@ -225,12 +259,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
-
-
+                e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
         }
 

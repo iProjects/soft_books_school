@@ -42,7 +42,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditStudentForm));
             this.btnClose = new System.Windows.Forms.LinkLabel();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnUpdate = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -300,7 +300,10 @@
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.groupBox22 = new System.Windows.Forms.GroupBox();
+            this.dataGridViewfeesrecord = new System.Windows.Forms.DataGridView();
+            this.bindingSourcefeesrecords = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -344,6 +347,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceStudentAccounts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceDisplines)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceDisciplinaryCategories)).BeginInit();
+            this.groupBox22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewfeesrecord)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourcefeesrecords)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
@@ -359,9 +365,9 @@
             this.btnClose.Text = "Close";
             this.btnClose.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnClose_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // btnUpdate
             // 
@@ -498,11 +504,11 @@
             this.btnUploadPhoto.Text = "Upload Photo";
             this.btnUploadPhoto.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnUploadPhoto_LinkClicked);
             // 
-            // pBStudentPhoto
+            // imgStudentPhoto
             // 
             this.imgStudentPhoto.ErrorImage = global::WinSBSchool.Properties.Resources.defaultphoto;
             this.imgStudentPhoto.Location = new System.Drawing.Point(426, 176);
-            this.imgStudentPhoto.Name = "pBStudentPhoto";
+            this.imgStudentPhoto.Name = "imgStudentPhoto";
             this.imgStudentPhoto.Size = new System.Drawing.Size(240, 167);
             this.imgStudentPhoto.TabIndex = 67;
             this.imgStudentPhoto.TabStop = false;
@@ -1425,6 +1431,7 @@
             // tabPage10
             // 
             this.tabPage10.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPage10.Controls.Add(this.groupBox22);
             this.tabPage10.Controls.Add(this.groupBox21);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
@@ -1436,10 +1443,10 @@
             // 
             this.groupBox21.Controls.Add(this.cboFeesPaymentPlan);
             this.groupBox21.Controls.Add(this.label94);
-            this.groupBox21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox21.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox21.Location = new System.Drawing.Point(0, 0);
             this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(710, 430);
+            this.groupBox21.Size = new System.Drawing.Size(710, 65);
             this.groupBox21.TabIndex = 0;
             this.groupBox21.TabStop = false;
             // 
@@ -1448,7 +1455,7 @@
             this.cboFeesPaymentPlan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFeesPaymentPlan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboFeesPaymentPlan.FormattingEnabled = true;
-            this.cboFeesPaymentPlan.Location = new System.Drawing.Point(180, 78);
+            this.cboFeesPaymentPlan.Location = new System.Drawing.Point(114, 17);
             this.cboFeesPaymentPlan.Name = "cboFeesPaymentPlan";
             this.cboFeesPaymentPlan.Size = new System.Drawing.Size(264, 21);
             this.cboFeesPaymentPlan.TabIndex = 0;
@@ -1456,7 +1463,7 @@
             // label94
             // 
             this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(79, 82);
+            this.label94.Location = new System.Drawing.Point(13, 21);
             this.label94.Name = "label94";
             this.label94.Size = new System.Drawing.Size(98, 13);
             this.label94.TabIndex = 16;
@@ -3080,6 +3087,28 @@
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;
             // 
+            // groupBox22
+            // 
+            this.groupBox22.Controls.Add(this.dataGridViewfeesrecord);
+            this.groupBox22.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox22.Location = new System.Drawing.Point(0, 65);
+            this.groupBox22.Name = "groupBox22";
+            this.groupBox22.Size = new System.Drawing.Size(710, 365);
+            this.groupBox22.TabIndex = 1;
+            this.groupBox22.TabStop = false;
+            // 
+            // dataGridViewfeesrecord
+            // 
+            this.dataGridViewfeesrecord.AllowUserToAddRows = false;
+            this.dataGridViewfeesrecord.AllowUserToDeleteRows = false;
+            this.dataGridViewfeesrecord.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewfeesrecord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewfeesrecord.Location = new System.Drawing.Point(3, 16);
+            this.dataGridViewfeesrecord.Name = "dataGridViewfeesrecord";
+            this.dataGridViewfeesrecord.ReadOnly = true;
+            this.dataGridViewfeesrecord.Size = new System.Drawing.Size(704, 346);
+            this.dataGridViewfeesrecord.TabIndex = 0;
+            // 
             // EditStudentForm
             // 
             this.AcceptButton = this.btnUpdate;
@@ -3094,7 +3123,7 @@
             this.Name = "EditStudentForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.EditStudentForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -3162,6 +3191,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceStudentAccounts)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceDisplines)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceDisciplinaryCategories)).EndInit();
+            this.groupBox22.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewfeesrecord)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourcefeesrecords)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3169,7 +3201,7 @@
         #endregion
 
         private System.Windows.Forms.LinkLabel btnClose;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.LinkLabel btnUpdate;
         private System.Windows.Forms.BindingSource bindingSourceStudentAccounts;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -3467,6 +3499,9 @@
         private System.Windows.Forms.GroupBox groupBox21;
         private System.Windows.Forms.ComboBox cboFeesPaymentPlan;
         private System.Windows.Forms.Label label94;
+        private System.Windows.Forms.GroupBox groupBox22;
+        private System.Windows.Forms.DataGridView dataGridViewfeesrecord;
+        private System.Windows.Forms.BindingSource bindingSourcefeesrecords;
 
     }
 }

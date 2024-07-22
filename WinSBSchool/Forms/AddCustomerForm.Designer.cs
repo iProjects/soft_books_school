@@ -35,6 +35,7 @@
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.btnAdd = new System.Windows.Forms.LinkLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblbankdetails = new System.Windows.Forms.Label();
             this.btnSearchBankSortCode = new System.Windows.Forms.Button();
             this.txtBankSortCode = new System.Windows.Forms.TextBox();
             this.txtCustomerNo = new System.Windows.Forms.TextBox();
@@ -70,7 +71,7 @@
             this.groupBox1.Controls.Add(this.btnClose);
             this.groupBox1.Controls.Add(this.btnAdd);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 237);
+            this.groupBox1.Location = new System.Drawing.Point(0, 258);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(458, 38);
             this.groupBox1.TabIndex = 1;
@@ -104,6 +105,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lblbankdetails);
             this.groupBox2.Controls.Add(this.btnSearchBankSortCode);
             this.groupBox2.Controls.Add(this.txtBankSortCode);
             this.groupBox2.Controls.Add(address1Label);
@@ -120,9 +122,18 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(458, 237);
+            this.groupBox2.Size = new System.Drawing.Size(458, 258);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // lblbankdetails
+            // 
+            this.lblbankdetails.AutoSize = true;
+            this.lblbankdetails.Location = new System.Drawing.Point(93, 233);
+            this.lblbankdetails.Name = "lblbankdetails";
+            this.lblbankdetails.Size = new System.Drawing.Size(67, 13);
+            this.lblbankdetails.TabIndex = 146;
+            this.lblbankdetails.Text = "Bank Details";
             // 
             // btnSearchBankSortCode
             // 
@@ -131,7 +142,7 @@
             this.btnSearchBankSortCode.Location = new System.Drawing.Point(316, 197);
             this.btnSearchBankSortCode.Name = "btnSearchBankSortCode";
             this.btnSearchBankSortCode.Size = new System.Drawing.Size(58, 23);
-            this.btnSearchBankSortCode.TabIndex = 145;
+            this.btnSearchBankSortCode.TabIndex = 5;
             this.btnSearchBankSortCode.TabStop = false;
             this.btnSearchBankSortCode.Text = ":::";
             this.btnSearchBankSortCode.UseVisualStyleBackColor = false;
@@ -144,7 +155,8 @@
             this.txtBankSortCode.MaxLength = 5;
             this.txtBankSortCode.Name = "txtBankSortCode";
             this.txtBankSortCode.Size = new System.Drawing.Size(185, 20);
-            this.txtBankSortCode.TabIndex = 144;
+            this.txtBankSortCode.TabIndex = 5;
+            this.txtBankSortCode.TextChanged += new System.EventHandler(this.txtBankSortCode_TextChanged);
             this.txtBankSortCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBankSortCode_KeyDown);
             this.txtBankSortCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBankSortCode_KeyPress);
             // 
@@ -154,7 +166,7 @@
             this.txtCustomerNo.Location = new System.Drawing.Point(96, 50);
             this.txtCustomerNo.Name = "txtCustomerNo";
             this.txtCustomerNo.Size = new System.Drawing.Size(278, 20);
-            this.txtCustomerNo.TabIndex = 0;
+            this.txtCustomerNo.TabIndex = 1;
             this.txtCustomerNo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCustomerNo_KeyDown);
             this.txtCustomerNo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCustomerNo_KeyPress);
             // 
@@ -163,9 +175,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(50, 53);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(44, 13);
+            this.label6.Size = new System.Drawing.Size(48, 13);
             this.label6.TabIndex = 10;
-            this.label6.Text = "Number";
+            this.label6.Text = "Number*";
             // 
             // txtEmail
             // 
@@ -197,7 +209,7 @@
             this.txtName.Location = new System.Drawing.Point(96, 12);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(278, 20);
-            this.txtName.TabIndex = 1;
+            this.txtName.TabIndex = 0;
             // 
             // label4
             // 
@@ -246,7 +258,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(458, 275);
+            this.ClientSize = new System.Drawing.Size(458, 296);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -284,5 +296,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnSearchBankSortCode;
         private System.Windows.Forms.TextBox txtBankSortCode;
+        private System.Windows.Forms.Label lblbankdetails;
     }
 }

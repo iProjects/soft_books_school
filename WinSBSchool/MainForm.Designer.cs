@@ -1190,6 +1190,7 @@
             this.txtlog.BackColor = System.Drawing.Color.Black;
             this.txtlog.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtlog.Dock = System.Windows.Forms.DockStyle.Right;
+            this.txtlog.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.txtlog.ForeColor = System.Drawing.Color.Lime;
             this.txtlog.Location = new System.Drawing.Point(591, 49);
             this.txtlog.Name = "txtlog";

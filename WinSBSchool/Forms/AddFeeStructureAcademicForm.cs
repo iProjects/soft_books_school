@@ -11,9 +11,14 @@ namespace WinSBSchool.Forms
 {
     public partial class AddFeeStructureAcademicForm : Form
     {
-        SBSchoolDBEntities db;
         Repository rep;
+        SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         DAL.FeesStructure _FeesStructure;
         SchoolClass _SchoolClass;
         int _Term;
@@ -300,7 +305,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(connection) { Owner = this };
+                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnAccountListSelected);
                 saf.ShowDialog();
             }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.lblCrNarrative = new System.Windows.Forms.Label();
             this.lblDrNarrative = new System.Windows.Forms.Label();
             this.txtDebitNarrative = new System.Windows.Forms.TextBox();
@@ -82,7 +82,7 @@
             this.groupBoxDrNarrative = new System.Windows.Forms.GroupBox();
             this.groupBoxCrNarrative = new System.Windows.Forms.GroupBox();
             this.groupBoxAmount = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBoxCreditAccount.SuspendLayout();
             this.groupBoxDrAccount.SuspendLayout();
             this.tableLayoutPanelDPost.SuspendLayout();
@@ -99,7 +99,7 @@
             // 
             // errorProvider1
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // lblCrNarrative
             // 
@@ -702,7 +702,7 @@
             this.Name = "UserControlDoublePost";
             this.Size = new System.Drawing.Size(740, 766);
             this.Load += new System.EventHandler(this.UserControlDoublePost_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBoxCreditAccount.ResumeLayout(false);
             this.groupBoxCreditAccount.PerformLayout();
             this.groupBoxDrAccount.ResumeLayout(false);
@@ -730,7 +730,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDPost;
         private System.Windows.Forms.ComboBox cboModeofPayment;
         private System.Windows.Forms.Button btnPost;

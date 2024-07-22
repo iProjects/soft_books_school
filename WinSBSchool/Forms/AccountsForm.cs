@@ -6,31 +6,63 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class AccountsForm : Form
     {
         Repository rep;
-        string connection;
         SBSchoolDBEntities db;
+        string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname; 
         IQueryable<Account> _Accounts;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
 
-        public AccountsForm(string Conn)
+        public AccountsForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
+
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
+            user = UserName;
 
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AccountsForm initialization", TAG));
 
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void AccountsForm_Load(object sender, EventArgs e)
         {
             try
@@ -207,7 +239,7 @@ namespace WinSBSchool.Forms
 
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            AddAccountForm aaf = new AddAccountForm(connection) { Owner = this };
+            AddAccountForm aaf = new AddAccountForm(user, connection, _notificationmessageEventname) { Owner = this };
             aaf.ShowDialog();
         }
 

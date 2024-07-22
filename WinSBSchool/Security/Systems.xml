@@ -3,74 +3,11 @@
 
   <System Name="On kmk\SQLEXPRESS"
           Application ="SBSchool"
-          Database ="SBSchoolDB_february_2023"
+          Database ="SBSchoolDB_july_2024"
           AttachDB=""
           Server =".\SQLEXPRESS"
           Metadata="SBSchoolDBEntities"
           Version ="1.0.0.0"
           Default="true"/> 
-
-  <System Name="On sapserver"
-         Application ="SBSchool"
-         Database ="SBSchoolDB"
-         AttachDB=""
-         Server ="SAPSERVER"
-         Metadata="SBSchoolDBEntities"
-         Version ="1.0.0.0"
-         Default="false"/>  
-
-  <System Name="On spserver\SQLEXPRESS"
-		      Application ="SBSchool"
-          Database ="SBSchoolDB"
-          AttachDB=""
-          Server ="SPSERVER\SQLEXPRESS"
-          Metadata="SBSchoolDBEntities"
-          Version ="1.0.0.0"
-          Default="false"/> 
-
-  <System Name="On spserver"
-		      Application ="SBSchool"
-		      Database ="SBSchoolDB"
-		      AttachDB=""
-		      Server ="SPSERVER"
-		      Metadata="SBSchoolDBEntities"
-          Version ="1.0.0.0"
-          Default="false"/>
-
-  <System Name="On gracecomp\SQLEXPRESS"
-		      Application ="SBSchool"
-		      Database ="SBSchoolDB"
-		      AttachDB=""
-		      Server ="GRACECOMP\SQLEXPRESS"
-		      Metadata="SBSchoolDBEntities"
-          Version ="1.0.0.0"
-          Default="false"/>
-
-  <System Name="On Soft Books Server"
-        Application ="SBSchool"
-        Database ="SBSchoolDB"
-        AttachDB=""
-        Server ="softbooksserver\SQLEXPRESS"
-        Metadata="SBSchoolDBEntities"
-        Version ="1.0.0.0"
-        Default="false"/>
-  
-  <System Name="On Sugut"
-         Application ="SBSchool"
-         Database ="SBSchoolDB"
-         AttachDB=""
-         Server ="SUGUT-PC\SQLEXPRESS"
-         Metadata="SBSchoolDBEntities"
-         Version ="1.0.0.0"
-         Default="false"/>
-
-  <System Name="On Lucy"
-         Application ="SBSchool"
-         Database ="SBSchoolDB"
-         AttachDB=""
-         Server ="-ADMIN-PC\SQLEXPRESS"
-         Metadata="SBSchoolDBEntities"
-         Version ="1.0.0.0"
-         Default="false"/> 
 
 </Systems>

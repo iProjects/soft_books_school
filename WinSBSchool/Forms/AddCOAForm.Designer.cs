@@ -51,7 +51,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 20);
+            this.label1.Location = new System.Drawing.Point(66, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
@@ -60,7 +60,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 56);
+            this.label2.Location = new System.Drawing.Point(66, 57);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 1;
@@ -69,66 +69,27 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 91);
+            this.label3.Location = new System.Drawing.Point(12, 92);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
+            this.label3.Size = new System.Drawing.Size(122, 13);
             this.label3.TabIndex = 2;
-            this.label3.Text = "COA Level*";
+            this.label3.Text = "Chart Of Account Level*";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(38, 127);
+            this.label4.Location = new System.Drawing.Point(84, 127);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 3;
             this.label4.Text = "R order*";
-            // 
-            // txtShortCode
-            // 
-            this.txtShortCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtShortCode.Location = new System.Drawing.Point(86, 16);
-            this.txtShortCode.MaxLength = 10;
-            this.txtShortCode.Name = "txtShortCode";
-            this.txtShortCode.Size = new System.Drawing.Size(277, 20);
-            this.txtShortCode.TabIndex = 0;
-            // 
-            // txtDescription
-            // 
-            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDescription.Location = new System.Drawing.Point(86, 52);
-            this.txtDescription.MaxLength = 100;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(277, 20);
-            this.txtDescription.TabIndex = 1;
-            // 
-            // txtCOALevel
-            // 
-            this.txtCOALevel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCOALevel.Location = new System.Drawing.Point(86, 88);
-            this.txtCOALevel.MaxLength = 4;
-            this.txtCOALevel.Name = "txtCOALevel";
-            this.txtCOALevel.Size = new System.Drawing.Size(277, 20);
-            this.txtCOALevel.TabIndex = 2;
-            this.txtCOALevel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCOALevel_KeyDown);
-            this.txtCOALevel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCOALevel_KeyPress);
-            // 
-            // txtRorder
-            // 
-            this.txtRorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtRorder.Location = new System.Drawing.Point(86, 124);
-            this.txtRorder.MaxLength = 4;
-            this.txtRorder.Name = "txtRorder";
-            this.txtRorder.Size = new System.Drawing.Size(277, 20);
-            this.txtRorder.TabIndex = 3;
-            this.txtRorder.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRorder_KeyDown);
-            this.txtRorder.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtRorder_KeyPress);
+             
             // 
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.Location = new System.Drawing.Point(124, 10);
+            this.btnAdd.Location = new System.Drawing.Point(166, 13);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(68, 23);
             this.btnAdd.TabIndex = 0;
@@ -141,7 +102,7 @@
             this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(228, 10);
+            this.btnClose.Location = new System.Drawing.Point(270, 13);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(59, 23);
             this.btnClose.TabIndex = 1;
@@ -160,7 +121,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(0, 162);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(418, 42);
+            this.groupBox1.Size = new System.Drawing.Size(458, 42);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -177,7 +138,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(418, 162);
+            this.groupBox2.Size = new System.Drawing.Size(458, 162);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
@@ -188,7 +149,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(418, 204);
+            this.ClientSize = new System.Drawing.Size(458, 204);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

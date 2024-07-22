@@ -8,22 +8,37 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class EditStudentForm : Form
     {
         Repository rep;
-        DAL.Student s;
+        DAL.Student student;
         string connection;
         SBSchoolDBEntities db;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
         string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-        public EditStudentForm(DAL.Student student, string _user, string Conn)
+        public EditStudentForm(DAL.Student _student, string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
@@ -32,532 +47,25 @@ namespace WinSBSchool.Forms
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
 
-            s = student;
+            student = _student;
             user = _user;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished EditStudentForm initialization", TAG));
+
         }
 
-        private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            this.Close();
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
-        private void ComputeBookBalanceTotal()
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            try
-            {
-                decimal BookBalanceAmount = 0;
-                foreach (DataGridViewRow row in dataGridViewStudentAccounts.Rows)
-                {
-                    decimal rate = 0;
-                    if (row.Cells["ColumnAccountBookBalance"].Value != null)
-                    {
-                        rate = (decimal)row.Cells["ColumnAccountBookBalance"].Value;
-                    }
-                    BookBalanceAmount += rate;
-                }
-                lblBookBalance.Text = BookBalanceAmount.ToString("C2");
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
-        }
-        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-            errorProvider1.Clear();
-            if (IsStudentValid())
-            {
-                try
-                {
-
-                    #region "Personal Info"
-                    if (cboSchool.SelectedIndex != -1)
-                    {
-                        s.SchoolId = int.Parse(cboSchool.SelectedValue.ToString());
-                    }
-                    if (cboCurrentClass.SelectedIndex != -1)
-                    {
-                        s.ClassStreamId = int.Parse(cboCurrentClass.SelectedValue.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(txtAdminNo.Text))
-                    {
-                        s.AdminNo = Utils.ConvertFirstLetterToUpper(txtAdminNo.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtSurname.Text))
-                    {
-                        s.StudentSurName = Utils.ConvertFirstLetterToUpper(txtSurname.Text.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(txtOtherNames.Text))
-                    {
-                        s.StudentOtherNames = Utils.ConvertFirstLetterToUpper(txtOtherNames.Text.ToString());
-                    }
-                    if (cboGender.SelectedIndex != -1)
-                    {
-                        s.Gender = cboGender.SelectedValue.ToString();
-                    }
-                    if (dpDOB.Value != null)
-                    {
-                        s.DateOfBirth = dpDOB.Value;
-                    }
-                    if (!string.IsNullOrEmpty(txtPhone.Text))
-                    {
-                        s.Phone = txtPhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtEmail.Text))
-                    {
-                        s.Email = txtEmail.Text.ToString().ToLower().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtHomePage.Text))
-                    {
-                        s.Homepage = txtHomePage.Text.ToString().ToLower().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtAddress.Text))
-                    {
-                        s.StudentAddress = Utils.ConvertFirstLetterToUpper(txtAddress.Text.ToString().Trim());
-                    }
-                    if (cboStudentAdmissionType.SelectedIndex != -1)
-                    {
-                        s.AdmissionType = cboStudentAdmissionType.SelectedValue.ToString();
-                    }
-                    if (cboStatus.SelectedIndex != -1)
-                    {
-                        s.Status = cboStatus.SelectedValue.ToString();
-                    }
-                    int kcpe;
-                    if (!string.IsNullOrEmpty(txtKCPE.Text) && int.TryParse(txtKCPE.Text, out kcpe))
-                    {
-                        s.KCPE = txtKCPE.Text;
-                    }
-                    if (!string.IsNullOrEmpty(txtAdmittedBy.Text))
-                    {
-                        s.AdmittedBy = Utils.ConvertFirstLetterToUpper(txtAdmittedBy.Text.ToString());
-                    }
-                    if (dpAdmissionDate.Value != null)
-                    {
-                        s.AdmissionDate = dpAdmissionDate.Value;
-                    }
-                    if (!string.IsNullOrEmpty(txtRemarks.Text))
-                    {
-                        s.Remarks = Utils.ConvertFirstLetterToUpper(txtRemarks.Text.Trim());
-                    }
-                    if (imgStudentPhoto.ImageLocation != null)
-                    {
-                        s.Photo = imgStudentPhoto.ImageLocation.ToString().Trim();
-                    }
-                    s.LastModifiedTime = DateTime.Now;
-                    #endregion "Personal Info"
-
-                    #region "Parents Info"
-                    if (!string.IsNullOrEmpty(txtFatherName.Text))
-                    {
-                        s.FatherName = Utils.ConvertFirstLetterToUpper(txtFatherName.Text.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(txtFatherCellPhone.Text))
-                    {
-                        s.FatherCellPhone = txtFatherCellPhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtFatherOfficePhone.Text))
-                    {
-                        s.FatherOfficePhone = txtFatherOfficePhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtFatherEmail.Text))
-                    {
-                        s.FatherEmail = txtFatherEmail.Text.ToString().ToLower().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtMotherName.Text))
-                    {
-                        s.MotherName = Utils.ConvertFirstLetterToUpper(txtMotherName.Text.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(txtMotherCellPhone.Text))
-                    {
-                        s.MotherCellPhone = txtMotherCellPhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtMotherOfficePhone.Text))
-                    {
-                        s.MotherOfficePhone = txtMotherOfficePhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtMotherEmail.Text))
-                    {
-                        s.MotherEmail = txtMotherEmail.Text.Trim().ToLower();
-                    }
-                    if (!string.IsNullOrEmpty(txtGuardianName.Text))
-                    {
-                        s.GuardianName = Utils.ConvertFirstLetterToUpper(txtGuardianName.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtGuardianCellphone.Text))
-                    {
-                        s.GuardianCellPhone = txtGuardianCellphone.Text.Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtGuardianOfficePhone.Text))
-                    {
-                        s.GuardianOfficePhone = txtGuardianOfficePhone.Text.Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtGuardianEmail.Text))
-                    {
-                        s.GuardianEmail = txtGuardianEmail.Text.Trim().ToLower();
-                    }
-                    #endregion "Parents Info"
-
-                    #region "Fees Payment Plan"  
-                    if (cboFeesPaymentPlan.SelectedIndex != -1)
-                    {
-                        s.FeesPayPlan = cboFeesPaymentPlan.SelectedValue.ToString();
-                    } 
-                    #endregion "Fees Payment Plan"
-
-                    #region "Previous School Info"
-                    if (!string.IsNullOrEmpty(txtPreviousSchoolID.Text))
-                    {
-                        s.PrevSchoolId = txtPreviousSchoolID.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtPreviousSchoolName.Text))
-                    {
-                        s.PrevSchoolName = Utils.ConvertFirstLetterToUpper(txtPreviousSchoolName.Text.ToString().Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtPreviousSchoolPhone.Text))
-                    {
-                        s.PrevSchoolPhone = txtPreviousSchoolPhone.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtPreviousSchoolAddress.Text))
-                    {
-                        s.PrevSchoolAddress = txtPreviousSchoolAddress.Text.ToString().Trim();
-                    }
-                    if (!string.IsNullOrEmpty(txtReasonforLeaving.Text))
-                    {
-                        s.ReasonForLeaving = txtReasonforLeaving.Text.ToString().Trim();
-                    }
-                    #endregion "Previous School Info"
-
-                    #region "ExtraCurricular"
-                    if (!string.IsNullOrEmpty(txtExtraCurricular1.Text))
-                    {
-                        s.ExtraCurricular1 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular1.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtExtraCurricular2.Text))
-                    {
-                        s.ExtraCurricular2 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular2.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtExtraCurricular3.Text))
-                    {
-                        s.ExtraCurricular3 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular3.Text.Trim());
-                    }
-                    #endregion "ExtraCurricular"
-
-                    #region "Residence"
-                    s.Boarder = chkBoarder.Checked;
-                    s.RequireTransport = chkRequireTransport.Checked;
-                    if (cboTransportLocations.SelectedIndex != -1)
-                    {
-                        s.ResidenceId = int.Parse(cboTransportLocations.SelectedValue.ToString());
-                    }
-                    if (cboBoardingLocations.SelectedIndex != -1)
-                    {
-                        s.ResidenceHallRoomId = int.Parse(cboBoardingLocations.SelectedValue.ToString());
-                    }
-                    if (chkRequireTransport.Checked)
-                    {
-                        s.TransportChargeType = "B"; 
-                    }
-                    if (chkBoarder.Checked)
-                    {
-                        s.TransportChargeType = "T";
-                    }
-                    if (!chkBoarder.Checked && !chkRequireTransport.Checked)
-                    {
-                        s.TransportChargeType = "N";
-                    }
-                    #endregion "Residence"
-
-                    #region "Special Needs"
-                    if (!string.IsNullOrEmpty(txtDoctorName.Text))
-                    {
-                        s.DoctorName = Utils.ConvertFirstLetterToUpper(txtDoctorName.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtAilment.Text))
-                    {
-                        s.Ailments = Utils.ConvertFirstLetterToUpper(txtAilment.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtFoods.Text))
-                    {
-                        s.Foods = Utils.ConvertFirstLetterToUpper(txtFoods.Text.Trim());
-                    }
-                    if (!string.IsNullOrEmpty(txtAllergy.Text))
-                    {
-                        s.Allergies = Utils.ConvertFirstLetterToUpper(txtAllergy.Text.Trim());
-                    }
-                    #endregion "Special Needs"
-
-                    #region "Disciplinary"
-
-                    #endregion "Disciplinary"
-
-                    rep.UpdateStudent(s);
-
-                    if (this.Owner is StudentsForm && this.Owner != null)
-                    {
-                        StudentsForm f = (StudentsForm)this.Owner;
-                        f.RefreshGrid();
-                        this.Close();
-                    }
-
-
-                }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
-            }
-        }
-        private void InitializeControls()
-        {
-            try
-            {
-                #region "Personal Info"
-                if (s.SchoolId != null)
-                {
-                    cboSchool.SelectedValue = s.SchoolId;
-                }
-                if (s.ClassStreamId != null)
-                {
-                    cboCurrentClass.SelectedValue = s.ClassStreamId;
-                }
-                if (s.AdminNo != null)
-                {
-                    txtAdminNo.Text = s.AdminNo.Trim();
-                }
-                if (s.AdminNo == null)
-                {
-                    string _AdminNo = Utils.NextSeries(NextAdminNo());
-                    txtAdminNo.Text = _AdminNo;
-                }
-                if (s.StudentSurName != null)
-                {
-                    txtSurname.Text = s.StudentSurName.Trim();
-                }
-                if (s.StudentSurName != null)
-                {
-                    txtOtherNames.Text = s.StudentOtherNames.Trim();
-                }
-                if (s.Gender != null)
-                {
-                    cboGender.SelectedValue = s.Gender;
-                }
-                if (s.DateOfBirth != null)
-                {
-                    dpDOB.Value = DateTime.Parse(s.DateOfBirth.ToString());
-                }
-                if (s.Phone != null)
-                {
-                    txtPhone.Text = s.Phone.Trim();
-                }
-                if (s.Email != null)
-                {
-                    txtEmail.Text = s.Email.Trim();
-                }
-                if (s.Homepage != null)
-                {
-                    txtHomePage.Text = s.Homepage.Trim();
-                }
-                if (s.StudentAddress != null)
-                {
-                    txtAddress.Text = s.StudentAddress.Trim();
-                }
-                if (s.AdmissionType != null)
-                {
-                    cboStudentAdmissionType.SelectedValue = s.AdmissionType.Trim();
-                }
-                if (s.Status != null)
-                {
-                    cboStatus.SelectedValue = s.Status.Trim();
-                }
-                if (s.KCPE != null)
-                {
-                    txtKCPE.Text = s.KCPE.ToString().Trim();
-                }
-                if (s.AdmissionDate != null)
-                {
-                    dpAdmissionDate.Value = DateTime.Parse(s.AdmissionDate.ToString());
-                }
-                if (s.AdmittedBy != null)
-                {
-                    txtAdmittedBy.Text = s.AdmittedBy.Trim();
-                }
-                if (s.Remarks != null)
-                {
-                    txtRemarks.Text = s.Remarks.Trim();
-                }
-                if (s.Photo != null)
-                {
-                    imgStudentPhoto.ImageLocation = s.Photo.ToString().Trim();
-                }
-                #endregion "Personal Info"
-
-                #region "Parents Info"
-                if (s.FatherName != null)
-                {
-                    txtFatherName.Text = s.FatherName.Trim();
-                }
-                if (s.FatherCellPhone != null)
-                {
-                    txtFatherCellPhone.Text = s.FatherCellPhone.Trim();
-                }
-                if (s.FatherOfficePhone != null)
-                {
-                    txtFatherOfficePhone.Text = s.FatherOfficePhone.Trim();
-                }
-                if (s.FatherEmail != null)
-                {
-                    txtFatherEmail.Text = s.FatherEmail.Trim();
-                }
-                if (s.MotherName != null)
-                {
-                    txtMotherName.Text = s.MotherName.Trim();
-                }
-                if (s.MotherCellPhone != null)
-                {
-                    txtMotherCellPhone.Text = s.MotherCellPhone.Trim();
-                }
-                if (s.MotherOfficePhone != null)
-                {
-                    txtMotherOfficePhone.Text = s.MotherOfficePhone.Trim();
-                }
-                if (s.MotherEmail != null)
-                {
-                    txtMotherEmail.Text = s.MotherEmail.Trim();
-                }
-                if (s.GuardianName != null)
-                {
-                    txtGuardianName.Text = s.GuardianName.Trim();
-                }
-                if (s.GuardianCellPhone != null)
-                {
-                    txtGuardianCellphone.Text = s.GuardianCellPhone.Trim();
-                }
-                if (s.GuardianOfficePhone != null)
-                {
-                    txtGuardianOfficePhone.Text = s.GuardianOfficePhone.Trim();
-                }
-                if (s.GuardianEmail != null)
-                {
-                    txtGuardianEmail.Text = s.GuardianEmail.Trim();
-                }
-                #endregion "Parents Info"
-
-                #region "Fees Payment Plan"
-                if (s.FeesPayPlan != null)
-                {
-                    cboFeesPaymentPlan.SelectedValue = s.FeesPayPlan.Trim();
-                }
-                #endregion "Fees Payment Plan"
-
-                #region "Previous School Info"
-                if (s.PrevSchoolId != null)
-                {
-                    txtPreviousSchoolID.Text = s.PrevSchoolId.Trim();
-                }
-                if (s.PrevSchoolName != null)
-                {
-                    txtPreviousSchoolName.Text = s.PrevSchoolName.Trim();
-                }
-                if (s.PrevSchoolPhone != null)
-                {
-                    txtPreviousSchoolPhone.Text = s.PrevSchoolPhone.Trim();
-                }
-                if (s.PrevSchoolAddress != null)
-                {
-                    txtPreviousSchoolAddress.Text = s.PrevSchoolAddress.Trim();
-                }
-                if (s.ReasonForLeaving != null)
-                {
-                    txtReasonforLeaving.Text = s.ReasonForLeaving.Trim();
-                }
-                #endregion "Previous School Info"
-
-                #region "Extra Curricular"
-                if (s.ExtraCurricular1 != null)
-                {
-                    txtExtraCurricular1.Text = s.ExtraCurricular1.Trim();
-                }
-                if (s.ExtraCurricular2 != null)
-                {
-                    txtExtraCurricular2.Text = s.ExtraCurricular2.Trim();
-                }
-                if (s.ExtraCurricular3 != null)
-                {
-                    txtExtraCurricular3.Text = s.ExtraCurricular3.Trim();
-                }
-                #endregion "Extra Curricular"
-
-                #region "Residence"
-                if (s.Boarder != null)
-                {
-                    chkBoarder.Checked = s.Boarder ?? false;
-                }
-                if (s.RequireTransport != null)
-                {
-                    chkRequireTransport.Checked = s.RequireTransport ?? false;
-                }
-                if (s.ResidenceId != null)
-                {
-                    cboTransportLocations.SelectedValue = s.ResidenceId;
-                }
-                if (s.ResidenceHallRoomId != null)
-                {
-                    cboBoardingLocations.SelectedValue = s.ResidenceHallRoomId;
-                }
-                #endregion "Residence"
-
-                #region "Accounts"
-                if (s.CustomerId != null)
-                {
-                    lbCustomerId.Text = s.CustomerId.ToString();
-                }
-                if (s.GLAccountId != null)
-                {
-                    lblAccountId.Text = s.GLAccountId.ToString();
-                }
-                #endregion "Accounts"
-
-                #region "Special Needs"
-                if (s.DoctorName != null)
-                {
-                    txtDoctorName.Text = s.DoctorName.Trim();
-                }
-                if (s.Ailments != null)
-                {
-                    txtAilment.Text = s.Ailments.Trim();
-                }
-                if (s.Foods != null)
-                {
-                    txtFoods.Text = s.Foods.Trim();
-                }
-                if (s.Allergies != null)
-                {
-                    txtAllergy.Text = s.Allergies.Trim();
-                }
-                #endregion "Special Needs"
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
-        }
-        private string NextAdminNo()
-        {
-            try
-            {
-                var cn = (from c in db.Students
-                          orderby c.Id descending
-                          select c).FirstOrDefault();
-                if (cn == null)
-                    return "0";
-                return cn.AdminNo.ToString();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-                return "0";
-            }
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
         private void EditStudentForm_Load(object sender, EventArgs e)
         {
@@ -714,7 +222,7 @@ namespace WinSBSchool.Forms
                 }
 
                 var _Dsplns = from dp in db.Disciplines
-                              where dp.StudentId == s.Id
+                              where dp.StudentId == student.Id
                               where dp.IsDeleted == false
                               select dp;
                 List<Discipline> _Disciplines = _Dsplns.ToList();
@@ -727,9 +235,9 @@ namespace WinSBSchool.Forms
                 InitializeControls();
 
                 int glacc;
-                if (s.GLAccountId != null)
+                if (student.GLAccountId != null)
                 {
-                    glacc = s.GLAccountId ?? 0;
+                    glacc = student.GLAccountId ?? 0;
                     var _studentAccountquery = (from ac in db.Accounts
                                                 where ac.Id == glacc
                                                 where ac.Closed == false
@@ -743,7 +251,7 @@ namespace WinSBSchool.Forms
                 chkRequireTransport.CheckedChanged += new EventHandler(chkRequireTransport_CheckedChanged);
                 chkBoarder.CheckedChanged += new EventHandler(chkBoarder_CheckedChanged);
 
-                if (s.RequireTransport ?? false)
+                if (student.RequireTransport ?? false)
                 {
                     groupBoxResidenceTransport.Enabled = true;
                 }
@@ -752,20 +260,547 @@ namespace WinSBSchool.Forms
                     groupBoxResidenceTransport.Enabled = false;
                 }
 
-                if (s.Boarder ?? false)
+                if (student.Boarder ?? false)
                 {
                     groupBoxResidenceBorder.Enabled = true;
                 }
                 else
                 {
                     groupBoxResidenceBorder.Enabled = false;
-                } 
+                }
+
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished EditStudentForm load", TAG));
+
             }
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
             }
         }
+        private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.Close();
+        }
+        private void ComputeBookBalanceTotal()
+        {
+            try
+            {
+                decimal BookBalanceAmount = 0;
+                foreach (DataGridViewRow row in dataGridViewStudentAccounts.Rows)
+                {
+                    decimal rate = 0;
+                    if (row.Cells["ColumnAccountBookBalance"].Value != null)
+                    {
+                        rate = (decimal)row.Cells["ColumnAccountBookBalance"].Value;
+                    }
+                    BookBalanceAmount += rate;
+                }
+                lblBookBalance.Text = BookBalanceAmount.ToString("C2");
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+            errorProvider.Clear();
+            if (IsStudentValid())
+            {
+                try
+                {
+
+                    #region "Personal Info"
+                    if (cboSchool.SelectedIndex != -1)
+                    {
+                        student.SchoolId = int.Parse(cboSchool.SelectedValue.ToString());
+                    }
+                    if (cboCurrentClass.SelectedIndex != -1)
+                    {
+                        student.ClassStreamId = int.Parse(cboCurrentClass.SelectedValue.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(txtAdminNo.Text))
+                    {
+                        student.AdminNo = Utils.ConvertFirstLetterToUpper(txtAdminNo.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtSurname.Text))
+                    {
+                        student.StudentSurName = Utils.ConvertFirstLetterToUpper(txtSurname.Text.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(txtOtherNames.Text))
+                    {
+                        student.StudentOtherNames = Utils.ConvertFirstLetterToUpper(txtOtherNames.Text.ToString());
+                    }
+                    if (cboGender.SelectedIndex != -1)
+                    {
+                        student.Gender = cboGender.SelectedValue.ToString();
+                    }
+                    if (dpDOB.Value != null)
+                    {
+                        student.DateOfBirth = dpDOB.Value;
+                    }
+                    if (!string.IsNullOrEmpty(txtPhone.Text))
+                    {
+                        student.Phone = txtPhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtEmail.Text))
+                    {
+                        student.Email = txtEmail.Text.ToString().ToLower().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtHomePage.Text))
+                    {
+                        student.Homepage = txtHomePage.Text.ToString().ToLower().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtAddress.Text))
+                    {
+                        student.StudentAddress = Utils.ConvertFirstLetterToUpper(txtAddress.Text.ToString().Trim());
+                    }
+                    if (cboStudentAdmissionType.SelectedIndex != -1)
+                    {
+                        student.AdmissionType = cboStudentAdmissionType.SelectedValue.ToString();
+                    }
+                    if (cboStatus.SelectedIndex != -1)
+                    {
+                        student.Status = cboStatus.SelectedValue.ToString();
+                    }
+                    int kcpe;
+                    if (!string.IsNullOrEmpty(txtKCPE.Text) && int.TryParse(txtKCPE.Text, out kcpe))
+                    {
+                        student.KCPE = txtKCPE.Text;
+                    }
+                    if (!string.IsNullOrEmpty(txtAdmittedBy.Text))
+                    {
+                        student.AdmittedBy = Utils.ConvertFirstLetterToUpper(txtAdmittedBy.Text.ToString());
+                    }
+                    if (dpAdmissionDate.Value != null)
+                    {
+                        student.AdmissionDate = dpAdmissionDate.Value;
+                    }
+                    if (!string.IsNullOrEmpty(txtRemarks.Text))
+                    {
+                        student.Remarks = Utils.ConvertFirstLetterToUpper(txtRemarks.Text.Trim());
+                    }
+                    if (imgStudentPhoto.ImageLocation != null)
+                    {
+                        student.Photo = imgStudentPhoto.ImageLocation.ToString().Trim();
+                    }
+                    student.LastModifiedTime = DateTime.Now;
+                    #endregion "Personal Info"
+
+                    #region "Parents Info"
+                    if (!string.IsNullOrEmpty(txtFatherName.Text))
+                    {
+                        student.FatherName = Utils.ConvertFirstLetterToUpper(txtFatherName.Text.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(txtFatherCellPhone.Text))
+                    {
+                        student.FatherCellPhone = txtFatherCellPhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtFatherOfficePhone.Text))
+                    {
+                        student.FatherOfficePhone = txtFatherOfficePhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtFatherEmail.Text))
+                    {
+                        student.FatherEmail = txtFatherEmail.Text.ToString().ToLower().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtMotherName.Text))
+                    {
+                        student.MotherName = Utils.ConvertFirstLetterToUpper(txtMotherName.Text.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(txtMotherCellPhone.Text))
+                    {
+                        student.MotherCellPhone = txtMotherCellPhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtMotherOfficePhone.Text))
+                    {
+                        student.MotherOfficePhone = txtMotherOfficePhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtMotherEmail.Text))
+                    {
+                        student.MotherEmail = txtMotherEmail.Text.Trim().ToLower();
+                    }
+                    if (!string.IsNullOrEmpty(txtGuardianName.Text))
+                    {
+                        student.GuardianName = Utils.ConvertFirstLetterToUpper(txtGuardianName.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtGuardianCellphone.Text))
+                    {
+                        student.GuardianCellPhone = txtGuardianCellphone.Text.Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtGuardianOfficePhone.Text))
+                    {
+                        student.GuardianOfficePhone = txtGuardianOfficePhone.Text.Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtGuardianEmail.Text))
+                    {
+                        student.GuardianEmail = txtGuardianEmail.Text.Trim().ToLower();
+                    }
+                    #endregion "Parents Info"
+
+                    #region "Fees Payment Plan"  
+                    if (cboFeesPaymentPlan.SelectedIndex != -1)
+                    {
+                        student.FeesPayPlan = cboFeesPaymentPlan.SelectedValue.ToString();
+                    } 
+                    #endregion "Fees Payment Plan"
+
+                    #region "Previous School Info"
+                    if (!string.IsNullOrEmpty(txtPreviousSchoolID.Text))
+                    {
+                        student.PrevSchoolId = txtPreviousSchoolID.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtPreviousSchoolName.Text))
+                    {
+                        student.PrevSchoolName = Utils.ConvertFirstLetterToUpper(txtPreviousSchoolName.Text.ToString().Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtPreviousSchoolPhone.Text))
+                    {
+                        student.PrevSchoolPhone = txtPreviousSchoolPhone.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtPreviousSchoolAddress.Text))
+                    {
+                        student.PrevSchoolAddress = txtPreviousSchoolAddress.Text.ToString().Trim();
+                    }
+                    if (!string.IsNullOrEmpty(txtReasonforLeaving.Text))
+                    {
+                        student.ReasonForLeaving = txtReasonforLeaving.Text.ToString().Trim();
+                    }
+                    #endregion "Previous School Info"
+
+                    #region "ExtraCurricular"
+                    if (!string.IsNullOrEmpty(txtExtraCurricular1.Text))
+                    {
+                        student.ExtraCurricular1 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular1.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtExtraCurricular2.Text))
+                    {
+                        student.ExtraCurricular2 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular2.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtExtraCurricular3.Text))
+                    {
+                        student.ExtraCurricular3 = Utils.ConvertFirstLetterToUpper(txtExtraCurricular3.Text.Trim());
+                    }
+                    #endregion "ExtraCurricular"
+
+                    #region "Residence"
+                    student.Boarder = chkBoarder.Checked;
+                    student.RequireTransport = chkRequireTransport.Checked;
+                    if (cboTransportLocations.SelectedIndex != -1)
+                    {
+                        student.ResidenceId = int.Parse(cboTransportLocations.SelectedValue.ToString());
+                    }
+                    if (cboBoardingLocations.SelectedIndex != -1)
+                    {
+                        student.ResidenceHallRoomId = int.Parse(cboBoardingLocations.SelectedValue.ToString());
+                    }
+                    if (chkRequireTransport.Checked)
+                    {
+                        student.TransportChargeType = "B"; 
+                    }
+                    if (chkBoarder.Checked)
+                    {
+                        student.TransportChargeType = "T";
+                    }
+                    if (!chkBoarder.Checked && !chkRequireTransport.Checked)
+                    {
+                        student.TransportChargeType = "N";
+                    }
+                    #endregion "Residence"
+
+                    #region "Special Needs"
+                    if (!string.IsNullOrEmpty(txtDoctorName.Text))
+                    {
+                        student.DoctorName = Utils.ConvertFirstLetterToUpper(txtDoctorName.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtAilment.Text))
+                    {
+                        student.Ailments = Utils.ConvertFirstLetterToUpper(txtAilment.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtFoods.Text))
+                    {
+                        student.Foods = Utils.ConvertFirstLetterToUpper(txtFoods.Text.Trim());
+                    }
+                    if (!string.IsNullOrEmpty(txtAllergy.Text))
+                    {
+                        student.Allergies = Utils.ConvertFirstLetterToUpper(txtAllergy.Text.Trim());
+                    }
+                    #endregion "Special Needs"
+
+                    #region "Disciplinary"
+
+                    #endregion "Disciplinary"
+
+                    rep.UpdateStudent(student);
+
+                    if (this.Owner is StudentsForm && this.Owner != null)
+                    {
+                        StudentsForm f = (StudentsForm)this.Owner;
+                        f.RefreshGrid();
+                        this.Close();
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    Utils.ShowError(ex);
+                }
+            }
+        }
+        private void InitializeControls()
+        {
+            try
+            {
+                #region "Personal Info"
+                if (student.SchoolId != null)
+                {
+                    cboSchool.SelectedValue = student.SchoolId;
+                }
+                if (student.ClassStreamId != null)
+                {
+                    cboCurrentClass.SelectedValue = student.ClassStreamId;
+                }
+                if (student.AdminNo != null)
+                {
+                    txtAdminNo.Text = student.AdminNo.Trim();
+                }
+                if (student.AdminNo == null)
+                {
+                    string _AdminNo = Utils.NextSeries(NextAdminNo());
+                    txtAdminNo.Text = _AdminNo;
+                }
+                if (student.StudentSurName != null)
+                {
+                    txtSurname.Text = student.StudentSurName.Trim();
+                }
+                if (student.StudentSurName != null)
+                {
+                    txtOtherNames.Text = student.StudentOtherNames.Trim();
+                }
+                if (student.Gender != null)
+                {
+                    cboGender.SelectedValue = student.Gender;
+                }
+                if (student.DateOfBirth != null)
+                {
+                    dpDOB.Value = DateTime.Parse(student.DateOfBirth.ToString());
+                }
+                if (student.Phone != null)
+                {
+                    txtPhone.Text = student.Phone.Trim();
+                }
+                if (student.Email != null)
+                {
+                    txtEmail.Text = student.Email.Trim();
+                }
+                if (student.Homepage != null)
+                {
+                    txtHomePage.Text = student.Homepage.Trim();
+                }
+                if (student.StudentAddress != null)
+                {
+                    txtAddress.Text = student.StudentAddress.Trim();
+                }
+                if (student.AdmissionType != null)
+                {
+                    cboStudentAdmissionType.SelectedValue = student.AdmissionType.Trim();
+                }
+                if (student.Status != null)
+                {
+                    cboStatus.SelectedValue = student.Status.Trim();
+                }
+                if (student.KCPE != null)
+                {
+                    txtKCPE.Text = student.KCPE.ToString().Trim();
+                }
+                if (student.AdmissionDate != null)
+                {
+                    dpAdmissionDate.Value = DateTime.Parse(student.AdmissionDate.ToString());
+                }
+                if (student.AdmittedBy != null)
+                {
+                    txtAdmittedBy.Text = student.AdmittedBy.Trim();
+                }
+                if (student.Remarks != null)
+                {
+                    txtRemarks.Text = student.Remarks.Trim();
+                }
+                if (student.Photo != null)
+                {
+                    imgStudentPhoto.ImageLocation = student.Photo.ToString().Trim();
+                }
+                #endregion "Personal Info"
+
+                #region "Parents Info"
+                if (student.FatherName != null)
+                {
+                    txtFatherName.Text = student.FatherName.Trim();
+                }
+                if (student.FatherCellPhone != null)
+                {
+                    txtFatherCellPhone.Text = student.FatherCellPhone.Trim();
+                }
+                if (student.FatherOfficePhone != null)
+                {
+                    txtFatherOfficePhone.Text = student.FatherOfficePhone.Trim();
+                }
+                if (student.FatherEmail != null)
+                {
+                    txtFatherEmail.Text = student.FatherEmail.Trim();
+                }
+                if (student.MotherName != null)
+                {
+                    txtMotherName.Text = student.MotherName.Trim();
+                }
+                if (student.MotherCellPhone != null)
+                {
+                    txtMotherCellPhone.Text = student.MotherCellPhone.Trim();
+                }
+                if (student.MotherOfficePhone != null)
+                {
+                    txtMotherOfficePhone.Text = student.MotherOfficePhone.Trim();
+                }
+                if (student.MotherEmail != null)
+                {
+                    txtMotherEmail.Text = student.MotherEmail.Trim();
+                }
+                if (student.GuardianName != null)
+                {
+                    txtGuardianName.Text = student.GuardianName.Trim();
+                }
+                if (student.GuardianCellPhone != null)
+                {
+                    txtGuardianCellphone.Text = student.GuardianCellPhone.Trim();
+                }
+                if (student.GuardianOfficePhone != null)
+                {
+                    txtGuardianOfficePhone.Text = student.GuardianOfficePhone.Trim();
+                }
+                if (student.GuardianEmail != null)
+                {
+                    txtGuardianEmail.Text = student.GuardianEmail.Trim();
+                }
+                #endregion "Parents Info"
+
+                #region "Fees Payment Plan"
+                if (student.FeesPayPlan != null)
+                {
+                    cboFeesPaymentPlan.SelectedValue = student.FeesPayPlan.Trim();
+                }
+                #endregion "Fees Payment Plan"
+
+                #region "Previous School Info"
+                if (student.PrevSchoolId != null)
+                {
+                    txtPreviousSchoolID.Text = student.PrevSchoolId.Trim();
+                }
+                if (student.PrevSchoolName != null)
+                {
+                    txtPreviousSchoolName.Text = student.PrevSchoolName.Trim();
+                }
+                if (student.PrevSchoolPhone != null)
+                {
+                    txtPreviousSchoolPhone.Text = student.PrevSchoolPhone.Trim();
+                }
+                if (student.PrevSchoolAddress != null)
+                {
+                    txtPreviousSchoolAddress.Text = student.PrevSchoolAddress.Trim();
+                }
+                if (student.ReasonForLeaving != null)
+                {
+                    txtReasonforLeaving.Text = student.ReasonForLeaving.Trim();
+                }
+                #endregion "Previous School Info"
+
+                #region "Extra Curricular"
+                if (student.ExtraCurricular1 != null)
+                {
+                    txtExtraCurricular1.Text = student.ExtraCurricular1.Trim();
+                }
+                if (student.ExtraCurricular2 != null)
+                {
+                    txtExtraCurricular2.Text = student.ExtraCurricular2.Trim();
+                }
+                if (student.ExtraCurricular3 != null)
+                {
+                    txtExtraCurricular3.Text = student.ExtraCurricular3.Trim();
+                }
+                #endregion "Extra Curricular"
+
+                #region "Residence"
+                if (student.Boarder != null)
+                {
+                    chkBoarder.Checked = student.Boarder ?? false;
+                }
+                if (student.RequireTransport != null)
+                {
+                    chkRequireTransport.Checked = student.RequireTransport ?? false;
+                }
+                if (student.ResidenceId != null)
+                {
+                    cboTransportLocations.SelectedValue = student.ResidenceId;
+                }
+                if (student.ResidenceHallRoomId != null)
+                {
+                    cboBoardingLocations.SelectedValue = student.ResidenceHallRoomId;
+                }
+                #endregion "Residence"
+
+                #region "Accounts"
+                if (student.CustomerId != null)
+                {
+                    lbCustomerId.Text = student.CustomerId.ToString();
+                }
+                if (student.GLAccountId != null)
+                {
+                    lblAccountId.Text = student.GLAccountId.ToString();
+                }
+                #endregion "Accounts"
+
+                #region "Special Needs"
+                if (student.DoctorName != null)
+                {
+                    txtDoctorName.Text = student.DoctorName.Trim();
+                }
+                if (student.Ailments != null)
+                {
+                    txtAilment.Text = student.Ailments.Trim();
+                }
+                if (student.Foods != null)
+                {
+                    txtFoods.Text = student.Foods.Trim();
+                }
+                if (student.Allergies != null)
+                {
+                    txtAllergy.Text = student.Allergies.Trim();
+                }
+                #endregion "Special Needs"
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+        private string NextAdminNo()
+        {
+            try
+            {
+                var cn = (from c in db.Students
+                          orderby c.Id descending
+                          select c).FirstOrDefault();
+                if (cn == null)
+                    return "0";
+                return cn.AdminNo.ToString();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+                return "0";
+            }
+        }
+       
         private void pBStudentPhoto_MouseHover(object sender, EventArgs e)
         {
             //setting a border when it is moused over
@@ -782,46 +817,46 @@ namespace WinSBSchool.Forms
 
             if (cboSchool.SelectedIndex == -1)
             {
-                errorProvider1.Clear(); //Clear all Error Messages
-                errorProvider1.SetError(cboSchool, "Select School!");
+                errorProvider.Clear(); //Clear all Error Messages
+                errorProvider.SetError(cboSchool, "Select School!");
                 return false;
             }
             if (cboCurrentClass.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboCurrentClass, "Select Class!");
+                errorProvider.Clear();
+                errorProvider.SetError(cboCurrentClass, "Select Class!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtAdminNo.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAdminNo, "Admission Number cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtAdminNo, "Admission Number cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtSurname.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtSurname, "Student Surname cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtSurname, "Student Surname cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtOtherNames.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtOtherNames, "Student Other Names cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtOtherNames, "Student Other Names cannot be null!");
                 return false;
             }
             if (cboGender.SelectedIndex == -1)
             {
-                errorProvider1.Clear(); //Clear all Error Messages
-                errorProvider1.SetError(cboGender, "Select Gender!");
+                errorProvider.Clear(); //Clear all Error Messages
+                errorProvider.SetError(cboGender, "Select Gender!");
                 return false;
             }
             DateTime _dob = dpDOB.Value;
             DateTime _today = DateTime.Today;
             if (_today <= _dob)
             {
-                errorProvider1.Clear(); //Clear all Error Messages
-                errorProvider1.SetError(dpDOB, "Date of Birth must be Less than Today!");
+                errorProvider.Clear(); //Clear all Error Messages
+                errorProvider.SetError(dpDOB, "Date of Birth must be Less than Today!");
                 return false;
             }
 
@@ -829,8 +864,8 @@ namespace WinSBSchool.Forms
             DateTime _DOB = dpDOB.Value;
             if (_AdmissionDate <= _DOB)
             {
-                errorProvider1.Clear(); //Clear all Error Messages
-                errorProvider1.SetError(dpAdmissionDate, "Admission Date must be greater than Date of Birth!");
+                errorProvider.Clear(); //Clear all Error Messages
+                errorProvider.SetError(dpAdmissionDate, "Admission Date must be greater than Date of Birth!");
                 return false;
             }
             return noerror;
@@ -846,7 +881,7 @@ namespace WinSBSchool.Forms
                 }
                 else
                 {
-                    AddNewCustomerForm ancf = new AddNewCustomerForm(s, connection) { Owner = this };
+                    AddNewCustomerForm ancf = new AddNewCustomerForm(student, connection) { Owner = this };
                     ancf.Show();
                 }
             }
@@ -879,9 +914,9 @@ namespace WinSBSchool.Forms
                 bindingSourceStudentAccounts.DataSource = null;
                 //set the datasource to a method
                 int glacc;
-                if (s.GLAccountId != null)
+                if (student.GLAccountId != null)
                 {
-                    glacc = s.GLAccountId ?? 0;
+                    glacc = student.GLAccountId ?? 0;
                     var _studentAccountquery = (from ac in db.Accounts
                                                 where ac.Id == glacc
                                                 where ac.Closed == false
@@ -1000,7 +1035,7 @@ namespace WinSBSchool.Forms
                 }
                 else if (int.TryParse(lbCustomerId.Text, out customerId))
                 {
-                    AddAccountForm aaf = new AddAccountForm(customerId, s, connection) { Owner = this };
+                    AddAccountForm aaf = new AddAccountForm(customerId, student, user, connection, _notificationmessageEventname) { Owner = this };
                     aaf.ShowDialog();
                 }
                 else
@@ -1046,7 +1081,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                AddStudentDisplineForm f = new AddStudentDisplineForm(s, connection) { Owner = this };
+                AddStudentDisplineForm f = new AddStudentDisplineForm(student, connection) { Owner = this };
                 f.ShowDialog();
             }
             catch (Exception ex)
@@ -1061,7 +1096,7 @@ namespace WinSBSchool.Forms
                 bindingSourceDisplines.DataSource = null;
                 var _Dsplns = from dp in db.Disciplines
                               where dp.IsDeleted == false
-                              where dp.StudentId == s.Id
+                              where dp.StudentId == student.Id
                               select dp;
                 List<Discipline> _Disciplines = _Dsplns.ToList();
                 bindingSourceDisplines.DataSource = _Disciplines;
@@ -1113,7 +1148,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Account _Account = (Account)bindingSourceStudentAccounts.Current;
-                    WinSBSchool.Reports.Views.Screen.EnquiryViewForm f = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(_Account, user, connection);
+                    WinSBSchool.Reports.Views.Screen.EnquiryViewForm f = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(_Account, user, connection, _notificationmessageEventname);
                     f.ShowDialog();
                 }
                 catch (Exception ex)
@@ -1182,7 +1217,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Discipline _Discipline = (Discipline)bindingSourceDisplines.Current;
-                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(s, _Discipline, connection) { Owner = this };
+                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(student, _Discipline, connection) { Owner = this };
                     f.Text = _Discipline.Incident.Trim().ToUpper();
                     f.DisableControls();
                     f.ShowDialog();
@@ -1210,7 +1245,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Discipline _Discipline = (Discipline)bindingSourceDisplines.Current;
-                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(s, _Discipline, connection) { Owner = this };
+                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(student, _Discipline, connection) { Owner = this };
                     f.Text = _Discipline.Incident.Trim().ToUpper();
                     f.ShowDialog();
                 }
@@ -1227,7 +1262,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Discipline _Discipline = (Discipline)bindingSourceDisplines.Current;
-                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(s, _Discipline, connection) { Owner = this };
+                    EditStudentDisciplineForm f = new EditStudentDisciplineForm(student, _Discipline, connection) { Owner = this };
                     f.Text = _Discipline.Incident.Trim().ToUpper();
                     f.ShowDialog();
                 }

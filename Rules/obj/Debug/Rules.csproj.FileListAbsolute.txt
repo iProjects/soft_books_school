@@ -16,3 +16,4 @@ D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Rules.dll
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Rules.pdb
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Rules\obj\Debug\Rules.dll
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Rules\obj\Debug\Rules.pdb
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\Rules\obj\Debug\Rules.csprojResolveAssemblyReference.cache

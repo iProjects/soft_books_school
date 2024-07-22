@@ -9,30 +9,46 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class COAForm : Form
     {
         #region "Private Fields"
-        string connection;
-        SBSchoolDBEntities db;
         Repository rep;
+        SBSchoolDBEntities db;
+        string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         List<COA> coas;
         List<int> ids = new List<int>();
         List<int> PL2incids = new List<int>();
         List<int> PL2expids = new List<int>();
         List<int> BS2assids = new List<int>();
         List<int> BS2liabids = new List<int>();
-        List<int> BS2capbids = new List<int>();
-        string user;
+        List<int> BS2capbids = new List<int>(); 
         bool busy = false;
         #endregion "Private Fields"
 
         #region "Constructor"
-        public COAForm(string _user, string Conn)
+        public COAForm(string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
+
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
@@ -41,10 +57,51 @@ namespace WinSBSchool.Forms
             rep = new Repository(connection); 
 
             user = _user;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished COAForm initialization", TAG));
+
         }
         #endregion "Constructor"
 
         #region "Private Methods"
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void COAForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                BuildTree();
+
+                //var coasQuery = db.COAs;
+                //coas = coasQuery.ToList();
+                //bindingSourceAccounts.DataSource = db.Accounts;
+
+                dataGridViewAccounts.AutoGenerateColumns = false;
+                this.dataGridViewAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridViewAccounts.DataSource = bindingSourceAccounts;
+
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished COAForm load", TAG));
+
+            }
+            catch (Exception ex)
+            {
+
+                Utils.ShowError(ex);
+            }
+        }
         public void BuildTree()
         {
             try
@@ -107,27 +164,7 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
-        private void COAForm_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                BuildTree();
-
-                //var coasQuery = db.COAs.Include("Accounts");
-                //coas = coasQuery.ToList();
-                //bindingSourceAccounts.DataSource = db.Accounts;
-
-                dataGridViewAccounts.AutoGenerateColumns = false;
-                this.dataGridViewAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridViewAccounts.DataSource = bindingSourceAccounts;
-
-            }
-            catch (Exception ex)
-            {
-
-                Utils.ShowError(ex);
-            }
-        }
+       
         private void CreateIdList(int ParentId, List<int> Ids)
         {
             try
@@ -203,16 +240,42 @@ namespace WinSBSchool.Forms
             }
             catch (Exception ex)
             {
+                Utils.ShowError(ex);
+            }
+        }
+
+        public void RefreshGrid(COA _Coa)
+        {
+            try
+            {
+                bindingSourceCOA.DataSource = null;
+                var coasQuery = db.COAs;
+                coas = coasQuery.ToList();
+                bindingSourceCOA.DataSource = coas;
+                groupBox9.Text = bindingSourceCOA.Count.ToString();
+
+                CreateIdList(_Coa.Id, ids);
+                var accQuery = db.Accounts.Where(crtu => ids.Contains(crtu.COAId));
+                bindingSourceAccounts.DataSource = accQuery;
+                groupBox8.Text = "Accounts  " + bindingSourceAccounts.Count.ToString();
+                List<Account> _Accounts = accQuery.ToList();
+                ComputeBookBalanceTotal(_Accounts);
+
+                BuildTree();
+            }
+            catch (Exception ex)
+            {
 
                 Utils.ShowError(ex);
             }
         }
+
         public void RefreshGrid()
         {
             try
             {
                 bindingSourceCOA.DataSource = null;
-                var coasQuery = db.COAs.Include("Accounts");
+                var coasQuery = db.COAs;
                 coas = coasQuery.ToList();
                 bindingSourceCOA.DataSource = coas;
                 groupBox9.Text = bindingSourceCOA.Count.ToString();
@@ -225,6 +288,7 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -346,7 +410,7 @@ namespace WinSBSchool.Forms
             {
                 TreeNode selectedNode = treeViewChartofAccounts.SelectedNode;
                 int itemId = int.Parse(selectedNode.Name);
-                AddAccountForm f = new AddAccountForm(itemId, connection) { Owner = this };
+                AddAccountForm f = new AddAccountForm(itemId, user, connection, _notificationmessageEventname) { Owner = this };
                 f.ShowDialog();
             }
             catch (Exception ex)
@@ -982,7 +1046,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Account _Account = (Account)bindingSourceAccounts.Current;
-                    WinSBSchool.Reports.Views.Screen.EnquiryViewForm f = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(_Account, user, connection);
+                    WinSBSchool.Reports.Views.Screen.EnquiryViewForm f = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(_Account, user, connection, _notificationmessageEventname);
                     f.ShowDialog();
                 }
                 catch (Exception ex)

@@ -840,8 +840,6 @@ D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchoo
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\SQL.txt
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\DBScripts\db.sql
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Forms\CreateDb\SBSchoolDB.sql
-D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Logs\error.txt
-D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Logs\Log.txt
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Output\dummy.txt
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Resources\background.png
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Resources\CreateDB.jpg
@@ -996,3 +994,5 @@ D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Help\images\payroll.jpg
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Help\help.html
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Forms.login_form.resources
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.LicencesInfoForm.resources
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Reports.Views.Screen.ViewTransactionDetailsForm.resources
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Controls.controlsform.resources

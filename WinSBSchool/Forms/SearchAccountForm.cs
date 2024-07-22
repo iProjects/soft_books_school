@@ -18,13 +18,13 @@ namespace WinSBSchool.Forms
         SBSchoolDBEntities db;
         static int index;
         List<Field> AccountFields = new List<Field>();
-        CriteriaBuilder criteriaBuilder = new CriteriaBuilder(); 
+        CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
         List<Account> _Accounts;
         //delegate
         public delegate void AccountSelectHandler(object sender, AccountSelectEventArgs e);
         //event
-        public event AccountSelectHandler OnAccountListSelected; 
- 
+        public event AccountSelectHandler OnAccountListSelected;
+
 
         public SearchAccountForm(string Conn)
         {
@@ -74,8 +74,8 @@ namespace WinSBSchool.Forms
 
                 cbOperator.DataSource = Op.GetList();
                 cbOperator.DisplayMember = "Description";
-                cbOperator.ValueMember = "Symbol"; 
-                
+                cbOperator.ValueMember = "Symbol";
+
                 lstCriteria.DataSource = criteriaBuilder.CriterionItemList();
 
                 var _AccountTypesquery = from dc in db.AccountTypes
@@ -94,7 +94,7 @@ namespace WinSBSchool.Forms
                 colAccountType.Width = 100;
                 colAccountType.FlatStyle = FlatStyle.Flat;
                 colAccountType.DefaultCellStyle.NullValue = "--- Select ---";
-                colAccountType.ReadOnly = true; 
+                colAccountType.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbAccountType"))
                 {
                     dataGridViewAccounts.Columns.Add(colAccountType);
@@ -104,7 +104,7 @@ namespace WinSBSchool.Forms
                                  select coa;
                 List<COA> _COAs = _COAsquery.ToList();
                 DataGridViewComboBoxColumn colCOA = new DataGridViewComboBoxColumn();
-                colCOA.HeaderText = "COA";
+                colCOA.HeaderText = "Chart of Account";
                 colCOA.Name = "cbCOA";
                 colCOA.DataSource = _COAs;
                 colCOA.DisplayMember = "Description";
@@ -116,7 +116,7 @@ namespace WinSBSchool.Forms
                 colCOA.Width = 100;
                 colCOA.FlatStyle = FlatStyle.Flat;
                 colCOA.DefaultCellStyle.NullValue = "--- Select ---";
-                colCOA.ReadOnly = true; 
+                colCOA.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbCOA"))
                 {
                     dataGridViewAccounts.Columns.Add(colCOA);
@@ -129,19 +129,19 @@ namespace WinSBSchool.Forms
                 colCustomer.HeaderText = "Customer";
                 colCustomer.Name = "cbCustomer";
                 colCustomer.DataSource = _Customers;
-                colCustomer.DisplayMember = "Name";
+                colCustomer.DisplayMember = "CustomerName";
                 colCustomer.DataPropertyName = "CustomerId";
                 colCustomer.ValueMember = "Id";
                 colCustomer.MaxDropDownItems = 10;
-                colCustomer.DisplayIndex = 2;
+                colCustomer.DisplayIndex = 5;
                 colCustomer.MinimumWidth = 5;
-                colCustomer.Width = 100;
+                colCustomer.Width = 150;
                 colCustomer.FlatStyle = FlatStyle.Flat;
                 colCustomer.DefaultCellStyle.NullValue = "--- Select ---";
-                colCustomer.ReadOnly = true; 
+                colCustomer.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbCustomer"))
                 {
-                    //dataGridViewAccounts.Columns.Add(colCustomer);
+                    dataGridViewAccounts.Columns.Add(colCustomer);
                 }
 
                 dataGridViewAccounts.AutoGenerateColumns = false;
@@ -170,18 +170,18 @@ namespace WinSBSchool.Forms
             }
         }
         public void ListBoxRefresh()
-        { 
+        {
             lstCriteria.DataSource = null;
             lstCriteria.DataSource = criteriaBuilder.CriterionItemList();
         }
         private CriterionItem GetValidCriterionItem()
         {
-           
+
             Field field = (Field)cbField.SelectedItem;
             Op Op = (Op)cbOperator.SelectedItem;
             string FValue = txtValue.Text;
             conjuction cj;
-            string FieldType = field.Type;            
+            string FieldType = field.Type;
             if (criteriaBuilder.IsFirstItem())
             {
                 cj = conjuction.nil;
@@ -231,7 +231,7 @@ namespace WinSBSchool.Forms
             {
                 CriterionItem selCriterionItem = (CriterionItem)lstCriteria.SelectedValue;
                 criteriaBuilder.Remove(selCriterionItem);
-                
+
                 //refresh
                 ListBoxRefresh();
             }
@@ -274,22 +274,21 @@ namespace WinSBSchool.Forms
         {
             try
             {
-
-
+                e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
         }
-         
+
     }
 
 
 
     public class AccountSelectEventArgs : System.EventArgs
     {
-        
+
         // add local member variables to hold text        
         private Account _account;
 

@@ -2283,7 +2283,7 @@ namespace WinSBSchool.Reports.Viewer
         {
             try
             {
-                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(connection) { Owner = this };
+                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(_user, connection, _notificationmessageEventname) { Owner = this };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnAccountListSelected);
                 saf.ShowDialog();
             }

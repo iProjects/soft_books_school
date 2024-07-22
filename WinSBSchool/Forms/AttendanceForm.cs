@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using WinSBSchool.Controls;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -11,20 +13,52 @@ namespace WinSBSchool.Forms
     {
         Repository rep;
         SBSchoolDBEntities db;
-        string connection;
+        string connection; 
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-        public AttendanceForm(string Conn)
+        public AttendanceForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AttendanceForm initialization", TAG));
+
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void AttendanceForm_Load(object sender, EventArgs e)
         {
             try
@@ -166,6 +200,12 @@ namespace WinSBSchool.Forms
             {
                 Utils.ShowError(ex);
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            controlsform asc = new controlsform(user, connection, _notificationmessageEventname);
+            asc.Show();
         } 
 
 

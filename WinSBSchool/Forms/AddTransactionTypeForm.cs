@@ -18,8 +18,13 @@ namespace WinSBSchool.Forms
     public partial class AddTransactionTypeForm : Form
     {
         Repository rep;
-        SBSchoolDBEntities db; 
+        SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         List<object> PrintObject;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
@@ -33,11 +38,11 @@ namespace WinSBSchool.Forms
             connection = Conn;
 
             db = new SBSchoolDBEntities(connection);
-            rep = new Repository(connection); 
+            rep = new Repository(connection);
 
             PrintObject = new List<object>();
         }
- 
+
         private void AddTransactionTypeForm_Load(object sender, EventArgs e)
         {
             try
@@ -48,7 +53,6 @@ namespace WinSBSchool.Forms
                 cboDebitCredit.DataSource = debitcredit;
                 cboDebitCredit.ValueMember = "Key";
                 cboDebitCredit.DisplayMember = "Value";
-                cboDebitCredit.SelectedIndex = -1;
 
                 var _TxnTypeView = new BindingList<KeyValuePair<string, string>>();
                 _TxnTypeView.Add(new KeyValuePair<string, string>("S", "Single Entry"));
@@ -57,7 +61,6 @@ namespace WinSBSchool.Forms
                 cboTxnView.DataSource = _TxnTypeView;
                 cboTxnView.ValueMember = "Key";
                 cboTxnView.DisplayMember = "Value";
-                cboTxnView.SelectedIndex = -1;
 
                 var _CreditAccountFieldView = new BindingList<KeyValuePair<string, string>>();
                 _CreditAccountFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -66,7 +69,6 @@ namespace WinSBSchool.Forms
                 cboCreditAccountField.DataSource = _CreditAccountFieldView;
                 cboCreditAccountField.ValueMember = "Key";
                 cboCreditAccountField.DisplayMember = "Value";
-                cboCreditAccountField.SelectedIndex = -1;
 
                 var _CreditNarrativeFieldView = new BindingList<KeyValuePair<string, string>>();
                 _CreditNarrativeFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -75,7 +77,6 @@ namespace WinSBSchool.Forms
                 cboCreditNarrativeField.DataSource = _CreditNarrativeFieldView;
                 cboCreditNarrativeField.ValueMember = "Key";
                 cboCreditNarrativeField.DisplayMember = "Value";
-                cboCreditNarrativeField.SelectedIndex = -1;
 
                 var _DebitAccountFieldView = new BindingList<KeyValuePair<string, string>>();
                 _DebitAccountFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -84,7 +85,6 @@ namespace WinSBSchool.Forms
                 cboDebitAccountField.DataSource = _DebitAccountFieldView;
                 cboDebitAccountField.ValueMember = "Key";
                 cboDebitAccountField.DisplayMember = "Value";
-                cboDebitAccountField.SelectedIndex = -1;
 
                 var _DebitNarrativeFieldView = new BindingList<KeyValuePair<string, string>>();
                 _DebitNarrativeFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -93,7 +93,6 @@ namespace WinSBSchool.Forms
                 cboDebitNarrativeField.DataSource = _DebitNarrativeFieldView;
                 cboDebitNarrativeField.ValueMember = "Key";
                 cboDebitNarrativeField.DisplayMember = "Value";
-                cboDebitNarrativeField.SelectedIndex = -1;
 
                 var _AmountFieldView = new BindingList<KeyValuePair<string, string>>();
                 _AmountFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -102,7 +101,6 @@ namespace WinSBSchool.Forms
                 cboAmountField.DataSource = _AmountFieldView;
                 cboAmountField.ValueMember = "Key";
                 cboAmountField.DisplayMember = "Value";
-                cboAmountField.SelectedIndex = -1;
 
                 var _MethodofPaymentFieldView = new BindingList<KeyValuePair<string, string>>();
                 _MethodofPaymentFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -111,7 +109,6 @@ namespace WinSBSchool.Forms
                 cboMethodofPaymentField.DataSource = _MethodofPaymentFieldView;
                 cboMethodofPaymentField.ValueMember = "Key";
                 cboMethodofPaymentField.DisplayMember = "Value";
-                cboMethodofPaymentField.SelectedIndex = -1;
 
                 var _ValueDateFieldView = new BindingList<KeyValuePair<string, string>>();
                 _ValueDateFieldView.Add(new KeyValuePair<string, string>("V", "Visible"));
@@ -120,7 +117,6 @@ namespace WinSBSchool.Forms
                 cboValueDateField.DataSource = _ValueDateFieldView;
                 cboValueDateField.ValueMember = "Key";
                 cboValueDateField.DisplayMember = "Value";
-                cboValueDateField.SelectedIndex = -1;
 
                 var _NarrativeFlag = new BindingList<KeyValuePair<string, string>>();
                 _NarrativeFlag.Add(new KeyValuePair<string, string>("S", "Screen"));
@@ -129,6 +125,20 @@ namespace WinSBSchool.Forms
                 cboNarrativeFlag.ValueMember = "Key";
                 cboNarrativeFlag.DisplayMember = "Value";
 
+                var status = new BindingList<KeyValuePair<string, string>>();
+                status.Add(new KeyValuePair<string, string>("A", "Active"));
+                status.Add(new KeyValuePair<string, string>("I", "Inactive"));
+                cbostatus.DataSource = status;
+                cbostatus.ValueMember = "Key";
+                cbostatus.DisplayMember = "Value";
+
+                var statementflag = new BindingList<KeyValuePair<string, string>>();
+                statementflag.Add(new KeyValuePair<string, string>("C", "Credit"));
+                statementflag.Add(new KeyValuePair<string, string>("D", "Debit"));
+                cbostatementflag.DataSource = statementflag;
+                cbostatementflag.ValueMember = "Key";
+                cbostatementflag.DisplayMember = "Value"; 
+                
                 AutoCompleteStringCollection acscyr = new AutoCompleteStringCollection();
                 acscyr.AddRange(this.AutoComplete_DrAccountIds());
                 txtDefaultDebitAccount.AutoCompleteCustomSource = acscyr;
@@ -166,6 +176,12 @@ namespace WinSBSchool.Forms
                     AutoCompleteMode.SuggestAppend;
                 txtDescription.AutoCompleteSource =
                      AutoCompleteSource.CustomSource;
+
+                txtCommissionType.Text = "2";
+                txtDialogFlag.Text = "1"; 
+                txtvaluedays.Text = "0";
+                chkPrintReceipts.Checked = true;
+
             }
             catch (Exception ex)
             {
@@ -248,7 +264,7 @@ namespace WinSBSchool.Forms
         }
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider1.Clear();
+            errorProvider.Clear();
             if (IsTransactionTypeValid())
             {
                 try
@@ -362,6 +378,12 @@ namespace WinSBSchool.Forms
                     txn.PrintReceiptPrompt = chkPrintReceiptPrompt.Checked;
                     #endregion "Receipts"
 
+                    txn.StatementFlag = cbostatementflag.SelectedValue.ToString();
+                    txn.ValueDays = int.Parse(txtvaluedays.Text);
+
+                    txn.Status = cbostatus.SelectedValue.ToString();
+                    txn.IsDeleted = false;
+
                     if (!db.TransactionTypes.Any(i => i.ShortCode == txn.ShortCode))
                     {
                         db.TransactionTypes.AddObject(txn);
@@ -383,26 +405,22 @@ namespace WinSBSchool.Forms
             bool noerror = true;
             if (string.IsNullOrEmpty(txtShortCode.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtShortCode, "Short Code cannot be null!");
+                errorProvider.SetError(txtShortCode, "Short Code cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtDescription.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDescription, "Description cannot be null!");
+                errorProvider.SetError(txtDescription, "Description cannot be null!");
                 return false;
             }
             if (cboDebitCredit.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboDebitCredit, "Select Debit/Credit!");
+                errorProvider.SetError(cboDebitCredit, "Select Debit/Credit!");
                 return false;
             }
             if (cboTxnView.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboTxnView, "Select Transaction Type View!");
+                errorProvider.SetError(cboTxnView, "Select Transaction Type View!");
                 return false;
             }
             return noerror;
@@ -415,7 +433,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(connection) { Owner = this };
+                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnDefaultCrAccountListSelected);
                 saf.ShowDialog();
             }
@@ -439,7 +457,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(connection) { Owner = this };
+                SearchAccountsSimpleForm saf = new Forms.SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnDefaultDrAccountListSelected);
                 saf.ShowDialog();
             }
@@ -755,6 +773,76 @@ namespace WinSBSchool.Forms
             {
                 txtDefaultDebitNarrative.Enabled = false;
             }
+        }
+
+        private void chkPrintReceipts_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkPrintReceipts.Checked)
+            {
+                groupBoxReceiptLayout.Enabled = true;
+
+                StringBuilder sb = new StringBuilder();
+
+                Dictionary<int, PrintField> fields = new Dictionary<int, PrintField>();
+
+                fields.Add(0, new PrintField(0, "Date:", new DateTime())); //Date now
+                fields.Add(1, new PrintField(1, "School Name:", null)); //School StudentName
+                fields.Add(2, new PrintField(2, "School Address:", null)); //School Address
+                fields.Add(3, new PrintField(3, "Receipt Number:", null)); //Receipt Number
+                fields.Add(4, new PrintField(4, "Debit Account:", null)); //Debit Account
+                fields.Add(5, new PrintField(5, "Credit Account:", null)); //Credit Account            
+                fields.Add(6, new PrintField(6, "Debit Narrative:", null)); //Debit Narrative
+                fields.Add(7, new PrintField(7, "Credit Narrative:", null)); //Credit Narrative
+                fields.Add(8, new PrintField(8, "Amount:", null)); //Amount
+                fields.Add(9, new PrintField(9, "Student Name:", null)); //StudentId StudentName
+                fields.Add(10, new PrintField(10, "Student Admino:", null)); //Admino
+                fields.Add(11, new PrintField(11, "Student Class:", null)); //Class
+
+                foreach (var field in fields.Values)
+                {
+                    string template = Utils.ConvertFirstLetterToUpper(field.Name.ToString()) + " {" + field.Id + "} ";
+                    sb.AppendLine(template);
+                    //sb.AppendLine(System.Environment.NewLine);           
+                }
+
+                txtReceiptLayout.Text = sb.ToString();
+
+            }
+            else
+            {
+                groupBoxReceiptLayout.Enabled = false;
+                //txtReceiptLayout.Text = string.Empty;
+            }
+
+        }
+
+        private void btndefaultreceiptlayout_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            Dictionary<int, PrintField> fields = new Dictionary<int, PrintField>();
+
+            fields.Add(0, new PrintField(0, "Date:", new DateTime())); //Date now
+            fields.Add(1, new PrintField(1, "School Name:", null)); //School StudentName
+            fields.Add(2, new PrintField(2, "School Address:", null)); //School Address
+            fields.Add(3, new PrintField(3, "Receipt Number:", null)); //Receipt Number
+            fields.Add(4, new PrintField(4, "Debit Account:", null)); //Debit Account
+            fields.Add(5, new PrintField(5, "Credit Account:", null)); //Credit Account            
+            fields.Add(6, new PrintField(6, "Debit Narrative:", null)); //Debit Narrative
+            fields.Add(7, new PrintField(7, "Credit Narrative:", null)); //Credit Narrative
+            fields.Add(8, new PrintField(8, "Amount:", null)); //Amount
+            fields.Add(9, new PrintField(9, "Student Name:", null)); //StudentId StudentName
+            fields.Add(10, new PrintField(10, "Student Admino:", null)); //Admino
+            fields.Add(11, new PrintField(11, "Student Class:", null)); //Class
+
+            foreach (var field in fields.Values)
+            {
+                string template = Utils.ConvertFirstLetterToUpper(field.Name.ToString()) + " {" + field.Id + "} ";
+                sb.AppendLine(template);
+                //sb.AppendLine(System.Environment.NewLine);           
+            }
+
+            txtReceiptLayout.Text = sb.ToString();
         }
 
 

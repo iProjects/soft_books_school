@@ -171,7 +171,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(652, 59);
+            this.panel1.Size = new System.Drawing.Size(849, 60);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -214,10 +214,10 @@
             this.tabControl1.Controls.Add(this.tabPageFees);
             this.tabControl1.Controls.Add(this.tbpRemarks);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 59);
+            this.tabControl1.Location = new System.Drawing.Point(0, 60);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(652, 280);
+            this.tabControl1.Size = new System.Drawing.Size(849, 279);
             this.tabControl1.TabIndex = 17;
             // 
             // tbpAdmission
@@ -225,7 +225,7 @@
             this.tbpAdmission.Controls.Add(this.grpAdmission);
             this.tbpAdmission.Location = new System.Drawing.Point(4, 22);
             this.tbpAdmission.Name = "tbpAdmission";
-            this.tbpAdmission.Size = new System.Drawing.Size(644, 254);
+            this.tbpAdmission.Size = new System.Drawing.Size(841, 253);
             this.tbpAdmission.TabIndex = 1;
             this.tbpAdmission.Text = "Admission";
             this.tbpAdmission.UseVisualStyleBackColor = true;
@@ -238,7 +238,7 @@
             this.grpAdmission.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpAdmission.Location = new System.Drawing.Point(0, 0);
             this.grpAdmission.Name = "grpAdmission";
-            this.grpAdmission.Size = new System.Drawing.Size(644, 254);
+            this.grpAdmission.Size = new System.Drawing.Size(841, 253);
             this.grpAdmission.TabIndex = 0;
             this.grpAdmission.TabStop = false;
             // 
@@ -422,7 +422,7 @@
             this.tbpPersonel.Controls.Add(this.grpField);
             this.tbpPersonel.Location = new System.Drawing.Point(4, 22);
             this.tbpPersonel.Name = "tbpPersonel";
-            this.tbpPersonel.Size = new System.Drawing.Size(644, 254);
+            this.tbpPersonel.Size = new System.Drawing.Size(841, 254);
             this.tbpPersonel.TabIndex = 0;
             this.tbpPersonel.Text = "Personal";
             this.tbpPersonel.UseVisualStyleBackColor = true;
@@ -447,7 +447,7 @@
             this.grpField.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpField.Location = new System.Drawing.Point(0, 0);
             this.grpField.Name = "grpField";
-            this.grpField.Size = new System.Drawing.Size(644, 254);
+            this.grpField.Size = new System.Drawing.Size(841, 254);
             this.grpField.TabIndex = 14;
             this.grpField.TabStop = false;
             // 
@@ -561,7 +561,7 @@
             this.tbpFamily.Controls.Add(this.groupBox6);
             this.tbpFamily.Location = new System.Drawing.Point(4, 22);
             this.tbpFamily.Name = "tbpFamily";
-            this.tbpFamily.Size = new System.Drawing.Size(644, 254);
+            this.tbpFamily.Size = new System.Drawing.Size(841, 254);
             this.tbpFamily.TabIndex = 2;
             this.tbpFamily.Text = "Family";
             this.tbpFamily.UseVisualStyleBackColor = true;
@@ -574,7 +574,7 @@
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox6.Location = new System.Drawing.Point(0, 0);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(644, 254);
+            this.groupBox6.Size = new System.Drawing.Size(841, 254);
             this.groupBox6.TabIndex = 20;
             this.groupBox6.TabStop = false;
             // 
@@ -774,7 +774,7 @@
             this.tbpCurricular.Controls.Add(this.groupBox7);
             this.tbpCurricular.Location = new System.Drawing.Point(4, 22);
             this.tbpCurricular.Name = "tbpCurricular";
-            this.tbpCurricular.Size = new System.Drawing.Size(644, 254);
+            this.tbpCurricular.Size = new System.Drawing.Size(841, 254);
             this.tbpCurricular.TabIndex = 7;
             this.tbpCurricular.Text = "Academic";
             this.tbpCurricular.UseVisualStyleBackColor = true;
@@ -785,7 +785,7 @@
             this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox7.Location = new System.Drawing.Point(0, 0);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(644, 254);
+            this.groupBox7.Size = new System.Drawing.Size(841, 254);
             this.groupBox7.TabIndex = 8;
             this.groupBox7.TabStop = false;
             // 
@@ -805,7 +805,7 @@
             this.tbpPromotion.BackColor = System.Drawing.Color.AliceBlue;
             this.tbpPromotion.Location = new System.Drawing.Point(4, 22);
             this.tbpPromotion.Name = "tbpPromotion";
-            this.tbpPromotion.Size = new System.Drawing.Size(644, 254);
+            this.tbpPromotion.Size = new System.Drawing.Size(841, 254);
             this.tbpPromotion.TabIndex = 4;
             this.tbpPromotion.Text = "Promotions";
             this.tbpPromotion.UseVisualStyleBackColor = true;
@@ -815,7 +815,7 @@
             this.tbpExtraCurricular.BackColor = System.Drawing.Color.AliceBlue;
             this.tbpExtraCurricular.Location = new System.Drawing.Point(4, 22);
             this.tbpExtraCurricular.Name = "tbpExtraCurricular";
-            this.tbpExtraCurricular.Size = new System.Drawing.Size(644, 254);
+            this.tbpExtraCurricular.Size = new System.Drawing.Size(841, 254);
             this.tbpExtraCurricular.TabIndex = 5;
             this.tbpExtraCurricular.Text = "ExtraCurricular";
             this.tbpExtraCurricular.UseVisualStyleBackColor = true;
@@ -827,7 +827,7 @@
             this.tbAttendance.Location = new System.Drawing.Point(4, 22);
             this.tbAttendance.Name = "tbAttendance";
             this.tbAttendance.Padding = new System.Windows.Forms.Padding(3);
-            this.tbAttendance.Size = new System.Drawing.Size(644, 254);
+            this.tbAttendance.Size = new System.Drawing.Size(841, 254);
             this.tbAttendance.TabIndex = 8;
             this.tbAttendance.Text = "Attendance";
             this.tbAttendance.UseVisualStyleBackColor = true;
@@ -855,7 +855,7 @@
             this.tbSendMessage.Location = new System.Drawing.Point(4, 22);
             this.tbSendMessage.Name = "tbSendMessage";
             this.tbSendMessage.Padding = new System.Windows.Forms.Padding(3);
-            this.tbSendMessage.Size = new System.Drawing.Size(644, 254);
+            this.tbSendMessage.Size = new System.Drawing.Size(841, 254);
             this.tbSendMessage.TabIndex = 9;
             this.tbSendMessage.Text = "Send Message";
             this.tbSendMessage.UseVisualStyleBackColor = true;
@@ -875,7 +875,7 @@
             this.groupBox8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox8.Location = new System.Drawing.Point(3, 3);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(638, 248);
+            this.groupBox8.Size = new System.Drawing.Size(835, 248);
             this.groupBox8.TabIndex = 9;
             this.groupBox8.TabStop = false;
             // 
@@ -961,7 +961,7 @@
             this.tabPageFees.Location = new System.Drawing.Point(4, 22);
             this.tabPageFees.Name = "tabPageFees";
             this.tabPageFees.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFees.Size = new System.Drawing.Size(644, 254);
+            this.tabPageFees.Size = new System.Drawing.Size(841, 254);
             this.tabPageFees.TabIndex = 10;
             this.tabPageFees.Text = "Fees Record";
             this.tabPageFees.UseVisualStyleBackColor = true;
@@ -971,7 +971,7 @@
             this.tbpRemarks.Controls.Add(this.txtRemarks);
             this.tbpRemarks.Location = new System.Drawing.Point(4, 22);
             this.tbpRemarks.Name = "tbpRemarks";
-            this.tbpRemarks.Size = new System.Drawing.Size(644, 254);
+            this.tbpRemarks.Size = new System.Drawing.Size(841, 254);
             this.tbpRemarks.TabIndex = 6;
             this.tbpRemarks.Text = "Remarks";
             this.tbpRemarks.UseVisualStyleBackColor = true;
@@ -983,7 +983,7 @@
             this.txtRemarks.Location = new System.Drawing.Point(0, 0);
             this.txtRemarks.Multiline = true;
             this.txtRemarks.Name = "txtRemarks";
-            this.txtRemarks.Size = new System.Drawing.Size(644, 254);
+            this.txtRemarks.Size = new System.Drawing.Size(841, 254);
             this.txtRemarks.TabIndex = 27;
             // 
             // errorProvider1
@@ -997,7 +997,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
             this.Name = "ucStudent";
-            this.Size = new System.Drawing.Size(652, 339);
+            this.Size = new System.Drawing.Size(849, 339);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -16,42 +17,50 @@ namespace WinSBSchool.Forms
         Repository rep;
         SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-        public SchoolsForm(string Conn)
+        public SchoolsForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
+
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished SchoolsForm initialization", TAG)); 
+
         }
 
-        private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            try
-            {
-                var dfscl = (from sub in db.Schools
-                             where sub.DefaultSchool == true
-                             where sub.IsDeleted == false
-                             select sub);
-                if (dfscl.Count() > 0)
-                {
-                    Forms.AddSchoolForm asf = new Forms.AddSchoolForm(connection) { Owner = this };
-                    asf.DisableChechBox();
-                    asf.ShowDialog();
-                }
-                else
-                {
-                    Forms.AddSchoolForm asf = new Forms.AddSchoolForm(connection) { Owner = this };
-                    asf.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
 
         private void SchoolsForm_Load(object sender, EventArgs e)
@@ -153,6 +162,32 @@ namespace WinSBSchool.Forms
             }
         }
 
+        private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                var dfscl = (from sub in db.Schools
+                             where sub.DefaultSchool == true
+                             where sub.IsDeleted == false
+                             select sub);
+                if (dfscl.Count() > 0)
+                {
+                    Forms.AddSchoolForm asf = new Forms.AddSchoolForm(connection) { Owner = this };
+                    asf.DisableChechBox();
+                    asf.ShowDialog();
+                }
+                else
+                {
+                    Forms.AddSchoolForm asf = new Forms.AddSchoolForm(connection) { Owner = this };
+                    asf.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+
         public void RefreshGrid()
         {
             try
@@ -213,20 +248,20 @@ namespace WinSBSchool.Forms
 
                     if (dfscl.Count() > 0 && school.DefaultSchool == true)
                     {
-                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                         esf.Text = school.SchoolName.ToUpper().Trim();
                         esf.ShowDialog();
                     }
                     if (dfscl.Count() > 0 && school.DefaultSchool != true)
                     {
-                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                         esf.Text = school.SchoolName.ToUpper().Trim();
                         esf.DisableCheckBox();
                         esf.ShowDialog();
                     }
                     if (dfscl.Count() == 0)
                     {
-                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                         esf.Text = school.SchoolName.ToUpper().Trim();
                         esf.SetCheckBox();
                         esf.ShowDialog();
@@ -282,7 +317,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.School school = (DAL.School)bindingSourceSchools.Current;
-                    Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                    Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                     esf.DisableControls();
                     esf.Text = school.SchoolName.ToUpper().Trim();
                     esf.ShowDialog();
@@ -309,13 +344,13 @@ namespace WinSBSchool.Forms
                         DAL.School school = (DAL.School)bindingSourceSchools.Current;
                         if (school.DefaultSchool == true)
                         {
-                            Forms.EditSchoolForm esf1 = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                            Forms.EditSchoolForm esf1 = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                             esf1.Text = school.SchoolName.ToUpper().Trim();
                             esf1.ShowDialog();
                         }
                         else
                         {
-                            Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                            Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                             esf.Text = school.SchoolName.ToUpper().Trim();
                             esf.DisableCheckBox();
                             esf.ShowDialog();
@@ -324,7 +359,7 @@ namespace WinSBSchool.Forms
                     else
                     {
                         DAL.School school = (DAL.School)bindingSourceSchools.Current;
-                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, connection) { Owner = this };
+                        Forms.EditSchoolForm esf = new Forms.EditSchoolForm(school, user, connection, _notificationmessageEventname) { Owner = this };
                         esf.Text = school.SchoolName.ToUpper().Trim();
                         esf.ShowDialog();
                     }

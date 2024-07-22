@@ -117,11 +117,11 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(70, 134);
+            label1.Location = new System.Drawing.Point(7, 135);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(33, 13);
+            label1.Size = new System.Drawing.Size(93, 13);
             label1.TabIndex = 134;
-            label1.Text = "COA*";
+            label1.Text = "Chart Of Account*";
             // 
             // address1Label
             // 

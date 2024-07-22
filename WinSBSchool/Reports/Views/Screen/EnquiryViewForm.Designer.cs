@@ -35,6 +35,8 @@ namespace WinSBSchool.Reports.Views.Screen
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -53,6 +55,7 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBoxTransRef = new System.Windows.Forms.GroupBox();
             this.txtTransRef = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btntransactions = new System.Windows.Forms.LinkLabel();
             this.btnPrint = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.groupBoxSearchCriteria = new System.Windows.Forms.GroupBox();
@@ -60,21 +63,23 @@ namespace WinSBSchool.Reports.Views.Screen
             this.radioButtonAccountId = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridViewTransactions = new System.Windows.Forms.DataGridView();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.bindingSourceTransactions = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSourceaccounts = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSourcetransactiontypes = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPostDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNarrative = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnTransRef = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnBalance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStatementFlag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnTransRef = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBoxAccountId.SuspendLayout();
@@ -83,26 +88,28 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBoxSearchCriteria.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceTransactions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceaccounts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourcetransactiontypes)).BeginInit();
             this.SuspendLayout();
             // 
             // dateTimePickerEndDate
             // 
             this.dateTimePickerEndDate.Location = new System.Drawing.Point(73, 37);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
-            this.dateTimePickerEndDate.Size = new System.Drawing.Size(129, 20);
+            this.dateTimePickerEndDate.Size = new System.Drawing.Size(210, 20);
             this.dateTimePickerEndDate.TabIndex = 3;
             this.dateTimePickerEndDate.Value = new System.DateTime(2013, 2, 1, 0, 0, 0, 0);
             // 
             // btnSearchAccount
             // 
             this.btnSearchAccount.AutoSize = true;
-            this.btnSearchAccount.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearchAccount.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearchAccount.LinkColor = System.Drawing.Color.Yellow;
-            this.btnSearchAccount.Location = new System.Drawing.Point(135, 18);
+            this.btnSearchAccount.Location = new System.Drawing.Point(145, 17);
             this.btnSearchAccount.Name = "btnSearchAccount";
-            this.btnSearchAccount.Size = new System.Drawing.Size(47, 13);
+            this.btnSearchAccount.Size = new System.Drawing.Size(67, 22);
             this.btnSearchAccount.TabIndex = 1;
             this.btnSearchAccount.TabStop = true;
             this.btnSearchAccount.Text = "Search";
@@ -111,11 +118,11 @@ namespace WinSBSchool.Reports.Views.Screen
             // btnSearch
             // 
             this.btnSearch.AutoSize = true;
-            this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.btnSearch.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.LinkColor = System.Drawing.Color.Yellow;
-            this.btnSearch.Location = new System.Drawing.Point(27, 17);
+            this.btnSearch.Location = new System.Drawing.Point(22, 16);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(61, 18);
+            this.btnSearch.Size = new System.Drawing.Size(67, 22);
             this.btnSearch.TabIndex = 4;
             this.btnSearch.TabStop = true;
             this.btnSearch.Text = "Search";
@@ -140,7 +147,7 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(848, 147);
+            this.groupBox1.Size = new System.Drawing.Size(904, 163);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             // 
@@ -152,7 +159,7 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBox7.Controls.Add(this.dateTimePickerStartDate);
             this.groupBox7.Location = new System.Drawing.Point(290, 10);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(222, 65);
+            this.groupBox7.Size = new System.Drawing.Size(289, 65);
             this.groupBox7.TabIndex = 15;
             this.groupBox7.TabStop = false;
             // 
@@ -169,7 +176,7 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(74, 12);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
-            this.dateTimePickerStartDate.Size = new System.Drawing.Size(128, 20);
+            this.dateTimePickerStartDate.Size = new System.Drawing.Size(209, 20);
             this.dateTimePickerStartDate.TabIndex = 2;
             this.dateTimePickerStartDate.Value = new System.DateTime(2013, 1, 1, 0, 0, 0, 0);
             // 
@@ -191,7 +198,7 @@ namespace WinSBSchool.Reports.Views.Screen
             this.txtAccountId.Location = new System.Drawing.Point(13, 17);
             this.txtAccountId.MaxLength = 4;
             this.txtAccountId.Name = "txtAccountId";
-            this.txtAccountId.Size = new System.Drawing.Size(90, 20);
+            this.txtAccountId.Size = new System.Drawing.Size(104, 20);
             this.txtAccountId.TabIndex = 0;
             this.txtAccountId.TextChanged += new System.EventHandler(this.txtAccountId_TextChanged);
             this.txtAccountId.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAccountId_KeyDown);
@@ -229,23 +236,37 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btntransactions);
             this.groupBox4.Controls.Add(this.btnPrint);
             this.groupBox4.Controls.Add(this.btnClose);
             this.groupBox4.Controls.Add(this.btnSearch);
             this.groupBox4.Location = new System.Drawing.Point(721, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(121, 125);
+            this.groupBox4.Size = new System.Drawing.Size(171, 145);
             this.groupBox4.TabIndex = 12;
             this.groupBox4.TabStop = false;
+            // 
+            // btntransactions
+            // 
+            this.btntransactions.AutoSize = true;
+            this.btntransactions.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btntransactions.LinkColor = System.Drawing.Color.Yellow;
+            this.btntransactions.Location = new System.Drawing.Point(22, 83);
+            this.btntransactions.Name = "btntransactions";
+            this.btntransactions.Size = new System.Drawing.Size(116, 22);
+            this.btntransactions.TabIndex = 14;
+            this.btntransactions.TabStop = true;
+            this.btntransactions.Text = "Transactions";
+            this.btntransactions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btntransactions_LinkClicked);
             // 
             // btnPrint
             // 
             this.btnPrint.AutoSize = true;
-            this.btnPrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.btnPrint.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrint.LinkColor = System.Drawing.Color.Yellow;
-            this.btnPrint.Location = new System.Drawing.Point(27, 51);
+            this.btnPrint.Location = new System.Drawing.Point(22, 52);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(43, 18);
+            this.btnPrint.Size = new System.Drawing.Size(51, 22);
             this.btnPrint.TabIndex = 7;
             this.btnPrint.TabStop = true;
             this.btnPrint.Text = "Print";
@@ -254,11 +275,11 @@ namespace WinSBSchool.Reports.Views.Screen
             // btnClose
             // 
             this.btnClose.AutoSize = true;
-            this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.btnClose.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClose.LinkColor = System.Drawing.Color.Yellow;
-            this.btnClose.Location = new System.Drawing.Point(27, 82);
+            this.btnClose.Location = new System.Drawing.Point(22, 114);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(52, 18);
+            this.btnClose.Size = new System.Drawing.Size(56, 22);
             this.btnClose.TabIndex = 6;
             this.btnClose.TabStop = true;
             this.btnClose.Text = "Close";
@@ -306,9 +327,9 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBox2.Controls.Add(this.dataGridViewTransactions);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(0, 147);
+            this.groupBox2.Location = new System.Drawing.Point(0, 163);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(848, 226);
+            this.groupBox2.Size = new System.Drawing.Size(904, 356);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "TRANSACTIONS    LIST";
@@ -319,23 +340,25 @@ namespace WinSBSchool.Reports.Views.Screen
             this.dataGridViewTransactions.AllowUserToDeleteRows = false;
             this.dataGridViewTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTransactions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnId,
             this.ColumnPostDate,
             this.ColumnNarrative,
+            this.ColumnTransRef,
             this.ColumnAmount,
-            this.ColumnBalance,
-            this.ColumnStatementFlag,
-            this.ColumnTransRef});
+            this.ColumnBalance});
             this.dataGridViewTransactions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTransactions.Location = new System.Drawing.Point(3, 16);
             this.dataGridViewTransactions.MultiSelect = false;
             this.dataGridViewTransactions.Name = "dataGridViewTransactions";
             this.dataGridViewTransactions.ReadOnly = true;
-            this.dataGridViewTransactions.Size = new System.Drawing.Size(842, 207);
+            this.dataGridViewTransactions.Size = new System.Drawing.Size(898, 337);
             this.dataGridViewTransactions.TabIndex = 10;
+            this.dataGridViewTransactions.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTransactions_CellContentDoubleClick);
+            this.dataGridViewTransactions.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewTransactions_DataError);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -354,6 +377,9 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.dataGridViewTextBoxColumn2.DataPropertyName = "PostDate";
+            dataGridViewCellStyle5.Format = "d";
+            dataGridViewCellStyle5.NullValue = null;
+            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewTextBoxColumn2.HeaderText = "Post Date";
             this.dataGridViewTextBoxColumn2.MinimumWidth = 10;
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
@@ -364,9 +390,9 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.dataGridViewTextBoxColumn3.DataPropertyName = "ValueDate";
-            dataGridViewCellStyle5.Format = "C2";
-            dataGridViewCellStyle5.NullValue = null;
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Format = "C2";
+            dataGridViewCellStyle6.NullValue = null;
+            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewTextBoxColumn3.HeaderText = "Value Date";
             this.dataGridViewTextBoxColumn3.MinimumWidth = 10;
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
@@ -377,9 +403,9 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn4.DataPropertyName = "TransactionTypeId";
-            dataGridViewCellStyle6.Format = "C2";
-            dataGridViewCellStyle6.NullValue = null;
-            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.Format = "C2";
+            dataGridViewCellStyle7.NullValue = null;
+            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewTextBoxColumn4.HeaderText = "Transaction Type Id";
             this.dataGridViewTextBoxColumn4.MinimumWidth = 100;
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
@@ -389,9 +415,9 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn5.DataPropertyName = "Narrative";
-            dataGridViewCellStyle7.Format = "C2";
-            dataGridViewCellStyle7.NullValue = null;
-            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Format = "C2";
+            dataGridViewCellStyle8.NullValue = null;
+            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewTextBoxColumn5.HeaderText = "Narrative";
             this.dataGridViewTextBoxColumn5.MinimumWidth = 10;
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
@@ -401,23 +427,27 @@ namespace WinSBSchool.Reports.Views.Screen
             // 
             this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn6.DataPropertyName = "Amount";
+            dataGridViewCellStyle9.Format = "C2";
+            dataGridViewCellStyle9.NullValue = null;
+            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewTextBoxColumn6.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn6.MinimumWidth = 100;
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             this.dataGridViewTextBoxColumn6.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn7
+            // ColumnId
             // 
-            this.dataGridViewTextBoxColumn7.DataPropertyName = "Balance";
-            this.dataGridViewTextBoxColumn7.HeaderText = "Balance";
-            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.ReadOnly = true;
+            this.ColumnId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnId.DataPropertyName = "Id";
+            this.ColumnId.HeaderText = "Id";
+            this.ColumnId.Name = "ColumnId";
+            this.ColumnId.ReadOnly = true;
+            this.ColumnId.Width = 30;
             // 
             // ColumnPostDate
             // 
             this.ColumnPostDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.ColumnPostDate.DataPropertyName = "PostDate";
-            dataGridViewCellStyle1.Format = "d";
             dataGridViewCellStyle1.NullValue = null;
             this.ColumnPostDate.DefaultCellStyle = dataGridViewCellStyle1;
             this.ColumnPostDate.HeaderText = "Post Date";
@@ -431,7 +461,16 @@ namespace WinSBSchool.Reports.Views.Screen
             this.ColumnNarrative.HeaderText = "Narrative";
             this.ColumnNarrative.Name = "ColumnNarrative";
             this.ColumnNarrative.ReadOnly = true;
-            this.ColumnNarrative.Width = 150;
+            this.ColumnNarrative.Width = 120;
+            // 
+            // ColumnTransRef
+            // 
+            this.ColumnTransRef.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnTransRef.DataPropertyName = "TransRef";
+            this.ColumnTransRef.HeaderText = "Transaction Reference";
+            this.ColumnTransRef.Name = "ColumnTransRef";
+            this.ColumnTransRef.ReadOnly = true;
+            this.ColumnTransRef.Width = 80;
             // 
             // ColumnAmount
             // 
@@ -443,11 +482,10 @@ namespace WinSBSchool.Reports.Views.Screen
             this.ColumnAmount.HeaderText = "Amount";
             this.ColumnAmount.Name = "ColumnAmount";
             this.ColumnAmount.ReadOnly = true;
-            this.ColumnAmount.Width = 140;
             // 
             // ColumnBalance
             // 
-            this.ColumnBalance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnBalance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ColumnBalance.DataPropertyName = "Balance";
             dataGridViewCellStyle3.Format = "C2";
             dataGridViewCellStyle3.NullValue = null;
@@ -455,23 +493,13 @@ namespace WinSBSchool.Reports.Views.Screen
             this.ColumnBalance.HeaderText = "Balance";
             this.ColumnBalance.Name = "ColumnBalance";
             this.ColumnBalance.ReadOnly = true;
-            this.ColumnBalance.Width = 140;
             // 
-            // ColumnStatementFlag
+            // dataGridViewTextBoxColumn7
             // 
-            this.ColumnStatementFlag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnStatementFlag.DataPropertyName = "StatementFlag";
-            this.ColumnStatementFlag.HeaderText = "Statement_Flag";
-            this.ColumnStatementFlag.Name = "ColumnStatementFlag";
-            this.ColumnStatementFlag.ReadOnly = true;
-            // 
-            // ColumnTransRef
-            // 
-            this.ColumnTransRef.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnTransRef.DataPropertyName = "TransRef";
-            this.ColumnTransRef.HeaderText = "Transaction Reference";
-            this.ColumnTransRef.Name = "ColumnTransRef";
-            this.ColumnTransRef.ReadOnly = true;
+            this.dataGridViewTextBoxColumn7.DataPropertyName = "Balance";
+            this.dataGridViewTextBoxColumn7.HeaderText = "Balance";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.ReadOnly = true;
             // 
             // EnquiryViewForm
             // 
@@ -480,7 +508,7 @@ namespace WinSBSchool.Reports.Views.Screen
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(848, 373);
+            this.ClientSize = new System.Drawing.Size(904, 519);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -501,8 +529,10 @@ namespace WinSBSchool.Reports.Views.Screen
             this.groupBoxSearchCriteria.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTransactions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceTransactions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceaccounts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourcetransactiontypes)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -538,12 +568,15 @@ namespace WinSBSchool.Reports.Views.Screen
         private System.Windows.Forms.GroupBox groupBoxSearchCriteria;
         private System.Windows.Forms.RadioButton radioButtonTransactionReference;
         private System.Windows.Forms.RadioButton radioButtonAccountId;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.LinkLabel btntransactions;
+        private System.Windows.Forms.BindingSource bindingSourceaccounts;
+        private System.Windows.Forms.BindingSource bindingSourcetransactiontypes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPostDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNarrative;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTransRef;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnAmount;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBalance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatementFlag;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTransRef;
     }
 }

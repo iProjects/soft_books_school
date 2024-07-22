@@ -361,6 +361,8 @@ namespace WinSBSchool
                 _lstnotificationdto.Add(_notificationdto);
                 Console.WriteLine(args.message);
 
+                Log.Write_To_Log_File_temp_dir(new Exception(_logtext));
+
                 var _lstmsgdto = from msgdto in _lstnotificationdto
                                  orderby msgdto._created_datetime descending
                                  select msgdto._notification_message;
@@ -549,8 +551,8 @@ namespace WinSBSchool
                 {
                     try
                     {
-                        //CollectAdminExtraInfo();
-                        //CollectAdminAppInfo();
+                        CollectAdminExtraInfo();
+                        CollectAdminAppInfo();
                     }
                     catch (Exception ex)
                     {
@@ -914,13 +916,13 @@ namespace WinSBSchool
         {
             try
             {
-                //ExecuteIPConfigCommands();
+                ExecuteIPConfigCommands();
 
-                //FindComputersConectedToHost();
+                FindComputersConectedToHost();
 
-                //GetClientExtraInfo();
+                GetClientExtraInfo();
 
-                //GetHostNameandMac();
+                GetHostNameandMac();
 
                 return true;
             }
@@ -1611,8 +1613,8 @@ namespace WinSBSchool
                 _template += res;
 
                 Debug.Write(res);
-                Log.WriteToErrorLogFile_and_EventViewer(new Exception(res));
-                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
+                Log.Write_To_Log_File_temp_dir(new Exception(res));
+                //_notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
 
                 return true;
             }
@@ -1648,8 +1650,8 @@ namespace WinSBSchool
                 _template += res;
 
                 Debug.Write(res);
-                Log.WriteToErrorLogFile_and_EventViewer(new Exception(res));
-                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
+                Log.Write_To_Log_File_temp_dir(new Exception(res));
+                //_notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
 
                 return true;
             }
@@ -1688,8 +1690,8 @@ namespace WinSBSchool
                 _template += res;
 
                 Debug.Write(res);
-                Log.WriteToErrorLogFile_and_EventViewer(new Exception(res));
-                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
+                Log.Write_To_Log_File_temp_dir(new Exception(res));
+                //_notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
 
                 return true;
             }
@@ -1728,8 +1730,8 @@ namespace WinSBSchool
                 _template += res;
 
                 Debug.Write(res);
-                Log.WriteToErrorLogFile(new Exception(res));
-                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
+                Log.Write_To_Log_File_temp_dir(new Exception(res));
+                //_notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(res, TAG));
 
                 return true;
             }
@@ -1775,7 +1777,7 @@ namespace WinSBSchool
 
                 Console.WriteLine(str_info.ToString());
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(str_info.ToString(), TAG));
-                Log.WriteToErrorLogFile_and_EventViewer(new Exception(str_info.ToString()));
+                Log.Write_To_Log_File_temp_dir(new Exception(str_info.ToString()));
 
             }
             catch (Exception ex)
@@ -1822,7 +1824,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading FeeStructureForm", TAG));
-                FeeStructureForm tf = new FeeStructureForm(LoggedInUser.UserName, connection);
+                FeeStructureForm tf = new FeeStructureForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 tf.Show();
             }
             catch (Exception ex)
@@ -1987,7 +1989,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading SchoolsForm", TAG));
-                SchoolsForm sf = new SchoolsForm(connection);
+                SchoolsForm sf = new SchoolsForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 sf.Show();
             }
             catch (Exception ex)
@@ -2030,7 +2032,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading StudentsForm", TAG));
-                StudentsForm u = new StudentsForm(LoggedInUser.UserName, connection);
+                StudentsForm u = new StudentsForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 u.Show();
             }
             catch (Exception ex)
@@ -2072,7 +2074,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading ClassesForm", TAG));
-                ClassesForm f = new ClassesForm(connection);
+                ClassesForm f = new ClassesForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 f.Show();
             }
             catch (Exception ex)
@@ -2086,7 +2088,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading ClassesForm", TAG));
-                ClassesForm f = new ClassesForm(connection);
+                ClassesForm f = new ClassesForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 f.Show();
             }
             catch (Exception ex)
@@ -2100,7 +2102,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostingDoubleEntryForm", TAG));
-                PostingDoubleEntryForm pdef = new PostingDoubleEntryForm(LoggedInUser.UserName, connection) { Owner = this };
+                PostingDoubleEntryForm pdef = new PostingDoubleEntryForm(LoggedInUser.UserName, connection, _notificationmessageEventname) { Owner = this };
                 pdef.ShowDialog();
             }
             catch (Exception ex)
@@ -2114,7 +2116,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostingMuiltiEntryForm", TAG));
-                PostingMuiltiEntryForm pmef = new PostingMuiltiEntryForm(LoggedInUser.UserName, connection) { Owner = this };
+                PostingMuiltiEntryForm pmef = new PostingMuiltiEntryForm(LoggedInUser.UserName, connection, _notificationmessageEventname) { Owner = this };
                 pmef.ShowDialog();
             }
             catch (Exception ex)
@@ -2128,7 +2130,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading TransactionsForm", TAG));
-                TransactionsForm t = new TransactionsForm(LoggedInUser.UserName, connection);
+                TransactionsForm t = new TransactionsForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 t.Show();
             }
             catch (Exception ex)
@@ -2156,7 +2158,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading AccountsForm", TAG));
-                AccountsForm af = new AccountsForm(connection);
+                AccountsForm af = new AccountsForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 af.Show();
             }
             catch (Exception ex)
@@ -2184,7 +2186,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostingSingleEntryForm", TAG));
-                PostingSingleEntryForm psef = new PostingSingleEntryForm(LoggedInUser.UserName.ToString(), connection) { Owner = this };
+                PostingSingleEntryForm psef = new PostingSingleEntryForm(LoggedInUser.UserName.ToString(), connection, _notificationmessageEventname) { Owner = this };
                 psef.ShowDialog();
             }
             catch (Exception ex)
@@ -2198,7 +2200,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostingDoubleEntryForm", TAG));
-                PostingDoubleEntryForm pdef = new PostingDoubleEntryForm(LoggedInUser.UserName.ToString(), connection) { Owner = this };
+                PostingDoubleEntryForm pdef = new PostingDoubleEntryForm(LoggedInUser.UserName.ToString(), connection, _notificationmessageEventname) { Owner = this };
                 pdef.ShowDialog();
             }
             catch (Exception ex)
@@ -2212,7 +2214,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading EnquiryViewForm", TAG));
-                WinSBSchool.Reports.Views.Screen.EnquiryViewForm ef = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(LoggedInUser.UserName, connection);
+                WinSBSchool.Reports.Views.Screen.EnquiryViewForm ef = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 ef.Show();
             }
             catch (Exception ex)
@@ -2226,7 +2228,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PostingMuiltiEntryForm", TAG));
-                PostingMuiltiEntryForm pmef = new PostingMuiltiEntryForm(LoggedInUser.UserName.ToString(), connection) { Owner = this };
+                PostingMuiltiEntryForm pmef = new PostingMuiltiEntryForm(LoggedInUser.UserName.ToString(), connection, _notificationmessageEventname) { Owner = this };
                 pmef.ShowDialog();
             }
             catch (Exception ex)
@@ -2240,7 +2242,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading EnquiryViewForm", TAG));
-                WinSBSchool.Reports.Views.Screen.EnquiryViewForm ef = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(LoggedInUser.UserName, connection);
+                WinSBSchool.Reports.Views.Screen.EnquiryViewForm ef = new WinSBSchool.Reports.Views.Screen.EnquiryViewForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 ef.Show();
             }
             catch (Exception ex)
@@ -2254,7 +2256,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading TransactionTypesListForm", TAG));
-                TransactionTypesListForm ttf = new TransactionTypesListForm(connection);
+                TransactionTypesListForm ttf = new TransactionTypesListForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 ttf.Show();
             }
             catch (Exception ex)
@@ -2456,7 +2458,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading FeeStructureOthersForm", TAG));
-                FeeStructureOthersForm fsof = new FeeStructureOthersForm(connection);
+                FeeStructureOthersForm fsof = new FeeStructureOthersForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 fsof.Show();
             }
             catch (Exception ex)
@@ -2470,7 +2472,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading FeeStructureAcademicForm", TAG));
-                FeeStructureAcademicForm fsaf = new FeeStructureAcademicForm(connection);
+                FeeStructureAcademicForm fsaf = new FeeStructureAcademicForm(LoggedInUser.UserName , connection, _notificationmessageEventname);
                 fsaf.Show();
             }
             catch (Exception ex)
@@ -2498,7 +2500,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading AttendanceForm", TAG));
-                AttendanceForm af = new AttendanceForm(connection);
+                AttendanceForm af = new AttendanceForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 af.Show();
             }
             catch (Exception ex)
@@ -2542,7 +2544,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading COAForm", TAG));
-                COAForm f = new COAForm(LoggedInUser.UserName, connection);
+                COAForm f = new COAForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 f.Show();
             }
             catch (Exception ex)
@@ -2556,7 +2558,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading PayFeesForm", TAG));
-                PayFeesForm pff = new PayFeesForm(LoggedInUser.UserName, connection);
+                PayFeesForm pff = new PayFeesForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 pff.ShowDialog();
             }
             catch (Exception ex)

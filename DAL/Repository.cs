@@ -1283,7 +1283,7 @@ namespace DAL
         {
             try
             {
-                School s = new School(); 
+                School s = new School();
                 s.SchoolIndex = school.SchoolIndex;
                 s.SchoolName = school.SchoolName;
                 s.SchoolType = school.SchoolType;
@@ -1654,6 +1654,18 @@ namespace DAL
                 return null;
             }
         }
+        public Transaction GetTransaction(int txn_id)
+        {
+            try
+            {
+                return db.Transactions.Where(i => i.Id == txn_id).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile(ex);
+                return null;
+            }
+        }
         public decimal GetBalanceBF(int accid, DateTime startdate)
         {
 
@@ -1683,7 +1695,8 @@ namespace DAL
                     PostDate = t.PostDate,
                     ValueDate = t.ValueDate,
                     TransRef = t.TransRef,
-                    RecordDate = t.RecordDate
+                    RecordDate = t.RecordDate,
+                    IsDeleted = false                     
                 };
 
                 db.Transactions.AddObject(ts);
@@ -1750,6 +1763,12 @@ namespace DAL
                 txntype.PrintReceipt = t.PrintReceipt;
                 txntype.ReceiptLayout = t.ReceiptLayout;
                 txntype.PrintReceiptPrompt = t.PrintReceiptPrompt;
+                txntype.StatementFlag = t.StatementFlag;
+                txntype.ValueDays = t.ValueDays;
+                txntype.Status = t.Status;
+
+                if (txntype.IsDeleted == null)
+                    txntype.IsDeleted = false;
 
                 db.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
             }
@@ -1781,6 +1800,22 @@ namespace DAL
             {
 
                 return db.TransactionTypes.OrderBy(a => a.Id).ToList();
+            }
+
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile(ex);
+                return null;
+            }
+        }
+        public TransactionType GetTransactionType(int id)
+        {
+            try
+            {
+                var ttype = from txntype in db.TransactionTypes
+                            where txntype.Id == id 
+                            select txntype;
+                return ttype.FirstOrDefault();
             }
 
             catch (Exception ex)
@@ -1823,7 +1858,7 @@ namespace DAL
                 ts.Authorizer = t.Authorizer;
                 ts.UserName = t.UserName;
                 ts.TransRef = t.TransRef;
-                ts.IsDeleted = t.IsDeleted;
+                ts.IsDeleted = false;
 
                 //Account ChangeBalance(t);
                 string status;
@@ -1841,7 +1876,7 @@ namespace DAL
                 }
 
                 db.Transactions.AddObject(ts);
-                db.SaveChanges();
+                db.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
 
             }
             catch (Exception ex)
@@ -2675,7 +2710,7 @@ namespace DAL
                 Log.WriteToErrorLogFile(ex);
                 return null;
             }
-        }        
+        }
         public void CopyExamResultsFromTemps()
         {
             try
@@ -2810,38 +2845,39 @@ namespace DAL
                 {
                     var rec = (from ser in db.StudentsExamResults_Temp
                                join serd in db.StudentsExamResultsDetails on ser.Id equals serd.StudentsExamResultsId
-                               select new { 
-                               ser.ClassTeacherRemark,
-                               ser.Examid,
-                               ser.HeadTeacherRemark,
-                               ser.Id,
-                               ser.IsDeleted,
-                               ser.MeanGrade,
-                               ser.MeanGrade_Target,
-                               ser.MeanMarks,
-                               ser.MeanMarks_Target,
-                               ser.Position,
-                               ser.Position_Target,
-                               ser.SchoolClassId,
-                               ser.Status,
-                               ser.StudentId,
-                               ser.TeacherId,
-                               ser.TotalMarks,
-                               ser.TotalMarks_Target,
-                               ser.TotalPoints,
-                               ser.TotalPoints_Target,
-                               serd.SubjectShortCode 
+                               select new
+                               {
+                                   ser.ClassTeacherRemark,
+                                   ser.Examid,
+                                   ser.HeadTeacherRemark,
+                                   ser.Id,
+                                   ser.IsDeleted,
+                                   ser.MeanGrade,
+                                   ser.MeanGrade_Target,
+                                   ser.MeanMarks,
+                                   ser.MeanMarks_Target,
+                                   ser.Position,
+                                   ser.Position_Target,
+                                   ser.SchoolClassId,
+                                   ser.Status,
+                                   ser.StudentId,
+                                   ser.TeacherId,
+                                   ser.TotalMarks,
+                                   ser.TotalMarks_Target,
+                                   ser.TotalPoints,
+                                   ser.TotalPoints_Target,
+                                   serd.SubjectShortCode
                                }).First();
 
                     _schoolclassid = rec.SchoolClassId;
                     _examid = rec.Examid;
-                    examtypeshortcodewc=rec.SubjectShortCode;
+                    examtypeshortcodewc = rec.SubjectShortCode;
                 }
                 else
                 {
                     _schoolclassid = -1;
                     _examid = -1;
-                    examtypeshortcodewc="";
+                    examtypeshortcodewc = "";
                 }
                 return cnt > 0;
             }
@@ -2873,11 +2909,11 @@ namespace DAL
             try
             {
                 var school = (from p in db.ExamPeriods
-                               where p.IsDeleted == false
-                               where p.Status == "A"
-                               where p.Term == term
-                               where p.Year == year
-                               select p).SingleOrDefault();
+                              where p.IsDeleted == false
+                              where p.Status == "A"
+                              where p.Term == term
+                              where p.Year == year
+                              select p).SingleOrDefault();
                 db.SaveChanges();
             }
             catch (Exception ex)
@@ -2925,7 +2961,7 @@ namespace DAL
                 Log.WriteToErrorLogFile(ex);
 
             }
-        }        
+        }
         public void TruncateWorkingTables()
         {
             try
@@ -3040,11 +3076,11 @@ namespace DAL
                 Log.WriteToErrorLogFile(ex);
             }
         }
-        public void ClearStudentsExamResults_Temp( int examid)
+        public void ClearStudentsExamResults_Temp(int examid)
         {
             try
             {
-                var _studentexamresulttempquery = from sert in db.StudentsExamResults_Temp 
+                var _studentexamresulttempquery = from sert in db.StudentsExamResults_Temp
                                                   where sert.Examid == examid
                                                   select sert;
                 List<StudentsExamResults_Temp> _sert = _studentexamresulttempquery.ToList();
@@ -4259,7 +4295,7 @@ namespace DAL
                 Log.WriteToErrorLogFile(ex);
                 return null;
             }
-        } 
+        }
         public List<string> GetExamPeriodIdsFromCriteria(List<CriterionItem> Criteria)
         {
             try

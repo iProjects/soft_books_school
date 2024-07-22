@@ -38,18 +38,17 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AttendanceForm));
             this.btnAdd = new System.Windows.Forms.LinkLabel();
             this.btnDelete = new System.Windows.Forms.LinkLabel();
             this.btnEdit = new System.Windows.Forms.LinkLabel();
             this.btnClose = new System.Windows.Forms.LinkLabel();
-            this.bindingSourceAttendance = new System.Windows.Forms.BindingSource(this.components);
             this.btnViewDetails = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -61,15 +60,8 @@
             this.txtReasonForNotAttending = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridViewAttendance = new System.Windows.Forms.DataGridView();
-            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1StudentName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2ClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3ClassStreamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4SubjectDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStartDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnEndDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnAttended = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.ColumnReasonForNotAttending = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnControls = new System.Windows.Forms.LinkLabel();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,17 +70,26 @@
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1StudentName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2ClassName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3ClassStreamName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4SubjectDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStartDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnEndDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnReasonForNotAttending = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bindingSourceAttendance = new System.Windows.Forms.BindingSource(this.components);
             schoolNameLabel = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAttendance)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAttendance)).BeginInit();
             this.SuspendLayout();
             // 
             // schoolNameLabel
@@ -358,6 +359,111 @@
             this.dataGridViewAttendance.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewAttendance_CellContentDoubleClick);
             this.dataGridViewAttendance.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewAttendance_DataError);
             // 
+            // ColumnAttended
+            // 
+            this.ColumnAttended.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnAttended.DataPropertyName = "Attended";
+            this.ColumnAttended.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ColumnAttended.HeaderText = "Attended";
+            this.ColumnAttended.Name = "ColumnAttended";
+            this.ColumnAttended.ReadOnly = true;
+            this.ColumnAttended.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnAttended.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ColumnAttended.Width = 60;
+            // 
+            // btnControls
+            // 
+            this.btnControls.AutoSize = true;
+            this.btnControls.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.btnControls.LinkColor = System.Drawing.Color.Yellow;
+            this.btnControls.Location = new System.Drawing.Point(412, 345);
+            this.btnControls.Name = "btnControls";
+            this.btnControls.Size = new System.Drawing.Size(73, 18);
+            this.btnControls.TabIndex = 5;
+            this.btnControls.TabStop = true;
+            this.btnControls.Text = "Controls";
+            this.btnControls.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "ShortCode";
+            this.dataGridViewTextBoxColumn1.HeaderText = "Short Code";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 50;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "ProgrammeId";
+            dataGridViewCellStyle6.Format = "G";
+            dataGridViewCellStyle6.NullValue = null;
+            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Programme";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Width = 110;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "ClassName";
+            dataGridViewCellStyle7.Format = "G";
+            dataGridViewCellStyle7.NullValue = null;
+            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle7;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.Width = 110;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "ClassTeacher";
+            this.dataGridViewTextBoxColumn4.HeaderText = "Teacher";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.Width = 461;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn5.DataPropertyName = "Remarks";
+            this.dataGridViewTextBoxColumn5.HeaderText = "Remarks";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn6.DataPropertyName = "StartDateTime";
+            dataGridViewCellStyle8.Format = "G";
+            dataGridViewCellStyle8.NullValue = null;
+            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle8;
+            this.dataGridViewTextBoxColumn6.HeaderText = "Start Time";
+            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            this.dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn7.DataPropertyName = "EndDateTime";
+            dataGridViewCellStyle9.Format = "G";
+            dataGridViewCellStyle9.NullValue = null;
+            this.dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle9;
+            this.dataGridViewTextBoxColumn7.HeaderText = "End Time";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            this.dataGridViewTextBoxColumn8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn8.DataPropertyName = "ReasonForNotAttending";
+            this.dataGridViewTextBoxColumn8.HeaderText = "Reason";
+            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            this.dataGridViewTextBoxColumn8.ReadOnly = true;
+            // 
             // ColumnId
             // 
             this.ColumnId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -423,18 +529,6 @@
             this.ColumnEndDateTime.Name = "ColumnEndDateTime";
             this.ColumnEndDateTime.ReadOnly = true;
             // 
-            // ColumnAttended
-            // 
-            this.ColumnAttended.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.ColumnAttended.DataPropertyName = "Attended";
-            this.ColumnAttended.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ColumnAttended.HeaderText = "Attended";
-            this.ColumnAttended.Name = "ColumnAttended";
-            this.ColumnAttended.ReadOnly = true;
-            this.ColumnAttended.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ColumnAttended.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ColumnAttended.Width = 60;
-            // 
             // ColumnReasonForNotAttending
             // 
             this.ColumnReasonForNotAttending.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -442,85 +536,6 @@
             this.ColumnReasonForNotAttending.HeaderText = "Reason";
             this.ColumnReasonForNotAttending.Name = "ColumnReasonForNotAttending";
             this.ColumnReasonForNotAttending.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "ShortCode";
-            this.dataGridViewTextBoxColumn1.HeaderText = "Short Code";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 50;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "ProgrammeId";
-            dataGridViewCellStyle6.Format = "G";
-            dataGridViewCellStyle6.NullValue = null;
-            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Programme";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Width = 110;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "ClassName";
-            dataGridViewCellStyle7.Format = "G";
-            dataGridViewCellStyle7.NullValue = null;
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle7;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Name";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.Width = 110;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn4.DataPropertyName = "ClassTeacher";
-            this.dataGridViewTextBoxColumn4.HeaderText = "Teacher";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.Width = 461;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn5.DataPropertyName = "Remarks";
-            this.dataGridViewTextBoxColumn5.HeaderText = "Remarks";
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            this.dataGridViewTextBoxColumn6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn6.DataPropertyName = "StartDateTime";
-            dataGridViewCellStyle8.Format = "G";
-            dataGridViewCellStyle8.NullValue = null;
-            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle8;
-            this.dataGridViewTextBoxColumn6.HeaderText = "Start Time";
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn7
-            // 
-            this.dataGridViewTextBoxColumn7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn7.DataPropertyName = "EndDateTime";
-            dataGridViewCellStyle9.Format = "G";
-            dataGridViewCellStyle9.NullValue = null;
-            this.dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle9;
-            this.dataGridViewTextBoxColumn7.HeaderText = "End Time";
-            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn8
-            // 
-            this.dataGridViewTextBoxColumn8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn8.DataPropertyName = "ReasonForNotAttending";
-            this.dataGridViewTextBoxColumn8.HeaderText = "Reason";
-            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
-            this.dataGridViewTextBoxColumn8.ReadOnly = true;
             // 
             // AttendanceForm
             // 
@@ -530,6 +545,7 @@
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
             this.ClientSize = new System.Drawing.Size(845, 373);
+            this.Controls.Add(this.btnControls);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -538,14 +554,15 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Attendance";
             this.Load += new System.EventHandler(this.AttendanceForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAttendance)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAttendance)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -584,5 +601,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEndDateTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnAttended;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnReasonForNotAttending;
+        private System.Windows.Forms.LinkLabel btnControls;
     }
 }

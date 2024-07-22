@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddTransactionTypeForm));
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.btnAdd = new System.Windows.Forms.LinkLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPagetxninfo = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboNarrativeFlag = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -56,7 +56,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPagedefaults = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnSearchDefaultDrAcc = new System.Windows.Forms.Button();
             this.btnSearchDefaultCrAcc = new System.Windows.Forms.Button();
@@ -75,7 +75,7 @@
             this.chkUseDefaultDebitAccount = new System.Windows.Forms.CheckBox();
             this.chkUseDefaultCreditAccount = new System.Windows.Forms.CheckBox();
             this.chkUseDefaultAmount = new System.Windows.Forms.CheckBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPageviews = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.cboCreditAccountField = new System.Windows.Forms.ComboBox();
             this.label21 = new System.Windows.Forms.Label();
@@ -91,9 +91,9 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabPagereceipts = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBoxReceiptLayout = new System.Windows.Forms.GroupBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnAddNewLine = new System.Windows.Forms.Button();
@@ -108,27 +108,38 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.chkPrintReceiptPrompt = new System.Windows.Forms.CheckBox();
             this.chkPrintReceipts = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.tabPageotherinfo = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.cbostatus = new System.Windows.Forms.ComboBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.txtvaluedays = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.btndefaultreceiptlayout = new System.Windows.Forms.Button();
+            this.cbostatementflag = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabPagetxninfo.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabPagedefaults.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabPageviews.SuspendLayout();
             this.groupBox8.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tabPagereceipts.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.groupBoxReceiptLayout.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.tabPageotherinfo.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // btnClose
             // 
@@ -179,10 +190,11 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPagetxninfo);
+            this.tabControl1.Controls.Add(this.tabPagedefaults);
+            this.tabControl1.Controls.Add(this.tabPageviews);
+            this.tabControl1.Controls.Add(this.tabPagereceipts);
+            this.tabControl1.Controls.Add(this.tabPageotherinfo);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 16);
             this.tabControl1.Name = "tabControl1";
@@ -190,16 +202,16 @@
             this.tabControl1.Size = new System.Drawing.Size(488, 434);
             this.tabControl1.TabIndex = 17;
             // 
-            // tabPage1
+            // tabPagetxninfo
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(480, 408);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Txn info";
+            this.tabPagetxninfo.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPagetxninfo.Controls.Add(this.groupBox1);
+            this.tabPagetxninfo.Location = new System.Drawing.Point(4, 22);
+            this.tabPagetxninfo.Name = "tabPagetxninfo";
+            this.tabPagetxninfo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagetxninfo.Size = new System.Drawing.Size(480, 408);
+            this.tabPagetxninfo.TabIndex = 0;
+            this.tabPagetxninfo.Text = "Txn info";
             // 
             // groupBox1
             // 
@@ -395,16 +407,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Debit Credit*";
             // 
-            // tabPage2
+            // tabPagedefaults
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.tabPage2.Controls.Add(this.groupBox4);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(480, 408);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Defaults";
+            this.tabPagedefaults.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPagedefaults.Controls.Add(this.groupBox4);
+            this.tabPagedefaults.Location = new System.Drawing.Point(4, 22);
+            this.tabPagedefaults.Name = "tabPagedefaults";
+            this.tabPagedefaults.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagedefaults.Size = new System.Drawing.Size(480, 408);
+            this.tabPagedefaults.TabIndex = 1;
+            this.tabPagedefaults.Text = "Defaults";
             // 
             // groupBox4
             // 
@@ -615,15 +627,15 @@
             this.chkUseDefaultAmount.UseVisualStyleBackColor = true;
             this.chkUseDefaultAmount.CheckedChanged += new System.EventHandler(this.chkUseDefaultAmount_CheckedChanged);
             // 
-            // tabPage3
+            // tabPageviews
             // 
-            this.tabPage3.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.tabPage3.Controls.Add(this.groupBox8);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(480, 408);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Views";
+            this.tabPageviews.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPageviews.Controls.Add(this.groupBox8);
+            this.tabPageviews.Location = new System.Drawing.Point(4, 22);
+            this.tabPageviews.Name = "tabPageviews";
+            this.tabPageviews.Size = new System.Drawing.Size(480, 408);
+            this.tabPageviews.TabIndex = 2;
+            this.tabPageviews.Text = "Views";
             // 
             // groupBox8
             // 
@@ -781,42 +793,43 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Amount Field";
             // 
-            // tabPage4
+            // tabPagereceipts
             // 
-            this.tabPage4.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.tabPage4.Controls.Add(this.groupBox5);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(480, 408);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Receipts";
+            this.tabPagereceipts.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPagereceipts.Controls.Add(this.groupBox5);
+            this.tabPagereceipts.Location = new System.Drawing.Point(4, 22);
+            this.tabPagereceipts.Name = "tabPagereceipts";
+            this.tabPagereceipts.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagereceipts.Size = new System.Drawing.Size(480, 408);
+            this.tabPagereceipts.TabIndex = 3;
+            this.tabPagereceipts.Text = "Receipts";
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.groupBox7);
+            this.groupBox5.Controls.Add(this.groupBoxReceiptLayout);
             this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox5.Location = new System.Drawing.Point(3, 3);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(474, 402);
-            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             // 
-            // groupBox7
+            // groupBoxReceiptLayout
             // 
-            this.groupBox7.Controls.Add(this.groupBox9);
-            this.groupBox7.Controls.Add(this.txtReceiptLayout);
-            this.groupBox7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox7.Location = new System.Drawing.Point(3, 83);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(468, 316);
-            this.groupBox7.TabIndex = 4;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Receipt Layout";
+            this.groupBoxReceiptLayout.Controls.Add(this.groupBox9);
+            this.groupBoxReceiptLayout.Controls.Add(this.txtReceiptLayout);
+            this.groupBoxReceiptLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxReceiptLayout.Location = new System.Drawing.Point(3, 83);
+            this.groupBoxReceiptLayout.Name = "groupBoxReceiptLayout";
+            this.groupBoxReceiptLayout.Size = new System.Drawing.Size(468, 316);
+            this.groupBoxReceiptLayout.TabIndex = 0;
+            this.groupBoxReceiptLayout.TabStop = false;
+            this.groupBoxReceiptLayout.Text = "Receipt Layout";
             // 
             // groupBox9
             // 
+            this.groupBox9.Controls.Add(this.btndefaultreceiptlayout);
             this.groupBox9.Controls.Add(this.btnClear);
             this.groupBox9.Controls.Add(this.btnAddNewLine);
             this.groupBox9.Controls.Add(this.btnText);
@@ -826,7 +839,7 @@
             this.groupBox9.Location = new System.Drawing.Point(287, 16);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(178, 297);
-            this.groupBox9.TabIndex = 13;
+            this.groupBox9.TabIndex = 0;
             this.groupBox9.TabStop = false;
             // 
             // btnClear
@@ -836,7 +849,7 @@
             this.btnClear.Location = new System.Drawing.Point(22, 182);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 9;
+            this.btnClear.TabIndex = 5;
             this.btnClear.Text = "Clear Template";
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
@@ -848,7 +861,7 @@
             this.btnAddNewLine.Location = new System.Drawing.Point(106, 107);
             this.btnAddNewLine.Name = "btnAddNewLine";
             this.btnAddNewLine.Size = new System.Drawing.Size(66, 23);
-            this.btnAddNewLine.TabIndex = 4;
+            this.btnAddNewLine.TabIndex = 3;
             this.btnAddNewLine.Text = "New Line";
             this.btnAddNewLine.UseVisualStyleBackColor = false;
             this.btnAddNewLine.Click += new System.EventHandler(this.btnAddNewLine_Click);
@@ -860,7 +873,7 @@
             this.btnText.Location = new System.Drawing.Point(22, 78);
             this.btnText.Name = "btnText";
             this.btnText.Size = new System.Drawing.Size(75, 23);
-            this.btnText.TabIndex = 4;
+            this.btnText.TabIndex = 1;
             this.btnText.Text = "Add Text";
             this.btnText.UseVisualStyleBackColor = false;
             this.btnText.Click += new System.EventHandler(this.btnText_Click);
@@ -872,7 +885,7 @@
             this.btnAddField.Location = new System.Drawing.Point(22, 107);
             this.btnAddField.Name = "btnAddField";
             this.btnAddField.Size = new System.Drawing.Size(75, 23);
-            this.btnAddField.TabIndex = 5;
+            this.btnAddField.TabIndex = 2;
             this.btnAddField.Text = "Add Field";
             this.btnAddField.UseVisualStyleBackColor = false;
             this.btnAddField.Click += new System.EventHandler(this.btnAddField_Click);
@@ -883,7 +896,7 @@
             this.txtText.Location = new System.Drawing.Point(22, 41);
             this.txtText.Name = "txtText";
             this.txtText.Size = new System.Drawing.Size(139, 20);
-            this.txtText.TabIndex = 3;
+            this.txtText.TabIndex = 0;
             // 
             // txtReceiptLayout
             // 
@@ -898,7 +911,7 @@
             this.txtReceiptLayout.ReadOnly = true;
             this.txtReceiptLayout.ShowSelectionMargin = true;
             this.txtReceiptLayout.Size = new System.Drawing.Size(278, 297);
-            this.txtReceiptLayout.TabIndex = 11;
+            this.txtReceiptLayout.TabIndex = 1;
             this.txtReceiptLayout.Text = "";
             // 
             // contextMenuStrip1
@@ -908,24 +921,24 @@
             this.toolStripSeparator1,
             this.pasteToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 54);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(103, 54);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(98, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(99, 6);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
@@ -937,7 +950,7 @@
             this.groupBox6.Location = new System.Drawing.Point(3, 16);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(468, 67);
-            this.groupBox6.TabIndex = 3;
+            this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             // 
             // chkPrintReceiptPrompt
@@ -947,7 +960,7 @@
             this.chkPrintReceiptPrompt.Location = new System.Drawing.Point(287, 30);
             this.chkPrintReceiptPrompt.Name = "chkPrintReceiptPrompt";
             this.chkPrintReceiptPrompt.Size = new System.Drawing.Size(120, 17);
-            this.chkPrintReceiptPrompt.TabIndex = 2;
+            this.chkPrintReceiptPrompt.TabIndex = 1;
             this.chkPrintReceiptPrompt.Text = "Print Receipt Prompt";
             this.chkPrintReceiptPrompt.UseVisualStyleBackColor = true;
             // 
@@ -961,6 +974,102 @@
             this.chkPrintReceipts.TabIndex = 0;
             this.chkPrintReceipts.Text = "Print Receipt";
             this.chkPrintReceipts.UseVisualStyleBackColor = true;
+            this.chkPrintReceipts.CheckedChanged += new System.EventHandler(this.chkPrintReceipts_CheckedChanged);
+            // 
+            // tabPageotherinfo
+            // 
+            this.tabPageotherinfo.Controls.Add(this.groupBox10);
+            this.tabPageotherinfo.Location = new System.Drawing.Point(4, 22);
+            this.tabPageotherinfo.Name = "tabPageotherinfo";
+            this.tabPageotherinfo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageotherinfo.Size = new System.Drawing.Size(480, 408);
+            this.tabPageotherinfo.TabIndex = 4;
+            this.tabPageotherinfo.Text = "Other Info";
+            this.tabPageotherinfo.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.groupBox10.Controls.Add(this.cbostatementflag);
+            this.groupBox10.Controls.Add(this.cbostatus);
+            this.groupBox10.Controls.Add(this.label24);
+            this.groupBox10.Controls.Add(this.txtvaluedays);
+            this.groupBox10.Controls.Add(this.label22);
+            this.groupBox10.Controls.Add(this.label23);
+            this.groupBox10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox10.Location = new System.Drawing.Point(3, 3);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(474, 402);
+            this.groupBox10.TabIndex = 0;
+            this.groupBox10.TabStop = false;
+            // 
+            // cbostatus
+            // 
+            this.cbostatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbostatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbostatus.FormattingEnabled = true;
+            this.cbostatus.Location = new System.Drawing.Point(121, 107);
+            this.cbostatus.Name = "cbostatus";
+            this.cbostatus.Size = new System.Drawing.Size(254, 21);
+            this.cbostatus.TabIndex = 8;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(81, 110);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(37, 13);
+            this.label24.TabIndex = 9;
+            this.label24.Text = "Status";
+            // 
+            // txtvaluedays
+            // 
+            this.txtvaluedays.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtvaluedays.Location = new System.Drawing.Point(121, 71);
+            this.txtvaluedays.MaxLength = 5;
+            this.txtvaluedays.Name = "txtvaluedays";
+            this.txtvaluedays.Size = new System.Drawing.Size(257, 20);
+            this.txtvaluedays.TabIndex = 1;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(57, 74);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(61, 13);
+            this.label22.TabIndex = 6;
+            this.label22.Text = "Value Days";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(40, 38);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(78, 13);
+            this.label23.TabIndex = 4;
+            this.label23.Text = "Statement Flag";
+            // 
+            // btndefaultreceiptlayout
+            // 
+            this.btndefaultreceiptlayout.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btndefaultreceiptlayout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btndefaultreceiptlayout.Location = new System.Drawing.Point(22, 140);
+            this.btndefaultreceiptlayout.Name = "btndefaultreceiptlayout";
+            this.btndefaultreceiptlayout.Size = new System.Drawing.Size(98, 23);
+            this.btndefaultreceiptlayout.TabIndex = 4;
+            this.btndefaultreceiptlayout.Text = "Default Layout";
+            this.btndefaultreceiptlayout.UseVisualStyleBackColor = false;
+            this.btndefaultreceiptlayout.Click += new System.EventHandler(this.btndefaultreceiptlayout_Click);
+            // 
+            // cbostatementflag
+            // 
+            this.cbostatementflag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbostatementflag.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbostatementflag.FormattingEnabled = true;
+            this.cbostatementflag.Location = new System.Drawing.Point(124, 35);
+            this.cbostatementflag.Name = "cbostatementflag";
+            this.cbostatementflag.Size = new System.Drawing.Size(254, 21);
+            this.cbostatementflag.TabIndex = 0;
             // 
             // AddTransactionTypeForm
             // 
@@ -977,41 +1086,44 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Transaction Type";
             this.Load += new System.EventHandler(this.AddTransactionTypeForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.tabPagetxninfo.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
+            this.tabPagedefaults.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
+            this.tabPageviews.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
+            this.tabPagereceipts.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
+            this.groupBoxReceiptLayout.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.tabPageotherinfo.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.LinkLabel btnClose;
         private System.Windows.Forms.LinkLabel btnAdd;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPagetxninfo;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox cboNarrativeFlag;
         private System.Windows.Forms.Label label11;
@@ -1031,7 +1143,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPagedefaults;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btnSearchDefaultDrAcc;
         private System.Windows.Forms.Button btnSearchDefaultCrAcc;
@@ -1050,7 +1162,7 @@
         private System.Windows.Forms.CheckBox chkUseDefaultDebitAccount;
         private System.Windows.Forms.CheckBox chkUseDefaultCreditAccount;
         private System.Windows.Forms.CheckBox chkUseDefaultAmount;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPageviews;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.ComboBox cboCreditAccountField;
         private System.Windows.Forms.Label label21;
@@ -1066,9 +1178,9 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabPagereceipts;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBoxReceiptLayout;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnAddNewLine;
@@ -1083,6 +1195,15 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageotherinfo;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.TextBox txtvaluedays;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ComboBox cbostatus;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Button btndefaultreceiptlayout;
+        private System.Windows.Forms.ComboBox cbostatementflag;
 
     }
 }

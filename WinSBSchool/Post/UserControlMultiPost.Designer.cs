@@ -81,7 +81,7 @@
             this.txtMpesaReceiptNo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtMpesaAmountPaid = new System.Windows.Forms.TextBox();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBoxDrAccount.SuspendLayout();
             this.groupBoxBankSlip.SuspendLayout();
             this.groupBoxCheque.SuspendLayout();
@@ -94,7 +94,7 @@
             this.groupBoxCreditAccount.SuspendLayout();
             this.groupBoxAmount.SuspendLayout();
             this.groupBoxMpesa.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxDrAccount
@@ -691,7 +691,7 @@
             // 
             // errorProvider1
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // UserControlMultiPost
             // 
@@ -722,7 +722,7 @@
             this.groupBoxAmount.PerformLayout();
             this.groupBoxMpesa.ResumeLayout(false);
             this.groupBoxMpesa.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -771,7 +771,7 @@
         private System.Windows.Forms.Label lblCrNarrative;
         private System.Windows.Forms.GroupBox groupBoxAmount;
         private System.Windows.Forms.TextBox txtAmount;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBoxMpesa;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtMpesaPhoneNumber;

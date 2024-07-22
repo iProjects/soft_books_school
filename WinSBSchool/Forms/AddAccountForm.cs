@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 
 namespace WinSBSchool.Forms
@@ -17,52 +18,97 @@ namespace WinSBSchool.Forms
     {
 
         Repository rep;
-        int _CustomerId;
-        SBSchoolDBEntities db; 
-        Student _Student;
+        SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
+        int _CustomerId;
+        Student _Student; 
         int _Parent;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
+        Customer _customer;
+        vwBankBranch _vwBankBranch;
 
         #region "Constructor"
-        public AddAccountForm(string Conn)
+        public AddAccountForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AddAccountForm initialization", TAG));
 
         }
-        public AddAccountForm(int Parent, string Conn)
+        public AddAccountForm(int Parent, string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
 
             if (Parent == null)
                 throw new ArgumentNullException("Parent");
             _Parent = Parent;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AddAccountForm initialization", TAG));
+
         }
-        public AddAccountForm(int CustomerId, Student _s, string Conn)
+        public AddAccountForm(int CustomerId, Student _s, string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
 
             if (_s == null)
                 throw new ArgumentNullException("Student");
@@ -85,8 +131,25 @@ namespace WinSBSchool.Forms
                 _CustomerId = CustomerId;
                 this.txtCustomerID.Text = _CustomerId.ToString();
             }
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AddAccountForm initialization", TAG));
+
         }
         #endregion "Constructor"
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Close();
@@ -95,6 +158,10 @@ namespace WinSBSchool.Forms
         {
             try
             {
+                lblcustomerdetails.Text = string.Empty;
+                lblbankdetails.Text = string.Empty;
+                txtAccountNo.Enabled = true;
+
                 var defaultschool = (from pc in db.Schools
                                      where pc.DefaultSchool == true
                                      orderby pc.SchoolName ascending
@@ -102,6 +169,7 @@ namespace WinSBSchool.Forms
                 School scl = defaultschool;
                 List<School> schools = rep.GetAllSchools();
                 bindingSourceAccSchool.DataSource = schools;
+
                 cboSchoolBranch.DataSource = bindingSourceAccSchool;
                 cboSchoolBranch.ValueMember = "Id";
                 cboSchoolBranch.DisplayMember = "SchoolName";
@@ -114,21 +182,27 @@ namespace WinSBSchool.Forms
                 passflags.Add(new KeyValuePair<string, string>("3", "All postings prohibited"));
                 passflags.Add(new KeyValuePair<string, string>("4", "Cannot Overdraw"));
 
-                var accttyps = from pc in db.AccountTypes 
+                cbopassflags.DataSource = passflags;
+                cbopassflags.ValueMember = "Key";
+                cbopassflags.DisplayMember = "Value";
+
+                var accttyps = from pc in db.AccountTypes
                                select pc;
                 bindingSourceAccountTypes.DataSource = accttyps.ToList();
+
                 cboAccountTypes.DataSource = bindingSourceAccountTypes;
                 cboAccountTypes.ValueMember = "Id";
-                cboAccountTypes.DisplayMember = "Description"; 
+                cboAccountTypes.DisplayMember = "Description";
 
                 var COAsquery = from pc in db.COAs
                                 orderby pc.ShortCode
                                 select pc;
                 List<COA> COAs = COAsquery.ToList();
+
                 cboCOA.DataSource = COAs;
                 cboCOA.ValueMember = "Id";
                 cboCOA.DisplayMember = "Description";
-                cboCOA.SelectedIndex = -1;
+                //cboCOA.SelectedIndex = -1;
 
                 var COAquery = (from coa in db.COAs
                                 where coa.Id == _Parent
@@ -178,12 +252,12 @@ namespace WinSBSchool.Forms
                     AutoCompleteMode.SuggestAppend;
                 txtAccountNo.AutoCompleteSource =
                      AutoCompleteSource.CustomSource;
-                
+
                 if (_CustomerId != null)
                 {
                     var customer_query = (from ct in db.Customers
-                                        where ct.Id.Equals(_CustomerId) 
-                                        select ct).FirstOrDefault();
+                                          where ct.Id.Equals(_CustomerId)
+                                          select ct).FirstOrDefault();
                     Customer _customer = customer_query;
                     if (_customer != null)
                     {
@@ -201,9 +275,9 @@ namespace WinSBSchool.Forms
             try
             {
                 var accountsquery = from bk in db.Accounts
-                                     where bk.Closed == false
-                                     where bk.IsDeleted == false
-                                     select bk.AccountName;
+                                    where bk.Closed == false
+                                    where bk.IsDeleted == false
+                                    select bk.AccountName;
                 return accountsquery.ToArray();
             }
             catch (Exception ex)
@@ -217,9 +291,9 @@ namespace WinSBSchool.Forms
             try
             {
                 var accountsquery = from bk in db.Accounts
-                                     where bk.Closed==false
-                                     where bk.IsDeleted==false
-                                     select bk.AccountNo;
+                                    where bk.Closed == false
+                                    where bk.IsDeleted == false
+                                    select bk.AccountNo;
                 return accountsquery.ToArray();
             }
             catch (Exception ex)
@@ -247,7 +321,7 @@ namespace WinSBSchool.Forms
             try
             {
                 var custidsquery = (from ac in db.Accounts
-                                    where ac.IsDeleted ==false
+                                    where ac.IsDeleted == false
                                     select ac.CustomerId).Distinct();
                 int[] intarray = custidsquery.ToArray();
                 List<string> items = new List<string>();
@@ -270,7 +344,7 @@ namespace WinSBSchool.Forms
             {
                 try
                 {
-                    txtAccountName.Text = _Student.AdminNo.Trim() + "  -  " + Utils.ConvertFirstLetterToUpper(_Student.StudentOtherNames) + "  " + Utils.ConvertFirstLetterToUpper(_Student.StudentSurName); 
+                    txtAccountName.Text = _Student.AdminNo.Trim() + "  -  " + Utils.ConvertFirstLetterToUpper(_Student.StudentOtherNames) + "  " + Utils.ConvertFirstLetterToUpper(_Student.StudentSurName);
                 }
                 catch (Exception ex)
                 {
@@ -282,7 +356,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                var cn = (from c in db.Accounts                          
+                var cn = (from c in db.Accounts
                           orderby c.Id descending
                           select c).FirstOrDefault();
                 if (cn == null)
@@ -297,6 +371,7 @@ namespace WinSBSchool.Forms
         }
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            errorProvider.Clear();
             if (IsAccountValid())
             {
                 try
@@ -347,14 +422,20 @@ namespace WinSBSchool.Forms
                     _Account.IntRate30 = 0;
                     _Account.IntRate60 = 0;
                     _Account.IntRate90 = 0;
-                    _Account.IntRateOver90 = 0; 
+                    _Account.IntRateOver90 = 0;
                     _Account.PassFlag = "1";
                     _Account.Closed = false;
                     _Account.IsDeleted = false;
 
-                    if (db.Accounts.Any(c => c.AccountName == _Account.AccountName && c.AccountNo == _Account.AccountNo))
+                    if (db.Accounts.Any(c => c.AccountName == _Account.AccountName))
                     {
-                        MessageBox.Show("Account Name " +  _Account.AccountName +  " with Number " + _Account.AccountNo + " Exists!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Account Name " + _Account.AccountName + " Exists!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    if (db.Accounts.Any(c => c.AccountNo == _Account.AccountNo))
+                    {
+                        MessageBox.Show("Account Number " + _Account.AccountNo + " Exists!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
                     }
                     if (!db.Accounts.Any(c => c.AccountName == _Account.AccountName && c.AccountNo == _Account.AccountNo))
                     {
@@ -371,21 +452,30 @@ namespace WinSBSchool.Forms
                         if (this.Owner is AccountsForm)
                         {
                             AccountsForm f = (AccountsForm)this.Owner;
+                            MessageBox.Show("Account Created Successfully!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             f.RefreshGrid();
                             this.Close();
                         }
                         if (this.Owner is COAForm)
                         {
                             COAForm f = (COAForm)this.Owner;
+                            MessageBox.Show("Account Created Successfully!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             f.RefreshGrid();
                             this.Close();
                         }
                         else if (this.Owner is EditStudentForm)
                         {
                             EditStudentForm mf = (EditStudentForm)this.Owner;
-                            mf.RefreshGrid();
                             MessageBox.Show("Account Created Successfully!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            mf.RefreshGrid();
                             mf.CloseForm(sender, e);
+                            this.Close();
+                        }
+                        else if (this.Owner is SearchAccountsSimpleForm)
+                        {
+                            SearchAccountsSimpleForm mf = (SearchAccountsSimpleForm)this.Owner;
+                            MessageBox.Show("Account Created Successfully!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            mf.ApplyFilter();
                             this.Close();
                         }
                     }
@@ -401,33 +491,28 @@ namespace WinSBSchool.Forms
             bool noerror = true;
             if (string.IsNullOrEmpty(txtCustomerID.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtCustomerID, "Owner cannot be null!");
-                return false;
+                errorProvider.SetError(txtCustomerID, "Owner cannot be null!");
+                noerror = false;
             }
             if (string.IsNullOrEmpty(txtAccountName.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountName, "Account Name cannot be null!");
-                return false;
+                errorProvider.SetError(txtAccountName, "Account Name cannot be null!");
+                noerror = false;
             }
             if (string.IsNullOrEmpty(txtAccountNo.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountNo, "Account No cannot be null!");
-                return false;
+                errorProvider.SetError(txtAccountNo, "Account No cannot be null!");
+                noerror = false;
             }
             if (cboAccountTypes.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboAccountTypes, "Select Account Type!");
-                return false;
+                errorProvider.SetError(cboAccountTypes, "Select Account Type!");
+                noerror = false;
             }
             if (cboCOA.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboCOA, "Select a Chart of Accounts!");
-                return false;
+                errorProvider.SetError(cboCOA, "Select Chart of Accounts!");
+                noerror = false;
             }
             return noerror;
         }
@@ -435,9 +520,9 @@ namespace WinSBSchool.Forms
         {
             try
             {
-            SearchCustomersSimpleForm scf = new SearchCustomersSimpleForm(connection) { Owner = this };
-            scf.OnCustomerListSelected += new SearchCustomersSimpleForm.CustomerSelectHandler(scf_OnCustomerListSelected);
-            scf.ShowDialog();
+                SearchCustomersSimpleForm scf = new SearchCustomersSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
+                scf.OnCustomerListSelected += new SearchCustomersSimpleForm.CustomerSelectHandler(scf_OnCustomerListSelected);
+                scf.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -448,12 +533,14 @@ namespace WinSBSchool.Forms
         private void scf_OnCustomerListSelected(object sender, CustomerSelectEventArgs e)
         {
             SetAccountNos(e._Customer);
+            txtCustomerID_TextChanged(sender, e);
         }
-        private void SetAccountNos(Customer _customer)
+        private void SetAccountNos(Customer customer)
         {
-            if (_customer != null)
+            if (customer != null)
             {
-                txtCustomerID.Text = _customer.Id.ToString();
+                txtCustomerID.Text = customer.Id.ToString();
+                _customer = customer;
             }
 
         }
@@ -473,12 +560,14 @@ namespace WinSBSchool.Forms
         private void saf_OnSetBankSortCodeListSelected(object sender, BankSelectEventArgs e)
         {
             SetBankSortCode(e._BankSortCode);
+            txtBankSortCode_TextChanged(sender, e);
         }
-        private void SetBankSortCode(vwBankBranch _vwBankBranch)
+        private void SetBankSortCode(vwBankBranch vwBankBranch)
         {
-            if (_vwBankBranch != null)
+            if (vwBankBranch != null)
             {
-                txtBankSortCode.Text = _vwBankBranch.BankSortCode.Trim();
+                txtBankSortCode.Text = vwBankBranch.BankSortCode.Trim();
+                _vwBankBranch = vwBankBranch;
             }
 
         }
@@ -557,6 +646,69 @@ namespace WinSBSchool.Forms
             }
         }
 
-        
+        private void txtBankSortCode_TextChanged(object sender, EventArgs e)
+        {
+            if (_vwBankBranch != null)
+            {
+                lblbankdetails.Text = "Bank Name [ " + _vwBankBranch.BankName + " ], Branch Name [ " + _vwBankBranch.BranchName + " ]";
+            }
+            if (!string.IsNullOrEmpty(txtBankSortCode.Text))
+            {
+                string banksortcode = txtBankSortCode.Text;
+                var query = from bsc in db.vwBankBranches
+                            where bsc.BankSortCode.StartsWith(banksortcode)
+                            select bsc;
+                vwBankBranch bb = query.FirstOrDefault();
+                if (bb != null)
+                {
+                    lblbankdetails.Text = "Bank Name [ " + bb.BankName + " ], Branch Name [ " + bb.BranchName + " ]";
+                }
+            }
+        }
+
+        private void txtCustomerID_TextChanged(object sender, EventArgs e)
+        {
+            if (_customer != null)
+            {
+                lblcustomerdetails.Text = "Name [ " + _customer.CustomerName + " ], No [ " + _customer.CustomerNo + " ]";
+            }
+            if (!string.IsNullOrEmpty(txtCustomerID.Text))
+            {
+                string CustomerID = txtCustomerID.Text;
+                int cid = int.Parse(CustomerID);
+                var query = from ct in db.Customers
+                            where ct.Id.Equals(cid)
+                            select ct;
+                Customer cst = query.FirstOrDefault();
+                if (cst != null)
+                {
+                    lblcustomerdetails.Text = "Name [ " + cst.CustomerName + " ], No [ " + cst.CustomerNo + " ]";
+                }
+            }
+        }
+
+        private void cboCOA_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                COA _selected_coa = (COA)cboCOA.SelectedItem;
+                var coa_query = from coa in db.COAs
+                                where coa.Id == _selected_coa.Id
+                                select coa;
+                COA _Coa = coa_query.FirstOrDefault();
+                if (_Coa != null)
+                {
+                    txtAccountName.Text = _Coa.Description;
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+
+
+
+
     }
 }

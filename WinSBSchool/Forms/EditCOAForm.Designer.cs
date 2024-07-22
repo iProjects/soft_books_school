@@ -53,7 +53,7 @@
             this.btnClose.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(230, 11);
+            this.btnClose.Location = new System.Drawing.Point(280, 12);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(59, 23);
             this.btnClose.TabIndex = 1;
@@ -65,7 +65,7 @@
             // 
             this.btnUpdate.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Location = new System.Drawing.Point(127, 11);
+            this.btnUpdate.Location = new System.Drawing.Point(177, 12);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(68, 23);
             this.btnUpdate.TabIndex = 0;
@@ -84,7 +84,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Location = new System.Drawing.Point(0, 166);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(418, 44);
+            this.groupBox1.Size = new System.Drawing.Size(449, 44);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
@@ -101,14 +101,14 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(418, 166);
+            this.groupBox2.Size = new System.Drawing.Size(449, 166);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 23);
+            this.label1.Location = new System.Drawing.Point(67, 23);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 4;
@@ -117,7 +117,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 58);
+            this.label2.Location = new System.Drawing.Point(67, 59);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 5;
@@ -126,16 +126,16 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 94);
+            this.label3.Location = new System.Drawing.Point(12, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
+            this.label3.Size = new System.Drawing.Size(122, 13);
             this.label3.TabIndex = 6;
-            this.label3.Text = "COA Level*";
+            this.label3.Text = "Chart Of Account Level*";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(38, 130);
+            this.label4.Location = new System.Drawing.Point(85, 129);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 7;
@@ -144,7 +144,7 @@
             // txtRorder
             // 
             this.txtRorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtRorder.Location = new System.Drawing.Point(86, 127);
+            this.txtRorder.Location = new System.Drawing.Point(137, 124);
             this.txtRorder.MaxLength = 4;
             this.txtRorder.Name = "txtRorder";
             this.txtRorder.Size = new System.Drawing.Size(277, 20);
@@ -155,7 +155,7 @@
             // txtCOALevel
             // 
             this.txtCOALevel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCOALevel.Location = new System.Drawing.Point(86, 91);
+            this.txtCOALevel.Location = new System.Drawing.Point(137, 88);
             this.txtCOALevel.MaxLength = 4;
             this.txtCOALevel.Name = "txtCOALevel";
             this.txtCOALevel.Size = new System.Drawing.Size(277, 20);
@@ -166,7 +166,7 @@
             // txtDescription
             // 
             this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDescription.Location = new System.Drawing.Point(86, 55);
+            this.txtDescription.Location = new System.Drawing.Point(137, 52);
             this.txtDescription.MaxLength = 100;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(277, 20);
@@ -175,7 +175,7 @@
             // txtShortCode
             // 
             this.txtShortCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtShortCode.Location = new System.Drawing.Point(86, 19);
+            this.txtShortCode.Location = new System.Drawing.Point(137, 16);
             this.txtShortCode.MaxLength = 10;
             this.txtShortCode.Name = "txtShortCode";
             this.txtShortCode.Size = new System.Drawing.Size(277, 20);
@@ -188,7 +188,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CornflowerBlue;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(418, 210);
+            this.ClientSize = new System.Drawing.Size(449, 210);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

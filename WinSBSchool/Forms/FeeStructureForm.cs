@@ -7,21 +7,36 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class FeeStructureForm : Form
     {
+        Repository rep;
         SBSchoolDBEntities db;
         string connection;
-        Repository rep;
         string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         BindingList<Transaction> observableTransactions;
         private int updateStatusCounter = 60;
 
-        public FeeStructureForm(string _user, string Conn)
+        public FeeStructureForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
@@ -29,9 +44,26 @@ namespace WinSBSchool.Forms
 
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
+            user = UserName;
 
             observableTransactions = new BindingList<Transaction>();
-            user = _user;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished FeeStructureForm initialization", TAG)); 
+
+        }
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
         private void FeeStructureForm_Load(object sender, EventArgs e)
         {
@@ -348,7 +380,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.FeeStructureAcademic _FeeStructureAcademic = (DAL.FeeStructureAcademic)bindingSourceFeeStructureAcademic.Current;
-                    Forms.EditFeeStructureAcademicForm es = new Forms.EditFeeStructureAcademicForm(_FeeStructureAcademic, connection) { Owner = this };
+                    Forms.EditFeeStructureAcademicForm es = new Forms.EditFeeStructureAcademicForm(_FeeStructureAcademic, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = _FeeStructureAcademic.Description.ToUpper().Trim();
                     es.ShowDialog();
                 }
@@ -365,7 +397,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.FeeStructureOther _FeeStructureOther = (DAL.FeeStructureOther)bindingSourceFeeStructureOthers.Current;
-                    Forms.EditFeeStructureOthersForm es = new Forms.EditFeeStructureOthersForm(_FeeStructureOther, connection) { Owner = this };
+                    Forms.EditFeeStructureOthersForm es = new Forms.EditFeeStructureOthersForm(_FeeStructureOther, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = _FeeStructureOther.Description.ToUpper().Trim();
                     es.ShowDialog();
                 }
@@ -633,7 +665,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.FeeStructureAcademic _FeeStructureAcademic = (DAL.FeeStructureAcademic)bindingSourceFeeStructureAcademic.Current;
-                    Forms.EditFeeStructureAcademicForm es = new Forms.EditFeeStructureAcademicForm(_FeeStructureAcademic, connection) { Owner = this };
+                    Forms.EditFeeStructureAcademicForm es = new Forms.EditFeeStructureAcademicForm(_FeeStructureAcademic, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = _FeeStructureAcademic.Description.ToUpper().Trim();
                     es.ShowDialog();
                 }
@@ -670,7 +702,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.FeesStructure _FeesStructure = (DAL.FeesStructure)bindingSourceFeeStructure.Current;
-                    Forms.AddFeeStructureOthersForm asf = new Forms.AddFeeStructureOthersForm(_FeesStructure, connection) { Owner = this };
+                    Forms.AddFeeStructureOthersForm asf = new Forms.AddFeeStructureOthersForm(_FeesStructure, user, connection, _notificationmessageEventname) { Owner = this };
                     asf.ShowDialog();
                 }
                 catch (Exception ex)
@@ -686,7 +718,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     DAL.FeeStructureOther _FeeStructureOther = (DAL.FeeStructureOther)bindingSourceFeeStructureOthers.Current;
-                    Forms.EditFeeStructureOthersForm es = new Forms.EditFeeStructureOthersForm(_FeeStructureOther, connection) { Owner = this };
+                    Forms.EditFeeStructureOthersForm es = new Forms.EditFeeStructureOthersForm(_FeeStructureOther, user, connection, _notificationmessageEventname) { Owner = this };
                     es.Text = _FeeStructureOther.Description.ToUpper().Trim();
                     es.ShowDialog();
                 }

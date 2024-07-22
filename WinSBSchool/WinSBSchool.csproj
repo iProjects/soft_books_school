@@ -467,6 +467,12 @@
     <Compile Include="Controls\ClassControl.Designer.cs">
       <DependentUpon>ClassControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\controlsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\controlsform.Designer.cs">
+      <DependentUpon>controlsform.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExamPeriodsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1733,6 +1739,12 @@
     <Compile Include="Reports\Views\Screen\EnquiryViewForm.Designer.cs">
       <DependentUpon>EnquiryViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Views\Screen\ViewTransactionDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\Views\Screen\ViewTransactionDetailsForm.Designer.cs">
+      <DependentUpon>ViewTransactionDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Security\AuthenticationService.cs" />
     <Compile Include="Security\AuthorizationService.cs" />
     <Compile Include="Security\IAuthenticationService.cs" />
@@ -1759,6 +1771,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ClassControl.resx">
       <DependentUpon>ClassControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\controlsform.resx">
+      <DependentUpon>controlsform.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExamPeriodsUserControl.resx">
       <DependentUpon>ExamPeriodsUserControl.cs</DependentUpon>
@@ -2309,6 +2324,9 @@
     <EmbeddedResource Include="Reports\Views\Screen\EnquiryViewForm.resx">
       <DependentUpon>EnquiryViewForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Views\Screen\ViewTransactionDetailsForm.resx">
+      <DependentUpon>ViewTransactionDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Security\LicencesInfoForm.resx">
       <DependentUpon>LicencesInfoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -2349,7 +2367,9 @@
       <Name>SMOScripting</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="DBScripts\db.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2530,12 +2550,6 @@
     <Content Include="libs\TSWizards.dll" />
     <Content Include="libs\VSLangProj.dll" />
     <Content Include="libs\VSTADTEProvider.Interop.dll" />
-    <Content Include="Logs\error.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Logs\Log.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Output\dummy.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

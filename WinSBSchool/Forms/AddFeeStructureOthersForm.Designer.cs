@@ -33,8 +33,9 @@
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnAdd = new System.Windows.Forms.LinkLabel();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblAccountDetails = new System.Windows.Forms.Label();
             this.txtAccountId = new System.Windows.Forms.TextBox();
             this.btnSearchAccount = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -48,9 +49,8 @@
             this.txtAmount = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblAccountDetails = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,9 +91,9 @@
             this.btnAdd.Text = "Add";
             this.btnAdd.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnAdd_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // groupBox2
             // 
@@ -117,6 +117,15 @@
             this.groupBox2.Size = new System.Drawing.Size(505, 249);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
+            // 
+            // lblAccountDetails
+            // 
+            this.lblAccountDetails.AutoSize = true;
+            this.lblAccountDetails.Location = new System.Drawing.Point(103, 88);
+            this.lblAccountDetails.Name = "lblAccountDetails";
+            this.lblAccountDetails.Size = new System.Drawing.Size(19, 13);
+            this.lblAccountDetails.TabIndex = 30;
+            this.lblAccountDetails.Text = "::::";
             // 
             // txtAccountId
             // 
@@ -250,15 +259,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Amount*";
             // 
-            // lblAccountDetails
-            // 
-            this.lblAccountDetails.AutoSize = true;
-            this.lblAccountDetails.Location = new System.Drawing.Point(103, 88);
-            this.lblAccountDetails.Name = "lblAccountDetails";
-            this.lblAccountDetails.Size = new System.Drawing.Size(19, 13);
-            this.lblAccountDetails.TabIndex = 30;
-            this.lblAccountDetails.Text = "::::";
-            // 
             // AddFeeStructureOthersForm
             // 
             this.AcceptButton = this.btnAdd;
@@ -276,7 +276,7 @@
             this.Load += new System.EventHandler(this.AddFeeStructureOthersForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
@@ -288,7 +288,7 @@
         private System.Windows.Forms.LinkLabel btnClose;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.LinkLabel btnAdd;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cboFeeStructure;

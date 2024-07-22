@@ -6,157 +6,64 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class EditFeeStructureAcademicForm : Form
     {
-        SBSchoolDBEntities db;
         Repository rep;
+        SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname; 
         FeeStructureAcademic _FeeStructureAcademic;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
 
-        public EditFeeStructureAcademicForm(FeeStructureAcademic _fsa, string Conn)
+        public EditFeeStructureAcademicForm(FeeStructureAcademic _fsa, string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
+
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            _FeeStructureAcademic = _fsa;
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
+            user = UserName;
 
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished EditFeeStructureAcademicForm initialization", TAG));
+ 
         }
-        public bool IsFeeStructureAcademicValid()
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            bool noerror = true;
-            if (cboFeeStructure.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboFeeStructure, "Select Fee Structure!");
-                return false;
-            }
-            if (cboClass.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboClass, "Select Class!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtTerm.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtTerm, "Term cannot be null!");
-                return false;
-            }
-            int term;
-            if (!int.TryParse(txtTerm.Text, out term))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtTerm, "Term must be integer!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtAccountId.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Account Id cannot be null!");
-                return false;
-            }
-            int acc;
-            if (!int.TryParse(txtAccountId.Text, out acc))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Account Id must be integer!");
-                return false;
-            }
-            Account account = rep.GetAccount(acc);
-            if (null == account)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAccountId, "Error retrieving the Account!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtDescription.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDescription, "Description cannot be null!");
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtAmount.Text))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount cannot be null!");
-                return false;
-            }
-            decimal amount;
-            if (!decimal.TryParse(txtAmount.Text, out amount))
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount must be decimal!");
-                return false;
-            }
-            if (cboAmountPeriod.SelectedIndex == -1)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboAmountPeriod, "Select Amount Period!");
-                return false;
-            }
-            return noerror;
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
 
-        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            errorProvider1.Clear();
-            if (IsFeeStructureAcademicValid())
-            {
-                try
-                {
-                    if (cboFeeStructure.SelectedIndex != -1)
-                    {
-                        _FeeStructureAcademic.FeeStructureId = int.Parse(cboFeeStructure.SelectedValue.ToString());
-                    }
-                    if (cboClass.SelectedIndex != -1)
-                    {
-                        _FeeStructureAcademic.SchoolClassId = int.Parse(cboClass.SelectedValue.ToString());
-                    }
-                    int term;
-                    if (!string.IsNullOrEmpty(txtTerm.Text) && int.TryParse(txtTerm.Text, out term))
-                    {
-                        _FeeStructureAcademic.Term = int.Parse(txtTerm.Text);
-                    }
-                    int acc;
-                    if (!string.IsNullOrEmpty(txtAccountId.Text) && int.TryParse(txtAccountId.Text, out acc))
-                    {
-                        _FeeStructureAcademic.AccountId = int.Parse(txtAccountId.Text);
-                    }
-                    if (!string.IsNullOrEmpty(txtDescription.Text))
-                    {
-                        _FeeStructureAcademic.Description = Utils.ConvertFirstLetterToUpper(txtDescription.Text.Trim());
-                    }
-                    decimal amount;
-                    if (!string.IsNullOrEmpty(txtDescription.Text) && decimal.TryParse(txtAmount.Text, out amount))
-                    {
-                        _FeeStructureAcademic.Amount = decimal.Parse(txtAmount.Text);
-                    }
-                    if (cboAmountPeriod.SelectedIndex != -1)
-                    {
-                        _FeeStructureAcademic.AmountPeriod = cboAmountPeriod.SelectedValue.ToString();
-                    }
-
-                    rep.UpdateFeeStructureAcademic(_FeeStructureAcademic);
-
-                    FeeStructureForm f = (FeeStructureForm)this.Owner;
-                    f.RefreshGridAcademics();
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
-            }
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
+
         private void EditFeeStructureOthersForm_Load(object sender, EventArgs e)
         {
             try
@@ -290,6 +197,123 @@ namespace WinSBSchool.Forms
             }
 
         }
+        private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            errorProvider.Clear();
+            if (IsFeeStructureAcademicValid())
+            {
+                try
+                {
+                    if (cboFeeStructure.SelectedIndex != -1)
+                    {
+                        _FeeStructureAcademic.FeeStructureId = int.Parse(cboFeeStructure.SelectedValue.ToString());
+                    }
+                    if (cboClass.SelectedIndex != -1)
+                    {
+                        _FeeStructureAcademic.SchoolClassId = int.Parse(cboClass.SelectedValue.ToString());
+                    }
+                    int term;
+                    if (!string.IsNullOrEmpty(txtTerm.Text) && int.TryParse(txtTerm.Text, out term))
+                    {
+                        _FeeStructureAcademic.Term = int.Parse(txtTerm.Text);
+                    }
+                    int acc;
+                    if (!string.IsNullOrEmpty(txtAccountId.Text) && int.TryParse(txtAccountId.Text, out acc))
+                    {
+                        _FeeStructureAcademic.AccountId = int.Parse(txtAccountId.Text);
+                    }
+                    if (!string.IsNullOrEmpty(txtDescription.Text))
+                    {
+                        _FeeStructureAcademic.Description = Utils.ConvertFirstLetterToUpper(txtDescription.Text.Trim());
+                    }
+                    decimal amount;
+                    if (!string.IsNullOrEmpty(txtDescription.Text) && decimal.TryParse(txtAmount.Text, out amount))
+                    {
+                        _FeeStructureAcademic.Amount = decimal.Parse(txtAmount.Text);
+                    }
+                    if (cboAmountPeriod.SelectedIndex != -1)
+                    {
+                        _FeeStructureAcademic.AmountPeriod = cboAmountPeriod.SelectedValue.ToString();
+                    }
+
+                    rep.UpdateFeeStructureAcademic(_FeeStructureAcademic);
+
+                    FeeStructureForm f = (FeeStructureForm)this.Owner;
+                    f.RefreshGridAcademics();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    Utils.ShowError(ex);
+                }
+            }
+        }
+        public bool IsFeeStructureAcademicValid()
+        {
+            bool noerror = true;
+            if (cboFeeStructure.SelectedIndex == -1)
+            { 
+                errorProvider.SetError(cboFeeStructure, "Select Fee Structure!");
+                noerror = false;
+            }
+            if (cboClass.SelectedIndex == -1)
+            { 
+                errorProvider.SetError(cboClass, "Select Class!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtTerm.Text))
+            { 
+                errorProvider.SetError(txtTerm, "Term cannot be null!");
+                noerror = false;
+            }
+            int term;
+            if (!int.TryParse(txtTerm.Text, out term))
+            { 
+                errorProvider.SetError(txtTerm, "Term must be integer!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtAccountId.Text))
+            { 
+                errorProvider.SetError(txtAccountId, "Account Id cannot be null!");
+                noerror = false;
+            }
+            int acc;
+            if (!int.TryParse(txtAccountId.Text, out acc))
+            { 
+                errorProvider.SetError(txtAccountId, "Account Id must be integer!");
+                noerror = false;
+            }
+            Account account = rep.GetAccount(acc);
+            if (null == account)
+            { 
+                errorProvider.SetError(txtAccountId, "Error retrieving the Account!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtDescription.Text))
+            {
+                errorProvider.Clear();
+                errorProvider.SetError(txtDescription, "Description cannot be null!");
+                noerror = false;
+            }
+            if (string.IsNullOrEmpty(txtAmount.Text))
+            { 
+                errorProvider.SetError(txtAmount, "Amount cannot be null!");
+                noerror = false;
+            }
+            decimal amount;
+            if (!decimal.TryParse(txtAmount.Text, out amount))
+            { 
+                errorProvider.SetError(txtAmount, "Amount must be decimal!");
+                noerror = false;
+            }
+            if (cboAmountPeriod.SelectedIndex == -1)
+            { 
+                errorProvider.SetError(cboAmountPeriod, "Select Amount Period!");
+                noerror = false;
+            }
+            return noerror;
+        }
+
         private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Close();
@@ -299,7 +323,7 @@ namespace WinSBSchool.Forms
         {
             try
             {
-                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(connection) { Owner = this };
+                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = this };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnAccountListSelected);
                 saf.ShowDialog();
             }

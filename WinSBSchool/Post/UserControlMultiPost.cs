@@ -18,30 +18,31 @@ namespace WinSBSchool.Post
 {
     public partial class UserControlMultiPost : UserControl
     {
-        private StreamReader streamToPrint;
-        private Font printFont;
-        TransactionType TType;
-        string user;
-        string connection;
-        List<Transaction> transactions;
-        School school;
-        string receiptNo;
-        SBSchoolDBEntities db;
         Repository rep;
+        SBSchoolDBEntities db;
+        string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
+        // Boolean flag used to determine when a character other than a number is entered.
+        private bool nonNumberEntered = false;
+        string receiptNo;
+        School school = null;
+        Student _Student = null;
+        SchoolClass _class = null;
         Account DrAccountBeforePosting;
         Account CrAccountBeforePosting;
         Account DrAccountAfterPosting;
         Account CrAccountAfterPosting;
         Transaction DebitTransaction;
         Transaction CreditTransaction;
+        private StreamReader streamToPrint;
+        private Font printFont;
+        TransactionType TType;
+        List<Transaction> transactions;
         decimal Amount;
-        // Boolean flag used to determine when a character other than a number is entered.
-        private bool nonNumberEntered = false;
-        public string TAG;
-        //Event declaration:
-        //event for publishing messages to output
-        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
-
 
         public UserControlMultiPost(TransactionType ttype, string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
@@ -121,6 +122,9 @@ namespace WinSBSchool.Post
 
                 this.tableLayoutPanelMPost.RowStyles[10].Height = 0;
                 this.tableLayoutPanelMPost.RowStyles[11].Height = 0;
+
+                if (TType.UseDefaultAmount ?? false)
+                    txtAmount.Text = TType.DefaultAmount.ToString();
 
                 AutoCompleteStringCollection acscyr = new AutoCompleteStringCollection();
                 acscyr.AddRange(this.AutoComplete_DrAccountIds());
@@ -375,61 +379,58 @@ namespace WinSBSchool.Post
             //Debit Account
             if (string.IsNullOrEmpty(txtDrAccount.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDrAccount, "Account ID cannot be null!");
-                return false;
+
+                errorProvider.SetError(txtDrAccount, "Account ID cannot be null!");
+                noerror = false;
             }
             int _draccountid;
             if (!int.TryParse(txtDrAccount.Text, out _draccountid))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDrAccount, "Account ID must be integer!");
-                return false;
+
+                errorProvider.SetError(txtDrAccount, "Account ID must be integer!");
+                noerror = false;
             }
 
             DrAccountBeforePosting = rep.GetAccount(_draccountid);
             if (null == DrAccountBeforePosting)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDrAccount, "Error retrieving the account!");
-                return false;
+                errorProvider.SetError(txtDrAccount, "Error retrieving the account!");
+                noerror = false;
             }
 
             //Credit Account
             if (string.IsNullOrEmpty(txtCrAccount.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtCrAccount, "Account ID cannot be null!");
-                return false;
+                errorProvider.SetError(txtCrAccount, "Account ID cannot be null!");
+                noerror = false;
             }
             int _craccountid;
             if (!int.TryParse(txtCrAccount.Text, out _craccountid))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtCrAccount, "Account ID must be integer!");
-                return false;
+                errorProvider.SetError(txtCrAccount, "Account ID must be integer!");
+                noerror = false;
             }
 
             CrAccountBeforePosting = rep.GetAccount(_craccountid);
             if (null == CrAccountBeforePosting)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtCrAccount, "Error retrieving the account!");
-                return false;
+
+                errorProvider.SetError(txtCrAccount, "Error retrieving the account!");
+                noerror = false;
             }
             //amount 
             if (string.IsNullOrEmpty(txtAmount.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount cannot be null!");
-                return false;
+
+                errorProvider.SetError(txtAmount, "Amount cannot be null!");
+                noerror = false;
             }
 
             if (!decimal.TryParse(txtAmount.Text, out Amount))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtAmount, "Amount must be decimal!");
-                return false;
+
+                errorProvider.SetError(txtAmount, "Amount must be decimal!");
+                noerror = false;
             }
             if (cboModeofPayment.SelectedIndex != -1)
             {
@@ -441,49 +442,49 @@ namespace WinSBSchool.Post
                     case "C":
                         if (string.IsNullOrEmpty(txtAmount.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtAmount, "Amount cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtAmount, "Amount cannot be null!");
+                            noerror = false;
                         }
                         break;
                     case "M":
                         if (string.IsNullOrEmpty(txtMpesaReceiptNo.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtMpesaReceiptNo, "Mpesa Receipt No cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtMpesaReceiptNo, "Mpesa Receipt No cannot be null!");
+                            noerror = false;
                         }
                         if (string.IsNullOrEmpty(txtMpesaAmountPaid.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtMpesaAmountPaid, "Amount cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtMpesaAmountPaid, "Amount cannot be null!");
+                            noerror = false;
                         }
                         if (string.IsNullOrEmpty(txtMpesaSenderName.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtMpesaSenderName, "Mpesa Sender Name cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtMpesaSenderName, "Mpesa Sender Name cannot be null!");
+                            noerror = false;
                         }
                         if (string.IsNullOrEmpty(txtMpesaPhoneNumber.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtMpesaPhoneNumber, "Mpesa Phone Number cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtMpesaPhoneNumber, "Mpesa Phone Number cannot be null!");
+                            noerror = false;
                         }
                         break;
                     case "B":
                         if (string.IsNullOrEmpty(txtBankSlipNo.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtBankSlipNo, "Bank Slip Number cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtBankSlipNo, "Bank Slip Number cannot be null!");
+                            noerror = false;
                         }
                         if (string.IsNullOrEmpty(txtbsBankSortCode.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtbsBankSortCode, "Bank Sort Code cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtbsBankSortCode, "Bank Sort Code cannot be null!");
+                            noerror = false;
                         }
                         if (!string.IsNullOrEmpty(txtbsBankSortCode.Text))
                         {
@@ -494,24 +495,24 @@ namespace WinSBSchool.Post
                             BankBranch _branch = _branchquery;
                             if (_branch == null)
                             {
-                                errorProvider1.Clear();
-                                errorProvider1.SetError(txtbsBankSortCode, "Bank Sort Code does not exist!");
-                                return false;
+
+                                errorProvider.SetError(txtbsBankSortCode, "Bank Sort Code does not exist!");
+                                noerror = false;
                             }
                         }
                         break;
                     case "Q":
                         if (string.IsNullOrEmpty(txtChequeNo.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtChequeNo, "Cheque Number cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtChequeNo, "Cheque Number cannot be null!");
+                            noerror = false;
                         }
                         if (string.IsNullOrEmpty(txtcqBankSortCode.Text))
                         {
-                            errorProvider1.Clear();
-                            errorProvider1.SetError(txtcqBankSortCode, "Bank Sort Code cannot be null!");
-                            return false;
+
+                            errorProvider.SetError(txtcqBankSortCode, "Bank Sort Code cannot be null!");
+                            noerror = false;
                         }
                         if (!string.IsNullOrEmpty(txtcqBankSortCode.Text))
                         {
@@ -522,9 +523,9 @@ namespace WinSBSchool.Post
                             BankBranch _branch = _branchquery;
                             if (_branch == null)
                             {
-                                errorProvider1.Clear();
-                                errorProvider1.SetError(txtcqBankSortCode, "Bank Sort Code does not exist!");
-                                return false;
+
+                                errorProvider.SetError(txtcqBankSortCode, "Bank Sort Code does not exist!");
+                                noerror = false;
                             }
                         }
                         break;
@@ -547,31 +548,33 @@ namespace WinSBSchool.Post
              *  4.3 Unlock
              * 5. if(tt.printreceipt == true) Print a reciept according to layout
              */
-            errorProvider1.Clear();
+            errorProvider.Clear();
             try
             {
                 if (IsTransactionValid())
                 {
-                    //Biuld up transactions 
-                    string RawSalt = DateTime.Now.ToString("yMdHms");
-                    string HashSalt = HashHelper.CreateRandomSalt();
-                    int foundS1 = HashSalt.IndexOf("==");
-                    int foundS2 = HashSalt.IndexOf("+");
-                    int foundS3 = HashSalt.IndexOf("/");
-                    if (foundS1 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS1);
-                    }
-                    if (foundS2 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS2);
-                    }
-                    if (foundS3 > 0)
-                    {
-                        HashSalt = HashSalt.Remove(foundS3);
-                    }
-                    string SaltedHash = RawSalt.Insert(5, HashSalt);
-                    string _transRef = SaltedHash;
+                    //Build up transactions 
+                    string RawSalt = Utils.create_random_salt();
+                    //string HashSalt = HashHelper.CreateRandomSalt();
+                    //int foundS1 = HashSalt.IndexOf("==");
+                    //int foundS2 = HashSalt.IndexOf("+");
+                    //int foundS3 = HashSalt.IndexOf("/");
+                    //if (foundS1 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS1);
+                    //}
+                    //if (foundS2 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS2);
+                    //}
+                    //if (foundS3 > 0)
+                    //{
+                    //    HashSalt = HashSalt.Remove(foundS3);
+                    //}
+                    //string SaltedHash = RawSalt.Insert(RawSalt.Length, HashSalt);
+                    string _transRef = RawSalt;
+                    int no_of_characters_in_transaction_reference_no = int.Parse(System.Configuration.ConfigurationManager.AppSettings["NO_OF_CHARACTERS_IN_TRANSACTION_REFERENCE_NO"]);
+                    _transRef = _transRef.ToUpper().Substring(0, no_of_characters_in_transaction_reference_no);
                     receiptNo = _transRef;
 
                     //debit transaction
@@ -587,10 +590,10 @@ namespace WinSBSchool.Post
                                            select da).FirstOrDefault();
                     DrAccountAfterPosting = _drAccountquery;
 
-                    DebitTransaction.Narrative = BuildNarrative("D");
+                    DebitTransaction.Narrative = BuildNarrative("D", DebitTransaction);
                     DebitTransaction.UserName = user;
                     DebitTransaction.Authorizer = "SYSTEM";
-                    DebitTransaction.StatementFlag = TType.StatementFlag;
+                    DebitTransaction.StatementFlag = "D";
                     DebitTransaction.PostDate = DateTime.Now;
                     int valuedays = TType.ValueDays ?? 0;
                     DebitTransaction.ValueDate = DebitTransaction.PostDate.AddDays(valuedays);
@@ -612,10 +615,10 @@ namespace WinSBSchool.Post
                                            select ca).FirstOrDefault();
                     CrAccountAfterPosting = _crAccountquery;
 
-                    CreditTransaction.Narrative = BuildNarrative("C");
+                    CreditTransaction.Narrative = BuildNarrative("C", CreditTransaction);
                     CreditTransaction.UserName = user;
                     CreditTransaction.Authorizer = "SYSTEM";
-                    CreditTransaction.StatementFlag = TType.StatementFlag;
+                    CreditTransaction.StatementFlag = "C";
                     CreditTransaction.PostDate = DateTime.Now;
                     valuedays = TType.ValueDays ?? 0;
                     CreditTransaction.ValueDate = CreditTransaction.PostDate.AddDays(valuedays);
@@ -629,10 +632,14 @@ namespace WinSBSchool.Post
                     {
                         rep.PostTransactions(transactions);
 
+                        var transmsg = DebitTransaction.TransRef + " Confirmed. Kshs " + DebitTransaction.Amount + " sent to " + rep.GetAccount(CreditTransaction.AccountId).AccountName + " on " + DebitTransaction.PostDate.ToString("dd-MM-yyyy ") + " at " + DebitTransaction.PostDate.ToString("HH:mm:ss tt") + ". New balance is Kshs " + DebitTransaction.Amount;
+                        _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(transmsg, TAG));
+
                         MessageBox.Show("Transactions Posted Successfully!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception exc)
                     {
+                        _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(exc.ToString(), TAG));
                         Utils.ShowError(exc);
                         return;
                     }
@@ -687,14 +694,42 @@ namespace WinSBSchool.Post
         {
             try
             {
+                if (CrAccountAfterPosting != null)
+                {
+                    var _student_query = from st in db.Students
+                                         join acc in db.Accounts on st.GLAccountId equals acc.Id
+                                         join cst in db.Customers on st.CustomerId equals cst.Id
+                                         where st.GLAccountId == CrAccountAfterPosting.Id
+                                         select st;
+                    _Student = _student_query.FirstOrDefault();
+                }
+
+                if (_Student != null)
+                {
+                    var _classquery = from sc in db.SchoolClasses
+                                      join cs in db.ClassStreams on sc.Id equals cs.ClassId
+                                      join st in db.Students on cs.Id equals st.ClassStreamId
+                                      where st.Id == _Student.Id
+                                      select sc;
+                    _class = _classquery.FirstOrDefault();
+                }
+
                 switch (item.Id)
                 {
                     case 0:
-                        return DateTime.Now.ToString("d/M/yyyy");
+                        return DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss ttt");
                     case 1:
-                        return school.SchoolName;
+                        if (school != null)
+                        {
+                            return school.SchoolName;
+                        }
+                        break;
                     case 2:
-                        return school.Address1 + school.Address2;
+                        if (school != null)
+                        {
+                            return school.Address1 + " " + school.Address2;
+                        }
+                        break;
                     case 3:
                         return receiptNo;
                     case 4:
@@ -708,14 +743,27 @@ namespace WinSBSchool.Post
                     case 8:
                         return CreditTransaction.Amount;
                     case 9:
-                        return "Student Name";
+                        if (_Student != null)
+                        {
+                            return _Student.StudentSurName + "  " + _Student.StudentOtherNames;
+                        }
+                        break;
                     case 10:
-                        return "Student Admin No";
+                        if (_Student != null)
+                        {
+                            return _Student.AdminNo;
+                        }
+                        break;
                     case 11:
-                        return "Class";
+                        if (_class != null)
+                        {
+                            return _class.ClassName;
+                        }
+                        break;
                     default:
                         return "Unknown Field";
                 }
+                return "";
             }
             catch (Exception ex)
             {
@@ -723,7 +771,25 @@ namespace WinSBSchool.Post
                 return null;
             }
         }
-        private string BuildNarrative(string type)
+        private string get_student_name()
+        {
+            string student_name = string.Empty;
+
+            return student_name;
+        }
+        private string get_student_admin_no()
+        {
+            string student_admin_no = string.Empty;
+
+            return student_admin_no;
+        }
+        private string get_class_name()
+        {
+            string class_name = string.Empty;
+
+            return class_name;
+        }
+        private string BuildNarrative(string type, Transaction txn)
         {
             try
             {
@@ -735,10 +801,10 @@ namespace WinSBSchool.Post
                     switch (TType.NarrativeFlag)
                     {
                         case "S": //see narrative as per screen input
-                            narr += txtDebitNarrative.Text;
+                            narr += " - " + txtDebitNarrative.Text;
                             break;
                         case "E": //see narrative as per screen input + account name
-                            narr += txtDebitNarrative.Text + " - " + DrAccountAfterPosting.AccountName;
+                            narr += " - " + txtDebitNarrative.Text + ",   Account = " + " Name: [ " + DrAccountAfterPosting.AccountName + " ]  " + "  No: [ " + DrAccountAfterPosting.AccountNo + " ] " + " Amount: [ " + txn.Amount.ToString("#,##0") + " ] ";
                             break;
                     }
                 }
@@ -749,10 +815,10 @@ namespace WinSBSchool.Post
                     switch (TType.NarrativeFlag)
                     {
                         case "S": //see narrative as per screen input
-                            narr += txtCrNarrative.Text;
+                            narr += " - " + txtCrNarrative.Text;
                             break;
                         case "E": //see narrative as per screen input + account name
-                            narr += txtCrNarrative.Text + " -  " + CrAccountAfterPosting.AccountName;
+                            narr += " - " + txtCrNarrative.Text + ",   Account = " + " Name: [ " + CrAccountAfterPosting.AccountName + " ]  " + "  No: [ " + CrAccountAfterPosting.AccountNo + " ] " + " Amount: [ " + txn.Amount.ToString("#,##0") + " ] ";
                             break;
                     }
                 }
@@ -826,7 +892,7 @@ namespace WinSBSchool.Post
                     _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
                     throw new Exception("Exception Occured While Printing", ex);
                 }
-                //streamToPrint = new StreamReader ("C:\\MyFile.txt");
+                //streamToPrint = new StreamReader ("C:\\MyFile.log");
                 //try
                 //{
                 //    printFont = new Font("Arial", 10);
@@ -881,7 +947,7 @@ namespace WinSBSchool.Post
             try
             {
                 Form myForm = this.FindForm();
-                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(connection) { Owner = myForm };
+                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = myForm };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnDrAccountListSelected);
                 saf.ShowDialog();
             }
@@ -908,7 +974,7 @@ namespace WinSBSchool.Post
             try
             {
                 Form myForm = this.FindForm();
-                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(connection) { Owner = myForm };
+                SearchAccountsSimpleForm saf = new SearchAccountsSimpleForm(user, connection, _notificationmessageEventname) { Owner = myForm };
                 saf.OnAccountListSelected += new SearchAccountsSimpleForm.AccountSelectHandler(saf_OnCrAccountListSelected);
                 saf.ShowDialog();
             }

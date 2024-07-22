@@ -6,13 +6,20 @@ using System.Linq;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
     public partial class SearchAccountsSimpleForm : Form
     {
+        Repository rep;
         SBSchoolDBEntities db;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         IQueryable<Account> _Accounts;
         //delegate
         public delegate void AccountSelectHandler(object sender, AccountSelectEventArgs e);
@@ -21,42 +28,49 @@ namespace WinSBSchool.Forms
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
 
-        public SearchAccountsSimpleForm(string Conn)
+        public SearchAccountsSimpleForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished SearchAccountsSimpleForm initialization", TAG));
+
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        private void btnSubmit_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewAccounts.SelectedRows.Count != 0)
-            {
-
-                try
-                {
-                    Account selectedAccount = (Account)bindingSourceAccounts.Current;
-                    OnAccountListSelected(this, new AccountSelectEventArgs(selectedAccount));
-
-                    this.Close();
-
-                }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
-            }
-        }
-
         private void SearchAccountsSimpleForm_Load(object sender, EventArgs e)
         {
             try
@@ -72,12 +86,12 @@ namespace WinSBSchool.Forms
                 colAccountType.DataPropertyName = "AccountTypeId";
                 colAccountType.ValueMember = "Id";
                 colAccountType.MaxDropDownItems = 10;
-                colAccountType.DisplayIndex = 3;
+                colAccountType.DisplayIndex = 2;
                 colAccountType.MinimumWidth = 5;
                 colAccountType.Width = 100;
                 colAccountType.FlatStyle = FlatStyle.Flat;
                 colAccountType.DefaultCellStyle.NullValue = "--- Select ---";
-                colAccountType.ReadOnly = true; 
+                colAccountType.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbAccountType"))
                 {
                     dataGridViewAccounts.Columns.Add(colAccountType);
@@ -94,12 +108,12 @@ namespace WinSBSchool.Forms
                 colCOA.DataPropertyName = "COAId";
                 colCOA.ValueMember = "Id";
                 colCOA.MaxDropDownItems = 10;
-                colCOA.DisplayIndex = 4;
+                colCOA.DisplayIndex = 3;
                 colCOA.MinimumWidth = 5;
                 colCOA.Width = 100;
                 colCOA.FlatStyle = FlatStyle.Flat;
                 colCOA.DefaultCellStyle.NullValue = "--- Select ---";
-                colCOA.ReadOnly = true; 
+                colCOA.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbCOA"))
                 {
                     dataGridViewAccounts.Columns.Add(colCOA);
@@ -116,22 +130,22 @@ namespace WinSBSchool.Forms
                 colCustomer.DataPropertyName = "CustomerId";
                 colCustomer.ValueMember = "Id";
                 colCustomer.MaxDropDownItems = 10;
-                colCustomer.DisplayIndex = 2;
+                colCustomer.DisplayIndex = 4;
                 colCustomer.MinimumWidth = 5;
                 colCustomer.Width = 100;
                 colCustomer.FlatStyle = FlatStyle.Flat;
                 colCustomer.DefaultCellStyle.NullValue = "--- Select ---";
-                colCustomer.ReadOnly = true; 
+                colCustomer.ReadOnly = true;
                 if (!this.dataGridViewAccounts.Columns.Contains("cbCustomer"))
                 {
-                    //dataGridViewAccounts.Columns.Add(colCustomer);
+                    dataGridViewAccounts.Columns.Add(colCustomer);
                 }
 
                 dataGridViewAccounts.AutoGenerateColumns = false;
                 this.dataGridViewAccounts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridViewAccounts.DataSource = bindingSourceAccounts;
 
-                _Accounts = db.Accounts.Where(i => i.Closed == false);
+                _Accounts = db.Accounts.Where(i => i.Closed == false).OrderByDescending(i => i.Id);
 
                 AutoCompleteStringCollection acsaccid = new AutoCompleteStringCollection();
                 acsaccid.AddRange(this.AutoComplete_AccountIds());
@@ -158,11 +172,11 @@ namespace WinSBSchool.Forms
                      AutoCompleteSource.CustomSource;
 
                 AutoCompleteStringCollection acsccustId = new AutoCompleteStringCollection();
-                acsccustId.AddRange(this.AutoComplete_CustomerIds());
-                txtCustomerId.AutoCompleteCustomSource = acsccustId;
-                txtCustomerId.AutoCompleteMode =
+                acsccustId.AddRange(this.AutoComplete_Customernames());
+                txtCustomerName.AutoCompleteCustomSource = acsccustId;
+                txtCustomerName.AutoCompleteMode =
                     AutoCompleteMode.SuggestAppend;
-                txtCustomerId.AutoCompleteSource =
+                txtCustomerName.AutoCompleteSource =
                      AutoCompleteSource.CustomSource;
 
             }
@@ -223,20 +237,14 @@ namespace WinSBSchool.Forms
                 return null;
             }
         }
-        private string[] AutoComplete_CustomerIds()
+        private string[] AutoComplete_Customernames()
         {
             try
             {
-                var custidsquery = (from ac in db.Accounts
-                                    select ac.CustomerId).Distinct();
-                int[] intarray = custidsquery.ToArray();
-                List<string> items = new List<string>();
-                for (int i = 0; i < custidsquery.Count(); i++)
-                {
-                    string strName = intarray[i].ToString();
-                    items.Add(strName);
-                }
-                return items.ToArray();
+                var custnamequery = from cs in db.Customers
+                                    where cs.IsDeleted == false
+                                    select cs.CustomerName;
+                return custnamequery.ToArray();
             }
             catch (Exception ex)
             {
@@ -245,7 +253,7 @@ namespace WinSBSchool.Forms
             }
         }
         // apply the filter
-        private void ApplyFilter()
+        public void ApplyFilter()
         {
             try
             {
@@ -263,31 +271,31 @@ namespace WinSBSchool.Forms
         {
             //none
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 return _account;
             }
             //all
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 int _AccId = int.Parse(txtAccountId.Text);
                 string _AccNo = txtAccountNo.Text;
                 string _AccName = txtAccountName.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountNo.StartsWith(_AccNo)
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountNo.Contains(_AccNo)
+                           where ac.AccountName.Contains(_AccName)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
@@ -299,131 +307,131 @@ namespace WinSBSchool.Forms
             }
             //accountno
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                 && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                 && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccNo = txtAccountNo.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountNo.StartsWith(_AccNo)
+                           where ac.AccountNo.Contains(_AccNo)
                            where ac.Closed == false
                            select ac;
                 return _account;
-            }            
+            }
             //accountname
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccName = txtAccountName.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountName.Contains(_AccName)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //customerid
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                 && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                 && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and accountno
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
                 string _AccNo = txtAccountNo.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountNo.StartsWith(_AccNo)
+                           where ac.AccountNo.Contains(_AccNo)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and accountname
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
                 string _AccName = txtAccountName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountName.Contains(_AccName)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and customerid
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                 && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                 && string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountno and accountname
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                 && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                 && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccNo = txtAccountNo.Text;
                 string _AccName = txtAccountName.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountNo.StartsWith(_AccNo)
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountNo.Contains(_AccNo)
+                           where ac.AccountName.Contains(_AccName)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountno and customerid
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccNo = txtAccountNo.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountNo.StartsWith(_AccNo)
+                           where ac.AccountNo.Contains(_AccNo)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountname and customerid
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccName = txtAccountName.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountName.Contains(_AccName)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and accountno and accountname 
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                 && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerId.Text))
+                 && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
@@ -431,63 +439,63 @@ namespace WinSBSchool.Forms
                 string _AccName = txtAccountName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountNo.StartsWith(_AccNo)
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountNo.Contains(_AccNo)
+                           where ac.AccountName.Contains(_AccName)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and accountno and customerid
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                 && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                 && !string.IsNullOrEmpty(txtAccountNo.Text) && string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
                 string _AccNo = txtAccountNo.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountNo.StartsWith(_AccNo)
+                           where ac.AccountNo.Contains(_AccNo)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
             }
             //accountid and accountname and customerid
             if (!string.IsNullOrEmpty(txtAccountId.Text)
-                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                 && string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 int _AccId = int.Parse(txtAccountId.Text);
                 string _AccName = txtAccountName.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
                            where ac.Id == _AccId
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountName.Contains(_AccName)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
-            } 
+            }
             //accountno and accountname and customerid
             if (string.IsNullOrEmpty(txtAccountId.Text)
-                && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerId.Text))
+                && !string.IsNullOrEmpty(txtAccountNo.Text) && !string.IsNullOrEmpty(txtAccountName.Text) && !string.IsNullOrEmpty(txtCustomerName.Text))
             {
                 _account = null;
                 string _AccNo = txtAccountNo.Text;
                 string _AccName = txtAccountName.Text;
-                int _CustId = int.Parse(txtCustomerId.Text);
+                string _custname = txtCustomerName.Text;
                 _account = from ac in db.Accounts
-                           where ac.AccountNo.StartsWith(_AccNo)
-                           where ac.AccountName.StartsWith(_AccName)
+                           where ac.AccountNo.Contains(_AccNo)
+                           where ac.AccountName.Contains(_AccName)
                            join cs in db.Customers on ac.CustomerId equals cs.Id
-                           where cs.Id == _CustId
+                           where cs.CustomerName.Contains(_custname)
                            where ac.Closed == false
                            select ac;
                 return _account;
-            } 
+            }
             return _account;
         }
         private void txtAccountNo_Validated(object sender, EventArgs e)
@@ -623,17 +631,46 @@ namespace WinSBSchool.Forms
                 }
             }
         }
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAccounts.SelectedRows.Count != 0)
+            {
 
+                try
+                {
+                    Account selectedAccount = (Account)bindingSourceAccounts.Current;
+                    OnAccountListSelected(this, new AccountSelectEventArgs(selectedAccount));
+
+                    this.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    Utils.ShowError(ex);
+                }
+            }
+        }
         private void dataGridViewAccounts_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             try
             {
-
+                e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
+        }
+
+        private void btnloadall_Click(object sender, EventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void btnaddaccount_Click(object sender, EventArgs e)
+        {
+            AddAccountForm aaf = new AddAccountForm(user, connection, _notificationmessageEventname) { Owner = this };
+            aaf.ShowDialog();
         }
 
 

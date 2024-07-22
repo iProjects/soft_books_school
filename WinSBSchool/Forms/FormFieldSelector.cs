@@ -60,18 +60,18 @@ namespace WinSBSchool.Forms
         
         public PrintFields()
         {
-            fields.Add(0, new PrintField(0,"Date Now", new DateTime())); //Date now
-            fields.Add(1, new PrintField(1, "School Name", null)); //School StudentName
-            fields.Add(2, new PrintField(2, "School Address", null)); //School Address
-            fields.Add(3, new PrintField(3, "Receipt Number", null)); //Receipt Number
-            fields.Add(4, new PrintField(4, "Debit Account", null)); //Debit Account
-            fields.Add(5, new PrintField(5, "Credit Account", null)); //Credit Account            
-            fields.Add(6, new PrintField(6, "Debit Narrative", null)); //Debit Narrative
-            fields.Add(7, new PrintField(7, "Credit Narrative", null)); //Credit Narrative
-            fields.Add(8, new PrintField(8, "Amount", null)); //Amount
-            fields.Add(9, new PrintField(9, "Name", null)); //StudentId StudentName
-            fields.Add(10, new PrintField(10, "Admino", null)); //Admino
-            fields.Add(11, new PrintField(11, "Class", null)); //Class
+            fields.Add(0, new PrintField(0, "Date:", new DateTime())); //Date now
+            fields.Add(1, new PrintField(1, "School Name:", null)); //School StudentName
+            fields.Add(2, new PrintField(2, "School Address:", null)); //School Address
+            fields.Add(3, new PrintField(3, "Receipt Number:", null)); //Receipt Number
+            fields.Add(4, new PrintField(4, "Debit Account:", null)); //Debit Account
+            fields.Add(5, new PrintField(5, "Credit Account:", null)); //Credit Account            
+            fields.Add(6, new PrintField(6, "Debit Narrative:", null)); //Debit Narrative
+            fields.Add(7, new PrintField(7, "Credit Narrative:", null)); //Credit Narrative
+            fields.Add(8, new PrintField(8, "Amount:", null)); //Amount
+            fields.Add(9, new PrintField(9, "Student Name:", null)); //StudentId StudentName
+            fields.Add(10, new PrintField(10, "Student Admino:", null)); //Admino
+            fields.Add(11, new PrintField(11, "Student Class:", null)); //Class
             
         }
 

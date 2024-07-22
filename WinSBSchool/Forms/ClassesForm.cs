@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -19,30 +20,61 @@ namespace WinSBSchool.Forms
     {
         Repository rep;
         SBSchoolDBEntities db;
-        IQueryable<ClassStream> csQuery;
         string connection;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
+        IQueryable<ClassStream> csQuery;
 
-        public ClassesForm(string Conn)
+        public ClassesForm(string UserName, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
-
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
             connection = Conn;
 
-            rep = new Repository(connection);
             db = new SBSchoolDBEntities(connection);
+            rep = new Repository(connection);
+            user = UserName;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished ClassesForm initialization", TAG));
+
         }
 
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.Write_To_Log_File_temp_dir(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
         private void ClassForm_Load(object sender, EventArgs e)
         {
             try
             {
-                var _prgrmmYrs = from pys in db.ProgrammeYears
-                                 where pys.IsDeleted == false
-                                 select pys;
-                List<ProgrammeYear> _ProgrammeYears = _prgrmmYrs.ToList();
+                var _programmes_query = from pys in db.ProgrammeYears
+                                        where pys.IsDeleted == false
+                                        select pys;
+                List<ProgrammeYear> _ProgrammeYears = _programmes_query.ToList();
                 bindingSourceProgrammeYears.DataSource = _ProgrammeYears;
                 DataGridViewComboBoxColumn colCboxProgrammeYears = new DataGridViewComboBoxColumn();
                 colCboxProgrammeYears.HeaderText = "Programme Years";
@@ -63,11 +95,11 @@ namespace WinSBSchool.Forms
                     dataGridViewSchoolClasses.Columns.Add(colCboxProgrammeYears);
                 }
 
-                var tchrquery = from tc in db.Teachers
-                                where tc.Status == "A"
-                                where tc.IsDeleted == false
-                                select tc;
-                List<Teacher> _Teachers = tchrquery.ToList();
+                var teachers_query = from tc in db.Teachers
+                                     where tc.Status == "A"
+                                     where tc.IsDeleted == false
+                                     select tc;
+                List<Teacher> _Teachers = teachers_query.ToList();
                 bindingSourceTeachers.DataSource = _Teachers;
                 DataGridViewComboBoxColumn colCboxClassTeacher = new DataGridViewComboBoxColumn();
                 colCboxClassTeacher.HeaderText = "Teacher";
@@ -112,18 +144,22 @@ namespace WinSBSchool.Forms
                 if (!this.dataGridViewSchoolClasses.Columns.Contains("cbStatus"))
                 {
                     dataGridViewSchoolClasses.Columns.Add(colCboxStatus);
-                } 
+                }
 
-                var SchlClsssquery = from sc in db.SchoolClasses
-                                     where sc.IsDeleted == false
-                                     where sc.Status=="A"
-                                     select sc;
-                List<SchoolClass> _SchoolClasss = SchlClsssquery.ToList();
+                var school_query = from sc in db.SchoolClasses
+                                   where sc.IsDeleted == false
+                                   where sc.Status == "A"
+                                   select sc;
+                List<SchoolClass> _SchoolClasss = school_query.ToList();
                 bindingSourceSchoolClasses.DataSource = _SchoolClasss;
+
                 dataGridViewSchoolClasses.AutoGenerateColumns = false;
                 this.dataGridViewSchoolClasses.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridViewSchoolClasses.DataSource = bindingSourceSchoolClasses;
                 groupBox2.Text = bindingSourceSchoolClasses.Count.ToString();
+
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished ClassesForm load", TAG));
+
             }
             catch (Exception ex)
             {
@@ -328,16 +364,16 @@ namespace WinSBSchool.Forms
             {
                 Utils.ShowError(ex);
             }
-        } 
+        }
         private void dataGridViewSchoolClasses_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             try
             {
-                
+                e.ThrowException = false;
             }
             catch (Exception ex)
             {
-                Utils.ShowError(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
             }
         }
 
