@@ -12,6 +12,7 @@ using DAL;
 using Splash; 
 using System.Threading;
 using System.Data;
+using WinSBSchool;
 
 namespace WinSBSchool.Forms
 {

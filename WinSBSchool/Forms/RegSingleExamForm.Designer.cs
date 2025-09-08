@@ -35,6 +35,7 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cboinvigilator = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtModifiedBy = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -54,7 +55,6 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.bindingSourceExamType = new System.Windows.Forms.BindingSource(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cboinvigilator = new System.Windows.Forms.ComboBox();
             label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -133,6 +133,16 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Validating += new System.ComponentModel.CancelEventHandler(this.groupBox2_Validating);
+            // 
+            // cboinvigilator
+            // 
+            this.cboinvigilator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboinvigilator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboinvigilator.FormattingEnabled = true;
+            this.cboinvigilator.Location = new System.Drawing.Point(91, 120);
+            this.cboinvigilator.Name = "cboinvigilator";
+            this.cboinvigilator.Size = new System.Drawing.Size(243, 21);
+            this.cboinvigilator.TabIndex = 3;
             // 
             // label8
             // 
@@ -297,15 +307,6 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // cboinvigilator
-            // 
-            this.cboinvigilator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboinvigilator.FormattingEnabled = true;
-            this.cboinvigilator.Location = new System.Drawing.Point(91, 120);
-            this.cboinvigilator.Name = "cboinvigilator";
-            this.cboinvigilator.Size = new System.Drawing.Size(243, 21);
-            this.cboinvigilator.TabIndex = 3;
             // 
             // RegisterSingleExamForm
             // 

@@ -36,6 +36,11 @@ namespace WinSBSchool.Forms
         {
             try
             {
+                txtPYCNoOfHours.Text = "45";
+                txtTuitionFees.Text = "20000";
+                txtExamFees.Text = "3000";
+                txtRetakeFees.Text = "1000";
+
                 var status = new BindingList<KeyValuePair<string, string>>();
                 status.Add(new KeyValuePair<string, string>("A", "Active"));
                 status.Add(new KeyValuePair<string, string>("N", "Non-Active"));
@@ -44,10 +49,10 @@ namespace WinSBSchool.Forms
                 cboStatus.DisplayMember = "Value";
 
                 List<Subject> sbjcts = rep.GetActiveSubjects();
-                cboSubject.DataSource = sbjcts;
-                cboSubject.ValueMember = "ShortCode";
-                cboSubject.DisplayMember = "ShortCode";
-                cboSubject.SelectedIndex = -1;
+                cboprogrammecourses.DataSource = sbjcts;
+                cboprogrammecourses.ValueMember = "ShortCode";
+                cboprogrammecourses.DisplayMember = "Description";
+                cboprogrammecourses.SelectedIndex = -1;
 
                 listViewProgrammeYears.View = View.Details;
                 listViewProgrammeYears.GridLines = true;
@@ -284,7 +289,7 @@ namespace WinSBSchool.Forms
                 {
                     chkIsDefaultProgramme.Checked = _Programme.IsDefault.Value;
                 }
-                cboSubject.Enabled = true;
+                cboprogrammecourses.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -313,12 +318,12 @@ namespace WinSBSchool.Forms
                 btnAddProgrammeYear.Enabled = false;
                 #endregion "Programme Years"
                 #region "Programme Year Courses"
-                cboSubject.Enabled = false;
+                cboprogrammecourses.Enabled = false;
                 txtSemester.Enabled = false;
                 txtPYCNoOfHours.Enabled = false;
                 txtTuitionFees.Enabled = false;
                 txtExamFees.Enabled = false;
-                txtResitFees.Enabled = false;
+                txtRetakeFees.Enabled = false;
                 btnAddProgrammeYearCourse.Enabled = false;
                 btnDeleteProgrammeYearCourse.Enabled = false;
                 #endregion "Programme Year Courses"
@@ -333,7 +338,7 @@ namespace WinSBSchool.Forms
         }
         private void btnAddProgrammeYearCourse_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider1.Clear();
+            errorProvider.Clear();
 
             if (listViewProgrammeYears.SelectedItems.Count != 0)
             {
@@ -358,9 +363,9 @@ namespace WinSBSchool.Forms
                         {
                             prc.ProgrammeId = _Programme.Id.Trim();
                         }
-                        if (cboSubject.SelectedIndex != -1)
+                        if (cboprogrammecourses.SelectedIndex != -1)
                         {
-                            prc.CourseId = cboSubject.SelectedValue.ToString();
+                            prc.CourseId = cboprogrammecourses.SelectedValue.ToString();
                         }
                         if (year != null)
                         {
@@ -387,9 +392,9 @@ namespace WinSBSchool.Forms
                             prc.ExamFees = decimal.Parse(txtExamFees.Text);
                         }
                         decimal resitfees;
-                        if (!string.IsNullOrEmpty(txtResitFees.Text) && decimal.TryParse(txtResitFees.Text, out resitfees))
+                        if (!string.IsNullOrEmpty(txtRetakeFees.Text) && decimal.TryParse(txtRetakeFees.Text, out resitfees))
                         {
-                            prc.ResitFees = decimal.Parse(txtResitFees.Text);
+                            prc.ResitFees = decimal.Parse(txtRetakeFees.Text);
                         }
                         prc.Status = "A";
                         prc.IsDeleted = false;
@@ -467,14 +472,14 @@ namespace WinSBSchool.Forms
             bool noerror = true;
             if (string.IsNullOrEmpty(txtYear.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtYear, "Year cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtYear, "Year cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtPrYrDescription.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtPrYrDescription, "Description cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtPrYrDescription, "Description cannot be null!");
                 return false;
             }
             return noerror;
@@ -482,42 +487,42 @@ namespace WinSBSchool.Forms
         private bool IsProgrammeCourseValid()
         {
             bool noerror = true;
-            if (cboSubject.SelectedIndex == -1)
+            if (cboprogrammecourses.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboSubject, "Select a Subject!");
+                errorProvider.Clear();
+                errorProvider.SetError(cboprogrammecourses, "Select a Subject!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtSemester.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtSemester, "Semester cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtSemester, "Semester cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtPYCNoOfHours.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtPYCNoOfHours, "No Of Hours cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtPYCNoOfHours, "No Of Hours cannot be null!");
                 return false;
             }
             int _NoOfHours;
             if (!int.TryParse(txtPYCNoOfHours.Text, out _NoOfHours))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtPYCNoOfHours, "No Of Hours must be integer!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtPYCNoOfHours, "No Of Hours must be integer!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtTuitionFees.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtTuitionFees, "Tuition Fees cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtTuitionFees, "Tuition Fees cannot be null!");
                 return false;
             }
             decimal _TuitionFees;
             if (!decimal.TryParse(txtTuitionFees.Text, out _TuitionFees))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtTuitionFees, "Tuition Fees  must be decimal!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtTuitionFees, "Tuition Fees  must be decimal!");
                 return false;
             }
             return noerror;
@@ -634,7 +639,7 @@ namespace WinSBSchool.Forms
         }
         private void btnUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider1.Clear();
+            errorProvider.Clear();
             if (IsProgrammeValid())
             {
                 try
@@ -676,20 +681,20 @@ namespace WinSBSchool.Forms
             bool noeeror = true;
             if (string.IsNullOrEmpty(txtShortCode.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtShortCode, "Short Code cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtShortCode, "Short Code cannot be null!");
                 return false;
             }
             if (string.IsNullOrEmpty(txtDescription.Text))
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(txtDescription, "Description Cannot be null!");
+                errorProvider.Clear();
+                errorProvider.SetError(txtDescription, "Description Cannot be null!");
                 return false;
             }
             if (cboStatus.SelectedIndex == -1)
             {
-                errorProvider1.Clear();
-                errorProvider1.SetError(cboStatus, "Select Status!");
+                errorProvider.Clear();
+                errorProvider.SetError(cboStatus, "Select Status!");
                 return false;
             }
             return noeeror;
@@ -782,7 +787,7 @@ namespace WinSBSchool.Forms
         }
         private void btnAddProgrammeYear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider1.Clear();
+            errorProvider.Clear();
             if (IsProgrammeYearValid())
             {
                 try

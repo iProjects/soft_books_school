@@ -41,7 +41,7 @@ namespace WinSBSchool.Forms
                     Programme p = new Programme();
                     if (!string.IsNullOrEmpty(txtShortCode.Text))
                     {
-                        p.Id = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.Trim());
+                        p.Id = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.Trim().ToUpper());
                     }
                     if (!string.IsNullOrEmpty(txtDescription.Text))
                     {
@@ -189,6 +189,9 @@ namespace WinSBSchool.Forms
         {
             try
             {
+                txtFees.Text = "30000";
+                txtHours.Text = "45";
+
                 var status = new BindingList<KeyValuePair<string, string>>();
                 status.Add(new KeyValuePair<string, string>("A", "Active"));
                 status.Add(new KeyValuePair<string, string>("N", "Non-Active"));

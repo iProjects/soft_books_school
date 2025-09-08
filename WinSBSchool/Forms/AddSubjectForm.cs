@@ -36,13 +36,17 @@ namespace WinSBSchool.Forms
         {
             try
             {
+                txtOutOf.Text = "100";
+                txtPassMark.Text = "50";
+                txtROrder.Text = "1";
+
                 var status = new BindingList<KeyValuePair<string, string>>();
                 status.Add(new KeyValuePair<string, string>("A", "Active"));
                 status.Add(new KeyValuePair<string, string>("N", "Non-Active"));
                 cboStatus.DataSource = status;
                 cboStatus.ValueMember = "Key";
                 cboStatus.DisplayMember = "Value";
-
+                                
                 AutoCompleteStringCollection sssccls = new AutoCompleteStringCollection();
                 sssccls.AddRange(this.AutoComplete_ShortCode());
                 txtShortCode.AutoCompleteCustomSource = sssccls;
@@ -121,7 +125,7 @@ namespace WinSBSchool.Forms
                     Subject s = new Subject();
                     if (!string.IsNullOrEmpty(txtShortCode.Text))
                     {
-                        s.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.ToString().Trim());
+                        s.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.ToString().Trim().ToUpper());
                     }
                     if (!string.IsNullOrEmpty(txtDescription.Text))
                     {

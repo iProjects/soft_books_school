@@ -34,7 +34,7 @@
             this.btnClose = new System.Windows.Forms.LinkLabel();
             this.btnUpdate = new System.Windows.Forms.LinkLabel();
             this.bindingSourceProgrammeCourses = new System.Windows.Forms.BindingSource(this.components);
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tabControlProgrammes = new System.Windows.Forms.TabControl();
@@ -67,7 +67,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.ListViewProgrammeYearCourses = new System.Windows.Forms.ListView();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.txtResitFees = new System.Windows.Forms.TextBox();
+            this.txtRetakeFees = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.txtExamFees = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -77,13 +77,13 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtSemester = new System.Windows.Forms.TextBox();
             this.btnDeleteProgrammeYearCourse = new System.Windows.Forms.LinkLabel();
-            this.cboSubject = new System.Windows.Forms.ComboBox();
+            this.cboprogrammecourses = new System.Windows.Forms.ComboBox();
             this.btnAddProgrammeYearCourse = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             label15 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProgrammeCourses)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControlProgrammes.SuspendLayout();
@@ -131,9 +131,9 @@
             this.btnUpdate.Text = "Update";
             this.btnUpdate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnUpdate_LinkClicked);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // groupBox1
             // 
@@ -493,7 +493,7 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.txtResitFees);
+            this.groupBox6.Controls.Add(this.txtRetakeFees);
             this.groupBox6.Controls.Add(this.label13);
             this.groupBox6.Controls.Add(this.txtExamFees);
             this.groupBox6.Controls.Add(this.label12);
@@ -503,7 +503,7 @@
             this.groupBox6.Controls.Add(this.label10);
             this.groupBox6.Controls.Add(this.txtSemester);
             this.groupBox6.Controls.Add(this.btnDeleteProgrammeYearCourse);
-            this.groupBox6.Controls.Add(this.cboSubject);
+            this.groupBox6.Controls.Add(this.cboprogrammecourses);
             this.groupBox6.Controls.Add(this.btnAddProgrammeYearCourse);
             this.groupBox6.Controls.Add(this.label3);
             this.groupBox6.Controls.Add(this.label5);
@@ -514,25 +514,25 @@
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             // 
-            // txtResitFees
+            // txtRetakeFees
             // 
-            this.txtResitFees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtResitFees.Location = new System.Drawing.Point(81, 235);
-            this.txtResitFees.MaxLength = 8;
-            this.txtResitFees.Name = "txtResitFees";
-            this.txtResitFees.Size = new System.Drawing.Size(122, 20);
-            this.txtResitFees.TabIndex = 5;
-            this.txtResitFees.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResitFees_KeyDown);
-            this.txtResitFees.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtResitFees_KeyPress);
+            this.txtRetakeFees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtRetakeFees.Location = new System.Drawing.Point(81, 235);
+            this.txtRetakeFees.MaxLength = 8;
+            this.txtRetakeFees.Name = "txtRetakeFees";
+            this.txtRetakeFees.Size = new System.Drawing.Size(122, 20);
+            this.txtRetakeFees.TabIndex = 5;
+            this.txtRetakeFees.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtResitFees_KeyDown);
+            this.txtRetakeFees.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtResitFees_KeyPress);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(22, 238);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(57, 13);
+            this.label13.Size = new System.Drawing.Size(68, 13);
             this.label13.TabIndex = 65;
-            this.label13.Text = "Resit Fees";
+            this.label13.Text = "Retake Fees";
             // 
             // txtExamFees
             // 
@@ -618,15 +618,15 @@
             this.btnDeleteProgrammeYearCourse.Text = "Delete";
             this.btnDeleteProgrammeYearCourse.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnDeleteProgrammeYearCourse_LinkClicked);
             // 
-            // cboSubject
+            // cboprogrammecourses
             // 
-            this.cboSubject.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboSubject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboSubject.FormattingEnabled = true;
-            this.cboSubject.Location = new System.Drawing.Point(81, 34);
-            this.cboSubject.Name = "cboSubject";
-            this.cboSubject.Size = new System.Drawing.Size(122, 21);
-            this.cboSubject.TabIndex = 0;
+            this.cboprogrammecourses.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboprogrammecourses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboprogrammecourses.FormattingEnabled = true;
+            this.cboprogrammecourses.Location = new System.Drawing.Point(81, 34);
+            this.cboprogrammecourses.Name = "cboprogrammecourses";
+            this.cboprogrammecourses.Size = new System.Drawing.Size(122, 21);
+            this.cboprogrammecourses.TabIndex = 0;
             // 
             // btnAddProgrammeYearCourse
             // 
@@ -674,7 +674,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.EditProgrammeForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProgrammeCourses)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -698,7 +698,7 @@
         private System.Windows.Forms.LinkLabel btnClose;
         private System.Windows.Forms.LinkLabel btnUpdate;
         private System.Windows.Forms.BindingSource bindingSourceProgrammeCourses;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TabControl tabControlProgrammes;
         private System.Windows.Forms.TabPage tabPageProgrammeDetails;
@@ -724,7 +724,7 @@
         private System.Windows.Forms.LinkLabel btnDeleteProgrammeYearCourse;
         private System.Windows.Forms.LinkLabel btnAddProgrammeYearCourse;
         private System.Windows.Forms.TextBox txtSemester;
-        private System.Windows.Forms.ComboBox cboSubject;
+        private System.Windows.Forms.ComboBox cboprogrammecourses;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -733,7 +733,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtNextYear;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtResitFees;
+        private System.Windows.Forms.TextBox txtRetakeFees;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtExamFees;
         private System.Windows.Forms.Label label12;

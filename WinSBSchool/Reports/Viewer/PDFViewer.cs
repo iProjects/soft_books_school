@@ -583,8 +583,7 @@ namespace WinSBSchool.Reports.Viewer
             {
                 string app_dir = Utils.get_application_path();
                 var dir = Path.Combine(app_dir, folder);
-
-
+                
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

@@ -267,7 +267,7 @@ namespace WinSBSchool
                 List<spMenuItem> menuitems = new List<spMenuItem>();
                 foreach (var armq in allowedmenusquery.ToList())
                 {
-                    ToolStripMenuItem mnuitem = menuStrip1.Items.Find(armq.spMenuItem.mnuName, true).OfType<ToolStripMenuItem>().FirstOrDefault();
+                    ToolStripMenuItem mnuitem = menuStripmain.Items.Find(armq.spMenuItem.mnuName, true).OfType<ToolStripMenuItem>().FirstOrDefault();
 
                     if (mnuitem != null && armq.Allowed == true)
                     {
@@ -275,7 +275,7 @@ namespace WinSBSchool
                         _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(string.Format("Authorized menu [ {0} ]", armq.spMenuItem.mnuName), TAG));
                     }
 
-                    ToolStripItem tsbitem = toolStrip1.Items.Find(armq.spMenuItem.mnuName, true).OfType<ToolStripItem>().FirstOrDefault();
+                    ToolStripItem tsbitem = toolStripmain.Items.Find(armq.spMenuItem.mnuName, true).OfType<ToolStripItem>().FirstOrDefault();
 
                     if (tsbitem != null && armq.Allowed == true)
                     {
@@ -791,7 +791,7 @@ namespace WinSBSchool
                     string base_directory = Utils.get_application_path();
                     string back_up_path = Utils.build_file_path(base_directory, "database_backup");
 
-                    bool back_up_successfull = control_panel.backup_database_automatically(system.Server, system.Database, back_up_path, formatted_file_name);
+                    bool back_up_successfull = control_panel.backup_database_automatically(system.Server, system.Database);
 
                     if (back_up_successfull)
                     {
@@ -2011,7 +2011,7 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading TeachersForm", TAG));
-                TeachersForm f = new TeachersForm(connection);
+                TeachersForm f = new TeachersForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
                 f.Show();
             }
             catch (Exception ex)
@@ -2465,7 +2465,11 @@ namespace WinSBSchool
             try
             {
                 _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("loading FeeStructureAcademicForm", TAG));
+<<<<<<< Updated upstream
                 FeeStructureAcademicForm fsaf = new FeeStructureAcademicForm(connection);
+=======
+                FeeStructureAcademicForm fsaf = new FeeStructureAcademicForm(LoggedInUser.UserName, connection, _notificationmessageEventname);
+>>>>>>> Stashed changes
                 fsaf.Show();
             }
             catch (Exception ex)
@@ -2616,17 +2620,7 @@ namespace WinSBSchool
                 Utils.LogEventViewer(ex);
             }
         }
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Application.Exit();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
-        }
+
         private void uploadDownloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -2775,6 +2769,96 @@ namespace WinSBSchool
 
         #endregion  "Private Methods"
 
+        private void transactionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripButtonTransactions_Click(sender, e);
+        }
+
+        private void accountsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            accountsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void studentsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            studentToolStripMenuItem_Click(sender, e);
+        }
+
+        private void examsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            examsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void chartOfAccountsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            chartOfAccountsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void processExamsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            processExamsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void registerStudentsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItemRegisterStudents_Click(sender, e);
+        }
+
+        private void markSheetToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            MarkSheettoolStripMenuItem_Click(sender, e);
+        }
+
+        private void examResultsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            examsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void teachersToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            teacherToolStripMenuItem_Click(sender, e);
+        }
+
+        private void subjectsToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            subjectsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void classesToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            classesToolStripMenuItem_Click(sender, e);
+        }
+
+        private void programmesToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            programmesToolStripMenuItem_Click(sender, e);
+        }
+
+        private void customersToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            customersToolStripMenuItem_Click(sender, e);
+        }
+
+        private void gradingToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            gradingToolStripMenuItem_Click(sender, e);
+        }
+
+        private void attendanceToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            attendanceToolStripMenuItem_Click(sender, e);
+        }
+        private void exitToolStripMenuItemsub_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
 
 
 

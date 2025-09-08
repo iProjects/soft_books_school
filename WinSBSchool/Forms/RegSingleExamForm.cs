@@ -338,8 +338,8 @@ namespace WinSBSchool.Forms
 
                 var _teachers_query = from tc in db.Teachers
                                       where tc.IsDeleted == false
-                                      where tc.Status.Equals("A")
-                                      where tc.IsLeft.Equals(false)
+                                      where tc.Status == "A"
+                                      where tc.IsLeft == false
                                       select tc;
 
                 List<Teacher> _teachers = _teachers_query.ToList();

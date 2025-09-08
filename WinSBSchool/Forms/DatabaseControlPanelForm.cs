@@ -16,6 +16,7 @@ using System.Xml.Linq;
 using CommonLib;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using System.Text;
 
 namespace WinSBSchool.Forms
 {
@@ -53,7 +54,14 @@ namespace WinSBSchool.Forms
         //event for publishing messages to output
         event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
         event EventHandler<notificationmessageEventArgs> _notificationmessageEventname_from_parent;
+        bool from_parent = false;
         #endregion "Private Fields"
+
+        #region "Public Properties"
+        public string ServerName { get; set; }
+        public string LoginUserName { get; set; }
+        public string LoginPassword { get; set; }
+        #endregion "Public Properties"
 
         #region "Constructor"
         public DatabaseControlPanelForm()
@@ -74,7 +82,7 @@ namespace WinSBSchool.Forms
             server_names = new List<string>();
             databases = new List<ServerDatabase>();
 
-            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished main_form initialization", TAG));
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished DatabaseControlPanelForm initialization", TAG));
 
         }
         public DatabaseControlPanelForm(EventHandler<notificationmessageEventArgs> notificationmessageEventname_from_parent)
@@ -91,20 +99,77 @@ namespace WinSBSchool.Forms
             //EventName += HandlerName;
             _notificationmessageEventname += notificationmessageHandler;
             _notificationmessageEventname_from_parent = notificationmessageEventname_from_parent;
+            from_parent = true;
 
             server_names = new List<string>();
             databases = new List<ServerDatabase>();
 
-            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished main_form initialization", TAG));
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished DatabaseControlPanelForm initialization", TAG));
 
         }
         #endregion "Constructor"
 
-        #region "Public Properties"
-        public string ServerName { get; set; }
-        public string LoginUserName { get; set; }
-        public string LoginPassword { get; set; }
-        #endregion "Public Properties"
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            this._notificationmessageEventname.Invoke(sender, new notificationmessageEventArgs(ex.Message, TAG));
+        }
+
+        private void ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            this._notificationmessageEventname.Invoke(sender, new notificationmessageEventArgs(ex.Message, TAG));
+        }
+
+        //Event handler declaration:
+        private void notificationmessageHandler(object sender, notificationmessageEventArgs args)
+        {
+            try
+            {
+                /* Handler logic */
+
+                //Invoke(new Action(() =>
+                //{
+
+                notificationdto _notificationdto = new notificationdto();
+
+                DateTime currentDate = DateTime.Now;
+                String dateTimenow = currentDate.ToString("dd-MM-yyyy HH:mm:ss tt");
+
+                String _logtext = Environment.NewLine + "[ " + dateTimenow + " ]   " + args.message;
+
+                _notificationdto._notification_message = _logtext;
+                _notificationdto._created_datetime = dateTimenow;
+                _notificationdto.TAG = args.TAG;
+
+                _lstnotificationdto.Add(_notificationdto);
+
+                Console.WriteLine(args.message);
+
+                Log.WriteToErrorLogFile_and_EventViewer(new Exception(_logtext));
+
+                if (from_parent)
+                    _notificationmessageEventname_from_parent.Invoke(this, new notificationmessageEventArgs(args.message, TAG));
+
+                var _lstmsgdto = from msgdto in _lstnotificationdto
+                                 orderby msgdto._created_datetime descending
+                                 select msgdto._notification_message;
+
+                String[] _logflippedlines = _lstmsgdto.ToArray();
+
+                txtlog_connect.Lines = _logflippedlines;
+                txtlog_connect.ScrollToCaret();
+
+                txtlog_settings.Lines = _logflippedlines;
+                txtlog_settings.ScrollToCaret();
+
+                //}));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         #region "Private Methods"
         private void DatabaseControlPanelForm_Load(object sender, EventArgs e)
@@ -172,65 +237,6 @@ namespace WinSBSchool.Forms
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
-            }
-        }
-
-        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Exception ex = (Exception)e.ExceptionObject;
-            this._notificationmessageEventname.Invoke(sender, new notificationmessageEventArgs(ex.Message, TAG));
-        }
-
-        private void ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
-        {
-            Exception ex = e.Exception;
-            this._notificationmessageEventname.Invoke(sender, new notificationmessageEventArgs(ex.Message, TAG));
-        }
-
-        //Event handler declaration:
-        private void notificationmessageHandler(object sender, notificationmessageEventArgs args)
-        {
-            try
-            {
-                /* Handler logic */
-
-                //Invoke(new Action(() =>
-                //{
-
-                notificationdto _notificationdto = new notificationdto();
-
-                DateTime currentDate = DateTime.Now;
-                String dateTimenow = currentDate.ToString("dd-MM-yyyy HH:mm:ss tt");
-
-                String _logtext = Environment.NewLine + "[ " + dateTimenow + " ]   " + args.message;
-
-                _notificationdto._notification_message = _logtext;
-                _notificationdto._created_datetime = dateTimenow;
-                _notificationdto.TAG = args.TAG;
-
-                _lstnotificationdto.Add(_notificationdto);
-                Console.WriteLine(args.message);
-                _notificationmessageEventname_from_parent.Invoke(this, new notificationmessageEventArgs(args.message, TAG));
-
-                var _lstmsgdto = from msgdto in _lstnotificationdto
-                                 orderby msgdto._created_datetime descending
-                                 select msgdto._notification_message;
-
-                String[] _logflippedlines = _lstmsgdto.ToArray();
-
-                txtlog_connect.Lines = _logflippedlines;
-                txtlog_connect.ScrollToCaret();
-
-                txtlog_settings.Lines = _logflippedlines;
-                txtlog_settings.ScrollToCaret();
-
-                Log.WriteToErrorLogFile_and_EventViewer(new Exception(_logtext));
-
-                //}));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
             }
         }
 
@@ -393,50 +399,50 @@ namespace WinSBSchool.Forms
             else
             {
                 gbRestore.Visible = true;
+                txtNewDatabaseName.Text = "sbschooldb_" + DateTime.Now.Year + "_" + Utils.get_month_name(DateTime.Now.Month) + "_" + DateTime.Now.DayOfWeek.ToString();
             }
         }
         private void btnRestoreNow_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            errorProvider.Clear();
-            if (string.IsNullOrEmpty(txtNewDatabaseName.Text))
+            try
             {
-                errorProvider.SetError(txtNewDatabaseName, "Database Name cannot be null!");
-                return;
-            }
-            if (!string.IsNullOrEmpty(txtNewDatabaseName.Text))
-            {
-                try
+                // Create OpenFileDialog 
+                Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+                ofd.Title = "Select Restore File";
+                ofd.Filter = "Restore File (*.bak)|*.bak";
+                ofd.InitialDirectory = @"C:\database_backup\sbschool";
+                ofd.RestoreDirectory = true;
+                Nullable<bool> result = ofd.ShowDialog();
+                // Process open file dialog box results
+                if (result == true)
                 {
-                    // Create OpenFileDialog 
-                    Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-                    ofd.Title = "Select Back Up File";
-                    ofd.Filter = "Back Up File (*.bak)|*.bak";
-                    Nullable<bool> result = ofd.ShowDialog();
-                    // Process open file dialog box results
-                    if (result == true)
+                    // Get the selected file name and display in a TextBox  
+                    string BackupFilePath = ofd.FileName;
+                    string filename = Path.GetFileNameWithoutExtension(BackupFilePath);
+                    string directoryPath = Path.GetDirectoryName(BackupFilePath);
+                    string destinationDatabaseName = txtNewDatabaseName.Text;
+
+                    string DatabaseFolder = directoryPath;
+                    string DatabaseFileName = filename + "_DATA";
+                    string DatabaseLogFileName = filename + "_LOG";
+
+                    //RestoreDataBase(BackupFilePath, destinationDatabaseName, DatabaseFolder, DatabaseFileName, DatabaseLogFileName);
+
+                    if (string.IsNullOrEmpty(txtNewDatabaseName.Text))
                     {
-                        // Get the selected file name and display in a TextBox  
-                        string BackupFilePath = ofd.FileName;
-                        string filename = Path.GetFileNameWithoutExtension(BackupFilePath);
-                        string directoryPath = Path.GetDirectoryName(BackupFilePath);
-                        string destinationDatabaseName = txtNewDatabaseName.Text;
-
-                        string DatabaseFolder = directoryPath;
-                        string DatabaseFileName = filename + "_DATA";
-                        string DatabaseLogFileName = filename + "_LOG";
-
-                        RestoreDataBase(BackupFilePath,
-                         destinationDatabaseName,
-                         DatabaseFolder,
-                         DatabaseFileName,
-                         DatabaseLogFileName);
+                        txtNewDatabaseName.Text = filename;
+                    }
+                    if (!string.IsNullOrEmpty(txtNewDatabaseName.Text))
+                    {
 
                     }
+
+                    restore_v2(filename, BackupFilePath, destinationDatabaseName, DatabaseFolder, DatabaseFileName, DatabaseLogFileName);
                 }
-                catch (Exception ex)
-                {
-                    Utils.ShowError(ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
             }
         }
         private void btnBackUp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -445,15 +451,23 @@ namespace WinSBSchool.Forms
             {
                 try
                 {
-                    folderBrowserDialog.Description = "Select a folder to backup to.  Make sure the folder name does not contain space";
-                    DialogResult result = folderBrowserDialog.ShowDialog();
-                    if (result == DialogResult.OK)
-                    {
-                        ListViewItem.ListViewSubItem dbName = listViewDatabaseList.SelectedItems[0].SubItems[0];
-                        string foldername = this.folderBrowserDialog.SelectedPath;
-                        BackupDatabase(foldername, dbName.Text);
-                        MessageBox.Show("Backup complete!", Utils.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    ListViewItem.ListViewSubItem selected_database = listViewDatabaseList.SelectedItems[0].SubItems[0];
+
+                    BackUp(selected_database.Text);
+
+                    //folderBrowserDialog.Description = "Select a folder to backup to. Make sure the folder name does not contain space";
+                    //DialogResult result = folderBrowserDialog.ShowDialog();
+                    //if (result == DialogResult.OK)
+                    //{
+
+                    //    string foldername = this.folderBrowserDialog.SelectedPath;
+
+                    //    //BackupDatabase(foldername, dbName.Text);
+
+                    //    //BackUp(foldername, dbName.Text);
+
+                    //    MessageBox.Show("Backup complete!", Utils.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -681,6 +695,11 @@ namespace WinSBSchool.Forms
                         errorProvider.Clear();
                         bool isvalid = false;
 
+                        progressBar_settings.Invoke(new Action(() =>
+                        {
+                            progressBar_settings.Visible = true;
+                        }));
+
                         Invoke(new Action(() =>
                         {
                             isvalid = IsServerLoginValid();
@@ -816,11 +835,19 @@ namespace WinSBSchool.Forms
                 btnGetServerList.Enabled = true;
                 btnConnect.Enabled = true;
                 btnQuitChangeSever.Enabled = true;
+                btnrefreshdatabases.Enabled = true;
+                btnrefreshdatabases.Text = "Refresh Databases";
 
                 progressBar_connect.Invoke(new Action(() =>
                 {
                     progressBar_connect.Visible = false;
                 }));
+
+                progressBar_settings.Invoke(new Action(() =>
+                {
+                    progressBar_settings.Visible = false;
+                }));
+
             }
             catch (Exception ex)
             {
@@ -862,10 +889,11 @@ namespace WinSBSchool.Forms
                 errorProvider.Clear();
                 if (string.IsNullOrEmpty(cboserver.Text))
                 {
+                    this._notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("Sever cannot be null!", TAG));
                     errorProvider.SetError(cboserver, "select server!");
                     return;
                 }
-
+                 
                 btnConnect.Enabled = false;
                 btnGetServerList.Enabled = false;
                 //btnQuitChangeSever.Enabled = false;
@@ -1865,8 +1893,17 @@ namespace WinSBSchool.Forms
             Microsoft.SqlServer.Management.Smo.Server myServer = new Microsoft.SqlServer.Management.Smo.Server(serverName);
             return myServer;
         }
+        string buildconnectionstringfromobject(mssqlconnectionstringdto _connectionstringdto)
+        {
+            string CONNECTION_STRING = @"Data Source=" + _connectionstringdto.datasource + ";" +
+            "Database=" + _connectionstringdto.database + ";" +
+            "User Id=" + _connectionstringdto.userid + ";" +
+            "Password=" + _connectionstringdto.password;
+            return CONNECTION_STRING;
+        }
         #region "BackUp & Restore Version 1"
         #region "BackUp"
+
         private bool BackupDatabase(string _sWhereToBackup, string DatabaseName)
         {
             try
@@ -1902,53 +1939,162 @@ namespace WinSBSchool.Forms
 
             return true;
         }
-        public bool backup_database_automatically(string servername, string DatabaseName, string back_up_path, string formatted_filename)
+        public bool backup_database_automatically(string servername, string DatabaseName)
         {
             try
             {
-                string formated_db_name = DatabaseName + "_" + formatted_filename + ".bak";
-                // Filename
-                string sFileName = Utils.build_file_path(back_up_path, formated_db_name);
-                //string sFileName = string.Format("{0}\\{1}.bak", _sWhereToBackup, formated_db_name);
+                bool use_integrated_security = chkIntegratedSecurity.Checked;
+                string user_name = txtusername.Text;
+                string password = txtpassword.Text;
+                string server = cboserver.Text;
+                string master_database = "master";
+                //string master_database = DatabaseName;
+                string CONNECTION_STRING = string.Empty;
 
                 // Connection 
-                //string servername = lblSrvSttServerName.Text;
-                if (string.IsNullOrEmpty(servername))
-                    throw new ArgumentNullException("servername");
-                Microsoft.SqlServer.Management.Smo.Server oServer = GetServer(servername);
+                CONNECTION_STRING = @"Data Source=" + server + ";" +
+                                    "Database=" + master_database + ";" +
+                                    "Integrated Security=True";
 
-                // Backup
-                extendend::Microsoft.SqlServer.Management.Smo.Backup backup = new extendend::Microsoft.SqlServer.Management.Smo.Backup();
-                backup.Action = extendend::Microsoft.SqlServer.Management.Smo.BackupActionType.Database;
-                backup.Database = DatabaseName;
-                backup.Incremental = false;
-                backup.Initialize = true;
-                backup.LogTruncation = extendend::Microsoft.SqlServer.Management.Smo.BackupTruncateLogType.Truncate;
+                SqlConnection con = new SqlConnection(CONNECTION_STRING);
+                con.Open(); //OPEN ACCESS TO DATABASE
+                SqlCommand cmd = new SqlCommand(CONNECTION_STRING, con);
 
-                // Backup Device
-                extendend::Microsoft.SqlServer.Management.Smo.BackupDeviceItem backupItemDevice = new extendend::Microsoft.SqlServer.Management.Smo.BackupDeviceItem(sFileName, extendend::Microsoft.SqlServer.Management.Smo.DeviceType.File);
-                backup.Devices.Add(backupItemDevice);
+                DateTime currentDate = DateTime.Now;
+                String dateTimenow = currentDate.ToString("yyyy_MM_dd_HH_mm_ss");
+                string formated_backup_db_name = DatabaseName + "_" + dateTimenow;
+                string backup_db_name = formated_backup_db_name + ".BAK";
+                string backup_folder = @"C:\database_backups\sbschool";
+                string backup_file = Path.Combine(backup_folder, backup_db_name);
 
-                // Start Backup
-                backup.SqlBackup(oServer);
+                //CREATE DIRECTORY IF NOT EXIST
+                if (!Directory.Exists(backup_folder))
+                {
+                    Directory.CreateDirectory(backup_folder);
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "BACKUP DATABASE " + DatabaseName + " TO DISK = '" + backup_file + "'";
+                    cmd.Connection = con;
+                    cmd.ExecuteNonQuery();
 
+                    MessageBox.Show(@"Database backup successfull." + Environment.NewLine + backup_file, "Backup Database - " + DatabaseName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "BACKUP DATABASE " + DatabaseName + " TO DISK = '" + backup_file + "'";
+                    cmd.Connection = con;
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show(@"Database backup successfull." + Environment.NewLine + backup_file, "Backup Database - " + DatabaseName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                if (Directory.Exists(backup_folder))
+                {
+                    string _filetoSelect = Path.Combine(backup_folder, backup_db_name);
+                    // opens the folder in explorer and selects the displayed file
+                    string args = string.Format("/Select, {0}", _filetoSelect);
+                    ProcessStartInfo pfi = new ProcessStartInfo("Explorer.exe", args);
+                    System.Diagnostics.Process.Start(pfi);
+                }
                 return true;
             }
             catch (Exception ex)
             {
                 Utils.LogEventViewer(ex);
-                Log.WriteToErrorLogFile(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
+                MessageBox.Show(ex.Message + Environment.NewLine + "Please contact the developer", " Database Backup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+        }
+        public void BackUp(string DatabaseName)
+        {
+            try
+            {
+                bool use_integrated_security = chkIntegratedSecurity.Checked;
+                string user_name = txtusername.Text;
+                string password = txtpassword.Text;
+                string server = cboserver.Text;
+                string master_database = "master";
+                string CONNECTION_STRING = string.Empty;
 
+                // Connection 
+                if (use_integrated_security)
+                    CONNECTION_STRING = @"Data Source=" + server + ";" +
+                                        "Database=" + master_database + ";" +
+                                        "Integrated Security=True";
+                else
+                    CONNECTION_STRING = @"Data Source=" + server + ";" +
+                                        "Database=" + master_database + ";" +
+                                        "User Id=" + user_name + ";" +
+                                        "Password=" + password;
+
+                //string sFileName = string.Format("{0}\\{1}.bak", _sWhereToBackup, DatabaseName);
+
+                //string dbPath = @"Data Source=DESKTOP-2LLV29I\MSSQLSERVER01;Initial Catalog=dbOHMS;Integrated Security=True";
+
+                //using (var con = new SqlConnection(CONNECTION_STRING))
+                //{
+                //    con.Open();
+                //    using (var cmd = new SqlCommand(query, con))
+                //    {
+                //        cmd.ExecuteNonQuery();
+                //        _responsedto.isresponseresultsuccessful = true;
+                //        _responsedto.responsesuccessmessage = "successfully created database [ " + _connectionstringdto.new_database_name + " ] in " + DBContract.mssql + ".";
+                //        _responsedto.responseresultobject = _connectionstringdto;
+                //        return _responsedto;
+                //    }
+                //}
+
+                SqlConnection con = new SqlConnection(CONNECTION_STRING);
+                con.Open(); //OPEN ACCESS TO DATABASE
+                SqlCommand cmd = new SqlCommand(CONNECTION_STRING, con);
+
+                DateTime currentDate = DateTime.Now;
+                String dateTimenow = currentDate.ToString("yyyy_MM_dd_HH_mm_ss");
+                string formated_backup_db_name = DatabaseName + "_" + dateTimenow;
+                string backup_db_name = formated_backup_db_name + ".BAK";
+                string backup_folder = @"C:\database_backups\sbschool";
+                string backup_file = Path.Combine(backup_folder, backup_db_name);
+
+                //CREATE DIRECTORY IF NOT EXIST
+                if (!Directory.Exists(backup_folder))
+                {
+                    Directory.CreateDirectory(backup_folder);
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "BACKUP DATABASE " + DatabaseName + " TO DISK = '" + backup_file + "'";
+                    cmd.Connection = con;
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show(@"Database backup successfull." + Environment.NewLine + backup_file, "Backup Database - " + DatabaseName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = "BACKUP DATABASE " + DatabaseName + " TO DISK = '" + backup_file + "'";
+                    cmd.Connection = con;
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show(@"Database backup successfull." + Environment.NewLine + backup_file, "Backup Database - " + DatabaseName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                if (Directory.Exists(backup_folder))
+                {
+                    string _filetoSelect = Path.Combine(backup_folder, backup_db_name);
+                    // opens the folder in explorer and selects the displayed file
+                    string args = string.Format("/Select, {0}", _filetoSelect);
+                    ProcessStartInfo pfi = new ProcessStartInfo("Explorer.exe", args);
+                    System.Diagnostics.Process.Start(pfi);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.LogEventViewer(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
+                MessageBox.Show(ex.Message + Environment.NewLine + "Please contact the developer", " Database Backup Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion "BackUp"
         #region "Restore"
-        private void RestoreDataBase(string BackupFilePath,
-            string destinationDatabaseName,
-            string DatabaseFolder,
-            string DatabaseFileName,
-            string DatabaseLogFileName)
+        private void RestoreDataBase(string BackupFilePath, string destinationDatabaseName, string DatabaseFolder, string DatabaseFileName, string DatabaseLogFileName)
         {
             try
             {
@@ -1981,6 +2127,114 @@ namespace WinSBSchool.Forms
             catch (Exception ex)
             {
                 Utils.ShowError(ex);
+            }
+        }
+        private void restore_v2(string selected_file_name, string BackupFilePath, string destinationDatabaseName, string DatabaseFolder, string DatabaseName, string DatabaseLogFileName)
+        {
+            try
+            {
+                bool use_integrated_security = chkIntegratedSecurity.Checked;
+                string user_name = txtusername.Text;
+                string password = txtpassword.Text;
+                string server = cboserver.Text;
+                string master_database = "master";
+                string CONNECTION_STRING = string.Empty;
+
+                // Connection 
+                if (use_integrated_security)
+                    CONNECTION_STRING = @"Data Source=" + server + ";" +
+                                        "Database=" + master_database + ";" +
+                                        "Integrated Security=True";
+                else
+                    CONNECTION_STRING = @"Data Source=" + server + ";" +
+                                        "Database=" + master_database + ";" +
+                                        "User Id=" + user_name + ";" +
+                                        "Password=" + password;
+
+                SqlConnection con = new SqlConnection(CONNECTION_STRING);
+                con.Open(); //OPEN ACCESS TO DATABASE
+                SqlCommand cmd = new SqlCommand(CONNECTION_STRING, con);
+
+                DateTime currentDate = DateTime.Now;
+                String dateTimenow = currentDate.ToString("yyyy_MM_dd_HH_mm_ss");
+                string formated_restore_db_name = selected_file_name + "_" + dateTimenow;
+                string restore_db_name = selected_file_name;
+                string restore_folder = @"C:\database_restore\sbschool";
+                string file_to_restore = Path.Combine(restore_folder, restore_db_name);
+
+                char[] file_name_arr = selected_file_name.ToArray();
+                var reverse_arr = file_name_arr.Reverse();
+                var original_name = reverse_arr.Skip(20);
+                var reverse_to_original = original_name.Reverse();
+                char[] file_name = reverse_to_original.ToArray();
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < reverse_to_original.Count(); i++)
+                {
+                    sb.Append(file_name[i]);
+                }
+
+                string original_file_name = sb.ToString();
+
+                //CREATE DIRECTORY IF NOT EXIST
+                if (!Directory.Exists(restore_folder))
+                {
+                    Directory.CreateDirectory(restore_folder);
+                }
+
+                cmd.CommandType = CommandType.Text;
+                //RESTORE DATABASE WWIDW
+                //FROM DISK = 'C:\Backup\WideWorldImportersDW-Full.bak'
+                //WITH REPLACE,
+                //MOVE 'WWI_Primary' to 'C:\Data\WideWorldImportersDW.mdf',
+                //MOVE 'WWI_UserData' to 'C:\Data\WideWorldImportersDW_UserData.ndf',
+                //MOVE 'WWI_Log' to 'C:\Data\WideWorldImportersDW.ldf',
+                //MOVE 'WWIDW_InMemory_Data_1' to 'C:\Data\WideWorldImportersDW_InMemory_Data_1'
+
+                //cmd.CommandText = "RESTORE DATABASE " + restore_db_name +
+                // " FROM DISK = '" + BackupFilePath + "'";
+
+                //cmd.CommandText = "RESTORE DATABASE " + restore_db_name +
+                //" FROM DISK = '" + BackupFilePath + "'" +
+                //" WITH INIT, NOFORMAT, STATS = 10, FILE = 1";
+
+                cmd.CommandText = "RESTORE DATABASE " + restore_db_name +
+                " FROM DISK = '" + BackupFilePath + "'" +
+                " WITH STATS = 10, FILE = 1, " +
+                " MOVE '" + original_file_name + "' TO 'C:\\database_restore\\sbschool\\" + restore_db_name + ".MDF'," +
+                " MOVE '" + original_file_name + "_LOG' TO 'C:\\database_restore\\sbschool\\" + restore_db_name + "_LOG.LDF'";
+
+                //cmd.CommandText = "RESTORE DATABASE " + restore_db_name +
+                //" FROM DISK = '" + BackupFilePath + "'" +
+                //" WITH REPLACE, " +
+                //"MOVE 'WWI_Primary' to '" + Path.Combine(restore_folder, "WideWorldImportersDW.mdf") + "'," +
+                //"MOVE 'WWI_UserData' to '" + Path.Combine(restore_folder, "WideWorldImportersDW_UserData.ndf") + "'," +
+                //"MOVE 'WWI_Log' to '" + Path.Combine(restore_folder, "WideWorldImportersDW.ldf") + "'," +
+                //"MOVE 'WWIDW_InMemory_Data_1' to '" + Path.Combine(restore_folder, "WideWorldImportersDW_InMemory_Data_1") + "'";
+
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+
+                MessageBox.Show(@"Database Restore successfull." + Environment.NewLine + file_to_restore, "Restore Database - " + DatabaseName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                string restored_file = restore_db_name + ".MDF";
+
+                if (Directory.Exists(restore_folder))
+                {
+                    string _filetoSelect = Path.Combine(restore_folder, restored_file);
+                    // opens the folder in explorer and selects the displayed file
+                    string args = string.Format("/Select, {0}", _filetoSelect);
+                    ProcessStartInfo pfi = new ProcessStartInfo("Explorer.exe", args);
+                    System.Diagnostics.Process.Start(pfi);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utils.LogEventViewer(ex);
+                Log.Write_To_Log_File_temp_dir(ex);
+                MessageBox.Show(ex.Message + Environment.NewLine + "Please contact the developer", " Database Restore Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion "Restore"
@@ -2072,6 +2326,97 @@ namespace WinSBSchool.Forms
             }
         }
         #endregion "helpers"
+
+        private void chkshowpassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkshowpassword.Checked)
+            {
+                txtpassword.PasswordChar = '\0';
+            }
+            else
+            {
+                txtpassword.PasswordChar = '*';
+            }
+        }
+
+        private void btnrefreshdatabases_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                errorProvider.Clear();
+                if (string.IsNullOrEmpty(cboserver.Text))
+                {
+                    errorProvider.SetError(cboserver, "select server!");
+                    return;
+                }
+
+                btnConnect.Enabled = false;
+                btnGetServerList.Enabled = false;
+                //btnQuitChangeSever.Enabled = false;
+                btnrefreshdatabases.Enabled = false;
+                btnrefreshdatabases.Text = "Enumerating Databases...";
+
+                current_action = "connect";
+
+                _task_start_time = DateTime.Now;
+
+                //This allows the BackgroundWorker to be cancelled in between tasks
+                bgWorker.WorkerSupportsCancellation = true;
+                //This allows the worker to report progress between completion of tasks...
+                //this must also be used in conjunction with the ProgressChanged event
+                bgWorker.WorkerReportsProgress = true;
+
+                //this assigns event handlers for the backgroundWorker
+                bgWorker.DoWork += bgWorker_DoWork;
+                bgWorker.RunWorkerCompleted += bgWorker_WorkComplete;
+                /* When you wish to have something occur when a change in progress
+                    occurs, (like the completion of a specific task) the "ProgressChanged"
+                    event handler is used. Note that ProgressChanged events may be invoked
+                    by calls to bgWorker.ReportProgress(...) only if bgWorker.WorkerReportsProgress
+                    is set to true. */
+                bgWorker.ProgressChanged += bgWorker_ProgressChanged;
+
+                //tell the backgroundWorker to raise the "DoWork" event, thus starting it.
+                //Check to make sure the background worker is not already running.
+                if (!bgWorker.IsBusy)
+                    bgWorker.RunWorkerAsync();
+
+                //errorProvider.Clear();
+
+                //if (!chkIntegratedSecurity.Checked)
+                //{
+                //    if (!IsServerLoginValid())
+                //    {
+                //        MessageBox.Show("Incorrect Credentials, make sure the ServerName, UserName and Password are entered.", Utils.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //        return;
+                //    }
+                //}
+
+                //txtConnectionLoginErrors.Text = string.Empty;
+
+                //this.ServerName = (string)cboserver.Text.Trim();
+                //this.LoginUserName = (string)txtusername.Text.Trim();
+                //this.LoginPassword = (string)txtpassword.Text.Trim();
+
+                //Server server = ConnectToServer(ServerName, LoginUserName, LoginPassword, chkIntegratedSecurity.Checked);
+
+                //if (server.ConnectionContext.IsOpen)
+                //{
+                //    databases.Clear();
+                //    databases = GetServerDatabases(server);
+
+                //    DisplayServer(server, LoginUserName, LoginPassword);
+
+                //    NotifyMessage("Connected to Server.", "Edition: " + server.Edition + Environment.NewLine + "IsClustered: " + server.IsClustered + Environment.NewLine + "Build: " + server.BuildNumber + Environment.NewLine + "Net Name: " + server.NetName + Environment.NewLine + "Instance: " + server.InstanceName + Environment.NewLine + "Physical Memory: " + server.PhysicalMemory.ToString() + Environment.NewLine + "Platform: " + server.Platform + Environment.NewLine + "Processors: " + server.Processors + Environment.NewLine + "Type: " + server.ServerType + Environment.NewLine + "Service Id: " + server.ServiceInstanceId + Environment.NewLine + "Start Mode: " + server.ServiceStartMode.ToString() + Environment.NewLine + "State: " + server.State);
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                this._notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.Message, TAG));
+                Log.WriteToErrorLogFile_and_EventViewer(ex);
+            }
+        }
 
     }
 

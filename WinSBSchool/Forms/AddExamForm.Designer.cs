@@ -136,6 +136,7 @@
             this.cboSubject.Name = "cboSubject";
             this.cboSubject.Size = new System.Drawing.Size(206, 21);
             this.cboSubject.TabIndex = 2;
+            this.cboSubject.SelectedIndexChanged += new System.EventHandler(this.cboSubject_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -175,6 +176,7 @@
             this.cboExamPeriods.Name = "cboExamPeriods";
             this.cboExamPeriods.Size = new System.Drawing.Size(206, 21);
             this.cboExamPeriods.TabIndex = 0;
+            this.cboExamPeriods.SelectedIndexChanged += new System.EventHandler(this.cboExamPeriods_SelectedIndexChanged);
             // 
             // groupBox1
             // 

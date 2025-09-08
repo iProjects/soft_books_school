@@ -18,7 +18,7 @@ namespace WinSBSchool.Forms
     {
         private bool m_bLayoutCalled = false;
         private DateTime m_dt;
-        public  UserModel LoggedInUser;
+        public UserModel LoggedInUser;
         static LoginService loginservice;
         MainForm mainForm;
         private List<SBSystem> _SBsystems;
@@ -686,9 +686,9 @@ namespace WinSBSchool.Forms
                 Invoke(new MethodInvoker(
                    delegate()
                    {
-                       chkIntegratedSecurity.Checked = bool.Parse(last_record.IntegratedSecurity); 
+                       chkIntegratedSecurity.Checked = bool.Parse(last_record.IntegratedSecurity);
                    }));
-                 
+
                 chkremember.Checked = bool.Parse(last_record.remember);
 
             }
@@ -696,6 +696,36 @@ namespace WinSBSchool.Forms
             {
                 Log.WriteToErrorLogFile_and_EventViewer(ex);
             }
+        }
+
+        private void chkshowpassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkshowpassword.Checked)
+            {
+                txtpassword.PasswordChar = '\0';
+            }
+            else
+            {
+                txtpassword.PasswordChar = '*';
+            }
+        }
+
+        private void chkshowserverloginpassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkshowserverloginpassword.Checked)
+            {
+                txtServerLoginPassword.PasswordChar = '\0';
+            }
+            else
+            {
+                txtServerLoginPassword.PasswordChar = '*';
+            }
+        }
+
+        private void btndatabasecontrolpanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DatabaseControlPanelForm f = new DatabaseControlPanelForm();
+            f.Show();
         }
 
 

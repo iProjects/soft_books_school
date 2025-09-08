@@ -51,7 +51,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
+<<<<<<< Updated upstream
             this.label1.Location = new System.Drawing.Point(23, 20);
+=======
+            this.label1.Location = new System.Drawing.Point(75, 21);
+>>>>>>> Stashed changes
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
@@ -60,7 +64,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
+<<<<<<< Updated upstream
             this.label2.Location = new System.Drawing.Point(20, 56);
+=======
+            this.label2.Location = new System.Drawing.Point(72, 56);
+>>>>>>> Stashed changes
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
             this.label2.TabIndex = 1;
@@ -69,7 +77,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
+<<<<<<< Updated upstream
             this.label3.Location = new System.Drawing.Point(22, 91);
+=======
+            this.label3.Location = new System.Drawing.Point(14, 91);
+>>>>>>> Stashed changes
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 2;
@@ -78,7 +90,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
+<<<<<<< Updated upstream
             this.label4.Location = new System.Drawing.Point(38, 127);
+=======
+            this.label4.Location = new System.Drawing.Point(90, 126);
+>>>>>>> Stashed changes
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 3;
@@ -86,24 +102,37 @@
             // 
             // txtShortCode
             // 
+<<<<<<< Updated upstream
             this.txtShortCode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtShortCode.Location = new System.Drawing.Point(86, 16);
             this.txtShortCode.MaxLength = 10;
             this.txtShortCode.Name = "txtShortCode";
             this.txtShortCode.Size = new System.Drawing.Size(277, 20);
+=======
+            this.txtShortCode.Location = new System.Drawing.Point(140, 18);
+            this.txtShortCode.Name = "txtShortCode";
+            this.txtShortCode.Size = new System.Drawing.Size(239, 20);
+>>>>>>> Stashed changes
             this.txtShortCode.TabIndex = 0;
             // 
             // txtDescription
             // 
+<<<<<<< Updated upstream
             this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDescription.Location = new System.Drawing.Point(86, 52);
             this.txtDescription.MaxLength = 100;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(277, 20);
+=======
+            this.txtDescription.Location = new System.Drawing.Point(140, 54);
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(239, 20);
+>>>>>>> Stashed changes
             this.txtDescription.TabIndex = 1;
             // 
             // txtCOALevel
             // 
+<<<<<<< Updated upstream
             this.txtCOALevel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCOALevel.Location = new System.Drawing.Point(86, 88);
             this.txtCOALevel.MaxLength = 4;
@@ -123,6 +152,19 @@
             this.txtRorder.TabIndex = 3;
             this.txtRorder.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRorder_KeyDown);
             this.txtRorder.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtRorder_KeyPress);
+=======
+            this.txtCOALevel.Location = new System.Drawing.Point(140, 90);
+            this.txtCOALevel.Name = "txtCOALevel";
+            this.txtCOALevel.Size = new System.Drawing.Size(239, 20);
+            this.txtCOALevel.TabIndex = 2;
+            // 
+            // txtRorder
+            // 
+            this.txtRorder.Location = new System.Drawing.Point(140, 126);
+            this.txtRorder.Name = "txtRorder";
+            this.txtRorder.Size = new System.Drawing.Size(239, 20);
+            this.txtRorder.TabIndex = 3;
+>>>>>>> Stashed changes
             // 
             // btnAdd
             // 
@@ -132,7 +174,7 @@
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(68, 23);
             this.btnAdd.TabIndex = 0;
-            this.btnAdd.Text = "Add";
+            this.btnAdd.Text = "&Add";
             this.btnAdd.UseVisualStyleBackColor = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -145,7 +187,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(59, 23);
             this.btnClose.TabIndex = 1;
-            this.btnClose.Text = "Close";
+            this.btnClose.Text = "&Close";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 

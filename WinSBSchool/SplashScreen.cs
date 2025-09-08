@@ -9,12 +9,15 @@ using System.Windows.Forms;
 using System.Xml;
 using CommonLib;
 using Microsoft.Win32;
+using DAL; 
+using System.Reflection;
+using WinSBSchool;
 
 namespace Splash
 {
-	/// <summary>
-	/// Summary description for SplashScreen.
-	/// </summary>
+    /// <summary>
+    /// Summary description for SplashScreen.
+    /// </summary>
     public class SplashScreen : System.Windows.Forms.Form
     {
         // Threading
@@ -52,6 +55,10 @@ namespace Splash
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel pnlStatus;
         private NotifyIcon appNotifyIcon;
+        private ProgressBar progressBar;
+        private Label lblappname;
+        private Label lblbuildversion;
+        private Label lblcopyright;
         private System.ComponentModel.IContainer components;
 
         /// <summary>
@@ -71,6 +78,7 @@ namespace Splash
             {
                 //this.ClientSize = this.BackgroundImage.Size;
             }
+
         }
 
         private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -118,31 +126,36 @@ namespace Splash
             this.lblTimeRemaining = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.appNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblappname = new System.Windows.Forms.Label();
+            this.lblbuildversion = new System.Windows.Forms.Label();
+            this.lblcopyright = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblStatus
             // 
             this.lblStatus.BackColor = System.Drawing.Color.Transparent;
-            this.lblStatus.Location = new System.Drawing.Point(65, 102);
+            this.lblStatus.Location = new System.Drawing.Point(65, 74);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(279, 14);
+            this.lblStatus.Size = new System.Drawing.Size(349, 23);
             this.lblStatus.TabIndex = 0;
+            this.lblStatus.Click += new System.EventHandler(this.lblStatus_Click);
             // 
             // pnlStatus
             // 
             this.pnlStatus.BackColor = System.Drawing.Color.Transparent;
-            this.pnlStatus.Location = new System.Drawing.Point(65, 124);
+            this.pnlStatus.Location = new System.Drawing.Point(65, 102);
             this.pnlStatus.Name = "pnlStatus";
-            this.pnlStatus.Size = new System.Drawing.Size(279, 24);
+            this.pnlStatus.Size = new System.Drawing.Size(349, 23);
             this.pnlStatus.TabIndex = 1;
             this.pnlStatus.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlStatus_Paint);
             // 
             // lblTimeRemaining
             // 
             this.lblTimeRemaining.BackColor = System.Drawing.Color.Transparent;
-            this.lblTimeRemaining.Location = new System.Drawing.Point(65, 155);
+            this.lblTimeRemaining.Location = new System.Drawing.Point(65, 133);
             this.lblTimeRemaining.Name = "lblTimeRemaining";
-            this.lblTimeRemaining.Size = new System.Drawing.Size(279, 16);
+            this.lblTimeRemaining.Size = new System.Drawing.Size(349, 23);
             this.lblTimeRemaining.TabIndex = 2;
             this.lblTimeRemaining.Text = "Time remaining";
             // 
@@ -155,11 +168,58 @@ namespace Splash
             this.appNotifyIcon.Text = "notifyIcon1";
             this.appNotifyIcon.Visible = true;
             // 
+            // progressBar
+            // 
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(0, 232);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(455, 15);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 3;
+            // 
+            // lblappname
+            // 
+            this.lblappname.BackColor = System.Drawing.Color.Transparent;
+            this.lblappname.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblappname.ForeColor = System.Drawing.Color.White;
+            this.lblappname.Location = new System.Drawing.Point(0, 0);
+            this.lblappname.Name = "lblappname";
+            this.lblappname.Size = new System.Drawing.Size(455, 55);
+            this.lblappname.TabIndex = 5;
+            this.lblappname.Text = "app name";
+            this.lblappname.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblbuildversion
+            // 
+            this.lblbuildversion.BackColor = System.Drawing.Color.Transparent;
+            this.lblbuildversion.ForeColor = System.Drawing.Color.Black;
+            this.lblbuildversion.Location = new System.Drawing.Point(62, 166);
+            this.lblbuildversion.Name = "lblbuildversion";
+            this.lblbuildversion.Size = new System.Drawing.Size(349, 23);
+            this.lblbuildversion.TabIndex = 6;
+            this.lblbuildversion.Text = "build version";
+            // 
+            // lblcopyright
+            // 
+            this.lblcopyright.BackColor = System.Drawing.Color.Transparent;
+            this.lblcopyright.ForeColor = System.Drawing.Color.Black;
+            this.lblcopyright.Location = new System.Drawing.Point(62, 189);
+            this.lblcopyright.Name = "lblcopyright";
+            this.lblcopyright.Size = new System.Drawing.Size(349, 23);
+            this.lblcopyright.TabIndex = 7;
+            this.lblcopyright.Text = "copyright";
+            // 
             // SplashScreen
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(470, 235);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(455, 247);
+            this.Controls.Add(this.lblcopyright);
+            this.Controls.Add(this.lblbuildversion);
+            this.Controls.Add(this.lblappname);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.lblTimeRemaining);
             this.Controls.Add(this.pnlStatus);
             this.Controls.Add(this.lblStatus);
@@ -167,7 +227,7 @@ namespace Splash
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SplashScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Soft Books School Loading..........";
+            this.Text = "Soft Books Sacco Loading..........";
             this.Load += new System.EventHandler(this.SplashScreen_Load);
             this.ResumeLayout(false);
 
@@ -180,7 +240,7 @@ namespace Splash
         // launch the SplashScreen.
         static public void ShowSplashScreen()
         {
-            // Make sure it'st only launched once.
+            // Make sure it's only launched once.
             if (ms_frmSplash != null)
                 return;
             ms_oThread = new Thread(new ThreadStart(SplashScreen.ShowForm));
@@ -245,7 +305,7 @@ namespace Splash
                 ms_frmSplash.m_dblOpacityIncrement = -ms_frmSplash.m_dblOpacityDecrement;
             }
             ms_oThread.Abort();
-            ms_oThread = null;	// we don'crtxn need these any more.
+            ms_oThread = null;	// we don't need these any more.
             ms_frmSplash = null;
         }
 
@@ -257,7 +317,7 @@ namespace Splash
 
         // A static method to set the status and optionally update the reference.
         // This is useful if you are in a section of code that has a variable
-        // set of status string updates.  In that case, don'crtxn set the reference.
+        // set of status string updates.  In that case, don't set the reference.
         static public void SetStatus(string newStatus, bool setReference)
         {
             ms_sStatus = newStatus;
@@ -480,7 +540,7 @@ namespace Splash
             try
             {
                 appNotifyIcon.Text = Utils.APP_NAME;
-                appNotifyIcon.Icon = new Icon("Resources/Icons/SchoolStudents.ico");
+                appNotifyIcon.Icon = new Icon("resources/Icons/Dollar.ico");
                 appNotifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 appNotifyIcon.BalloonTipTitle = _Title;
                 appNotifyIcon.BalloonTipText = _Text;
@@ -500,13 +560,37 @@ namespace Splash
             try
             {
                 NotifyMessage(Utils.APP_NAME, "System Launching...");
+
+                lblappname.Text = Utils.APP_NAME;
+                lblappname.BackColor = Color.Black;
+                lblappname.ForeColor = Color.Lime;
+                lblappname.TextAlign = ContentAlignment.MiddleCenter;
+                lblappname.Font = new System.Drawing.Font("Microsoft Sans Serif", 22, FontStyle.Bold);
+
+                var assembly_version = Assembly.GetAssembly(typeof(Repository)).GetName().Version.ToString();
+                var dll_ver = System.Reflection.Assembly.GetAssembly(typeof(Repository)).GetName().Version.ToString();
+                string AssemblyProduct = app_assembly_info.AssemblyProduct;
+                string AssemblyVersion = app_assembly_info.AssemblyVersion;
+                string AssemblyCopyright = app_assembly_info.AssemblyCopyright;
+                string AssemblyCompany = app_assembly_info.AssemblyCompany;
+                this.Text = AssemblyProduct;
+                this.lblcopyright.Text = "Copyright ©  " + DateTime.Now.Year.ToString() + "  " + AssemblyCompany + " - All Rights Reserved";
+
+                //app version
+                var _buid_version = Application.ProductVersion;
+                lblbuildversion.Text = "build version - " + assembly_version;
+
             }
             catch (Exception ex)
             {
                 Utils.LogEventViewer(ex);
             }
         }
-         
+
+        private void lblStatus_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     /// <summary>
@@ -569,56 +653,56 @@ namespace Splash
 
     }
 
-	/// <summary>
-	/// A class for managing registry access.
-	/// </summary>
-	public class RegistryAccess
-	{
-		private const string SOFTWARE_KEY = "Software";
-		private const string COMPANY_NAME = "Software_Providers";
-		private const string APPLICATION_NAME = "SBSchool";
+    /// <summary>
+    /// A class for managing registry access.
+    /// </summary>
+    public class RegistryAccess
+    {
+        private const string SOFTWARE_KEY = "Software";
+        private const string COMPANY_NAME = "Software_Providers";
+        private const string APPLICATION_NAME = "SBSacco";
 
-		// Method for retrieving a Registry Value.
-		static public string GetStringRegistryValue(string key, string defaultValue)
-		{
-			RegistryKey rkCompany;
-			RegistryKey rkApplication;
+        // Method for retrieving a Registry Value.
+        static public string GetStringRegistryValue(string key, string defaultValue)
+        {
+            RegistryKey rkCompany;
+            RegistryKey rkApplication;
 
-			rkCompany = Registry.CurrentUser.OpenSubKey(SOFTWARE_KEY, false).OpenSubKey(COMPANY_NAME, false);
-			if( rkCompany != null )
-			{
-				rkApplication = rkCompany.OpenSubKey(APPLICATION_NAME, true);
-				if( rkApplication != null )
-				{
-					foreach(string sKey in rkApplication.GetValueNames())
-					{
-						if( sKey == key )
-						{
-							return (string)rkApplication.GetValue(sKey);
-						}
-					}
-				}
-			}
-			return defaultValue;
-		}
+            rkCompany = Registry.CurrentUser.OpenSubKey(SOFTWARE_KEY, false).OpenSubKey(COMPANY_NAME, false);
+            if (rkCompany != null)
+            {
+                rkApplication = rkCompany.OpenSubKey(APPLICATION_NAME, true);
+                if (rkApplication != null)
+                {
+                    foreach (string sKey in rkApplication.GetValueNames())
+                    {
+                        if (sKey == key)
+                        {
+                            return (string)rkApplication.GetValue(sKey);
+                        }
+                    }
+                }
+            }
+            return defaultValue;
+        }
 
-		// Method for storing a Registry Value.
-		static public void SetStringRegistryValue(string key, string stringValue)
-		{
-			RegistryKey rkSoftware;
-			RegistryKey rkCompany;
-			RegistryKey rkApplication;
+        // Method for storing a Registry Value.
+        static public void SetStringRegistryValue(string key, string stringValue)
+        {
+            RegistryKey rkSoftware;
+            RegistryKey rkCompany;
+            RegistryKey rkApplication;
 
-			rkSoftware = Registry.CurrentUser.OpenSubKey(SOFTWARE_KEY, true);
-			rkCompany = rkSoftware.CreateSubKey(COMPANY_NAME);
-			if( rkCompany != null )
-			{
-				rkApplication = rkCompany.CreateSubKey(APPLICATION_NAME);
-				if( rkApplication != null )
-				{
-					rkApplication.SetValue(key, stringValue);
-				}
-			}
-		}
-	}
+            rkSoftware = Registry.CurrentUser.OpenSubKey(SOFTWARE_KEY, true);
+            rkCompany = rkSoftware.CreateSubKey(COMPANY_NAME);
+            if (rkCompany != null)
+            {
+                rkApplication = rkCompany.CreateSubKey(APPLICATION_NAME);
+                if (rkApplication != null)
+                {
+                    rkApplication.SetValue(key, stringValue);
+                }
+            }
+        }
+    }
 }

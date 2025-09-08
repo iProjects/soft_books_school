@@ -38,7 +38,7 @@ namespace WinSBSchool.Forms
                 try
                 {
                     Programme programme = new Programme();
-                    programme.Id = Utils.ConvertFirstLetterToUpper(txtProgrammeId.Text);
+                    programme.Id = Utils.ConvertFirstLetterToUpper(txtProgrammeId.Text.Trim().ToUpper());
                     programme.Description =Utils.ConvertFirstLetterToUpper( txtDescription.Text);
                     programme.IsDeleted = false;
 

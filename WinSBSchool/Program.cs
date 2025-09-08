@@ -25,7 +25,7 @@ namespace WinSBSchool
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(ThreadException);
 
                 SplashScreen.ShowSplashScreen();
-
+                 
                 Application.DoEvents();
 
                 SplashScreen.SetStatus("Checking for [ " + SystemsConfigFile + " ] ...");
@@ -59,7 +59,7 @@ namespace WinSBSchool
                 SplashScreen.SetStatus("Checking for a valid License...");
 
                 System.Threading.Thread.Sleep(2000);
-
+                 
                 SplashScreen.CloseForm();
 
                 Application.Run(new login_form(defSys));

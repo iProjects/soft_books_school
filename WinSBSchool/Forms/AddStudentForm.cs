@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using CommonLib;
 using DAL;
+using System.Threading;
 
 namespace WinSBSchool.Forms
 {
@@ -22,10 +23,25 @@ namespace WinSBSchool.Forms
         SBSchoolDBEntities db;
         // Boolean flag used to determine when a character other than a number is entered.
         private bool nonNumberEntered = false;
+        string user;
+        public string TAG;
+        //Event declaration:
+        //event for publishing messages to output
+        public event EventHandler<notificationmessageEventArgs> _notificationmessageEventname;
 
-        public AddStudentForm(string Conn)
+        public AddStudentForm(string _user, string Conn, EventHandler<notificationmessageEventArgs> notificationmessageEventname)
         {
             InitializeComponent();
+
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadException);
+
+            TAG = this.GetType().Name;
+
+            //Subscribing to the event: 
+            //Dynamically:
+            //EventName += HandlerName;
+            _notificationmessageEventname = notificationmessageEventname;
 
             if (string.IsNullOrEmpty(Conn))
                 throw new ArgumentNullException("Conn");
@@ -33,11 +49,191 @@ namespace WinSBSchool.Forms
 
             db = new SBSchoolDBEntities(connection);
             rep = new Repository(connection);
+
+            user = _user;
+
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AddStudentForm initialization", TAG));
+
         }
-        private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+
+        private void UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            this.Close();
+            Exception ex = (Exception)e.ExceptionObject;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
         }
+
+        private void ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Exception ex = e.Exception;
+            Log.WriteToErrorLogFile_and_EventViewer(ex);
+            _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs(ex.ToString(), TAG));
+        }
+        private void AddStudentForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                imgStudentPhoto.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                //Gender Combox
+                var gender = new BindingList<KeyValuePair<string, string>>();
+                gender.Add(new KeyValuePair<string, string>("M", "Male"));
+                gender.Add(new KeyValuePair<string, string>("F", "Female"));
+                cboGender.DataSource = gender;
+                cboGender.ValueMember = "Key";
+                cboGender.DisplayMember = "Value";
+                cboGender.SelectedIndex = -1;
+
+                var _ClassStreamsquery = from csms in db.ClassStreams
+                                         where csms.IsDeleted == false
+                                         orderby csms.Description ascending
+                                         select csms;
+                List<ClassStream> ClassStreams = _ClassStreamsquery.ToList();
+                cboCurrentClass.DataSource = ClassStreams;
+                cboCurrentClass.ValueMember = "Id";
+                cboCurrentClass.DisplayMember = "Description";
+                cboCurrentClass.SelectedIndex = -1;
+
+                var status = new BindingList<KeyValuePair<string, string>>();
+                status.Add(new KeyValuePair<string, string>("A", "Active"));
+                status.Add(new KeyValuePair<string, string>("N", "Non-Active"));
+                cboStatus.DataSource = status;
+                cboStatus.ValueMember = "Key";
+                cboStatus.DisplayMember = "Value";
+
+                var AdmissionType = new BindingList<KeyValuePair<string, string>>();
+                AdmissionType.Add(new KeyValuePair<string, string>("N", "New Admission"));
+                AdmissionType.Add(new KeyValuePair<string, string>("T", "Transfer"));
+                cboStudentAdmissionType.DataSource = AdmissionType;
+                cboStudentAdmissionType.ValueMember = "Key";
+                cboStudentAdmissionType.DisplayMember = "Value";
+
+                var _Schoolsquery = from scs in db.Schools
+                                    where scs.Status=="A"
+                                    where scs.IsDeleted == false
+                                    select scs;
+                List<School> _Schools = _Schoolsquery.ToList();
+                cboSchool.DataSource = _Schools;
+                cboSchool.ValueMember = "Id";
+                cboSchool.DisplayMember = "SchoolName";
+                cboSchool.SelectedIndex = -1;
+
+                var _defaultSchoolquery = (from sub in db.Schools
+                                           where sub.DefaultSchool == true
+                                           where sub.IsDeleted == false
+                                           where sub.Status=="A"
+                                           select sub).FirstOrDefault();
+                School _defaultSchool = _defaultSchoolquery; 
+                if (_defaultSchool != null)
+                {
+                    cboSchool.SelectedValue = _defaultSchool.Id;
+                }
+
+                this.dpDOB.Value = DateTime.Today.AddYears(-18);
+
+                string _AdminNo = Utils.NextSeries(NextAdminNo());
+                txtAdminNo.Text = _AdminNo;
+                txtAdmittedBy.Text = user;
+                txtRemarks.Text = "New Student";
+
+                AutoCompleteStringCollection acscsrnm = new AutoCompleteStringCollection();
+                acscsrnm.AddRange(this.AutoComplete_StudentSurName());
+                txtSurname.AutoCompleteCustomSource = acscsrnm;
+                txtSurname.AutoCompleteMode =
+                    AutoCompleteMode.SuggestAppend;
+                txtSurname.AutoCompleteSource =
+                     AutoCompleteSource.CustomSource;
+
+                AutoCompleteStringCollection acscsotnm = new AutoCompleteStringCollection();
+                acscsotnm.AddRange(this.AutoComplete_StudentOtherNames());
+                txtOtherNames.AutoCompleteCustomSource = acscsotnm;
+                txtOtherNames.AutoCompleteMode =
+                    AutoCompleteMode.SuggestAppend;
+                txtOtherNames.AutoCompleteSource =
+                     AutoCompleteSource.CustomSource;
+
+                AutoCompleteStringCollection acscdmn = new AutoCompleteStringCollection();
+                acscdmn.AddRange(this.AutoComplete_AdminNo());
+                txtAdminNo.AutoCompleteCustomSource = acscdmn;
+                txtAdminNo.AutoCompleteMode =
+                    AutoCompleteMode.SuggestAppend;
+                txtAdminNo.AutoCompleteSource =
+                     AutoCompleteSource.CustomSource;
+                
+                _notificationmessageEventname.Invoke(this, new notificationmessageEventArgs("finished AddStudentForm load", TAG));
+
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+        private string[] AutoComplete_StudentSurName()
+        {
+            try
+            {
+                var studentsquery = from bk in db.Students
+                                    where bk.Status == "A"
+                                    where bk.IsDeleted == false
+                                    select bk.StudentSurName;
+                return studentsquery.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+                return null;
+            }
+        }
+        private string[] AutoComplete_StudentOtherNames()
+        {
+            try
+            {
+                var studentsquery = from bk in db.Students
+                                    where bk.Status == "A"
+                                    where bk.IsDeleted == false
+                                    select bk.StudentOtherNames;
+                return studentsquery.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+                return null;
+            }
+        }
+        private string[] AutoComplete_AdminNo()
+        {
+            try
+            {
+                var studentsquery = from bk in db.Students
+                                    where bk.Status == "A"
+                                    where bk.IsDeleted == false
+                                    select bk.AdminNo;
+                return studentsquery.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+                return null;
+            }
+        }
+        private string NextAdminNo()
+        {
+            try
+            {
+                var cn = (from c in db.Students
+                          orderby c.Id descending
+                          select c).FirstOrDefault();
+                if (cn == null)
+                    return "0";
+                return cn.AdminNo.ToString();
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+                return "0";
+            }
+        }
+
         private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             errorProvider1.Clear();
@@ -203,165 +399,12 @@ namespace WinSBSchool.Forms
             }
             return noerror;
         }
-        private void AddStudentForm_Load(object sender, EventArgs e)
+        
+        private void btnClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            try
-            {
-                imgStudentPhoto.SizeMode = PictureBoxSizeMode.StretchImage;
-
-                //Gender Combox
-                var gender = new BindingList<KeyValuePair<string, string>>();
-                gender.Add(new KeyValuePair<string, string>("M", "Male"));
-                gender.Add(new KeyValuePair<string, string>("F", "Female"));
-                cboGender.DataSource = gender;
-                cboGender.ValueMember = "Key";
-                cboGender.DisplayMember = "Value";
-                cboGender.SelectedIndex = -1;
-
-                var _ClassStreamsquery = from csms in db.ClassStreams
-                                         where csms.IsDeleted == false
-                                         orderby csms.Description ascending
-                                         select csms;
-                List<ClassStream> ClassStreams = _ClassStreamsquery.ToList();
-                cboCurrentClass.DataSource = ClassStreams;
-                cboCurrentClass.ValueMember = "Id";
-                cboCurrentClass.DisplayMember = "Description";
-                cboCurrentClass.SelectedIndex = -1;
-
-                var status = new BindingList<KeyValuePair<string, string>>();
-                status.Add(new KeyValuePair<string, string>("A", "Active"));
-                status.Add(new KeyValuePair<string, string>("N", "Non-Active"));
-                cboStatus.DataSource = status;
-                cboStatus.ValueMember = "Key";
-                cboStatus.DisplayMember = "Value";
-
-                var AdmissionType = new BindingList<KeyValuePair<string, string>>();
-                AdmissionType.Add(new KeyValuePair<string, string>("N", "New Admission"));
-                AdmissionType.Add(new KeyValuePair<string, string>("T", "Transfer"));
-                cboStudentAdmissionType.DataSource = AdmissionType;
-                cboStudentAdmissionType.ValueMember = "Key";
-                cboStudentAdmissionType.DisplayMember = "Value";
-
-                var _Schoolsquery = from scs in db.Schools
-                                    where scs.Status=="A"
-                                    where scs.IsDeleted == false
-                                    select scs;
-                List<School> _Schools = _Schoolsquery.ToList();
-                cboSchool.DataSource = _Schools;
-                cboSchool.ValueMember = "Id";
-                cboSchool.DisplayMember = "SchoolName";
-                cboSchool.SelectedIndex = -1;
-
-                var _defaultSchoolquery = (from sub in db.Schools
-                                           where sub.DefaultSchool == true
-                                           where sub.IsDeleted == false
-                                           where sub.Status=="A"
-                                           select sub).FirstOrDefault();
-                School _defaultSchool = _defaultSchoolquery; 
-                if (_defaultSchool != null)
-                {
-                    cboSchool.SelectedValue = _defaultSchool.Id;
-                }
-
-                this.dpDOB.Value = DateTime.Today.AddYears(-18);
-
-                string _AdminNo = Utils.NextSeries(NextAdminNo());
-                txtAdminNo.Text = _AdminNo;
-
-                AutoCompleteStringCollection acscsrnm = new AutoCompleteStringCollection();
-                acscsrnm.AddRange(this.AutoComplete_StudentSurName());
-                txtSurname.AutoCompleteCustomSource = acscsrnm;
-                txtSurname.AutoCompleteMode =
-                    AutoCompleteMode.SuggestAppend;
-                txtSurname.AutoCompleteSource =
-                     AutoCompleteSource.CustomSource;
-
-                AutoCompleteStringCollection acscsotnm = new AutoCompleteStringCollection();
-                acscsotnm.AddRange(this.AutoComplete_StudentOtherNames());
-                txtOtherNames.AutoCompleteCustomSource = acscsotnm;
-                txtOtherNames.AutoCompleteMode =
-                    AutoCompleteMode.SuggestAppend;
-                txtOtherNames.AutoCompleteSource =
-                     AutoCompleteSource.CustomSource;
-
-                AutoCompleteStringCollection acscdmn = new AutoCompleteStringCollection();
-                acscdmn.AddRange(this.AutoComplete_AdminNo());
-                txtAdminNo.AutoCompleteCustomSource = acscdmn;
-                txtAdminNo.AutoCompleteMode =
-                    AutoCompleteMode.SuggestAppend;
-                txtAdminNo.AutoCompleteSource =
-                     AutoCompleteSource.CustomSource;
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-            }
+            this.Close();
         }
-        private string[] AutoComplete_StudentSurName()
-        {
-            try
-            {
-                var studentsquery = from bk in db.Students
-                                    where bk.Status == "A"
-                                    where bk.IsDeleted == false
-                                    select bk.StudentSurName;
-                return studentsquery.ToArray();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-                return null;
-            }
-        }
-        private string[] AutoComplete_StudentOtherNames()
-        {
-            try
-            {
-                var studentsquery = from bk in db.Students
-                                    where bk.Status == "A"
-                                    where bk.IsDeleted == false
-                                    select bk.StudentOtherNames;
-                return studentsquery.ToArray();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-                return null;
-            }
-        }
-        private string[] AutoComplete_AdminNo()
-        {
-            try
-            {
-                var studentsquery = from bk in db.Students
-                                    where bk.Status == "A"
-                                    where bk.IsDeleted == false
-                                    select bk.AdminNo;
-                return studentsquery.ToArray();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-                return null;
-            }
-        }
-        private string NextAdminNo()
-        {
-            try
-            {
-                var cn = (from c in db.Students
-                          orderby c.Id descending
-                          select c).FirstOrDefault();
-                if (cn == null)
-                    return "0";
-                return cn.AdminNo.ToString();
-            }
-            catch (Exception ex)
-            {
-                Utils.ShowError(ex);
-                return "0";
-            }
-        }
+
         private void btnUploadPhoto_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             openFileDialog1.Title = "select an Image File";

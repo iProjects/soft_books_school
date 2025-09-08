@@ -16,4 +16,3 @@ D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\CommonLib.dll
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\CommonLib\obj\Debug\CommonLib.dll
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\CommonLib\obj\Debug\CommonLib.pdb
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\CommonLib.pdb
-D:\wakxpx\csharp\visualstudio\2010\SBSchool\CommonLib\obj\Debug\CommonLib.csprojResolveAssemblyReference.cache

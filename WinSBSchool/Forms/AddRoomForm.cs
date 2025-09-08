@@ -45,7 +45,7 @@ namespace WinSBSchool.Forms
                     Room room = new Room();
                     if (!string.IsNullOrEmpty(txtShortCode.Text))
                     {
-                        room.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text);
+                        room.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.Trim().ToUpper());
                     }
                     if (!string.IsNullOrEmpty(txtDescription.Text))
                     {

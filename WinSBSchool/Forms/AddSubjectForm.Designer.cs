@@ -70,7 +70,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(107, 239);
+            label2.Location = new System.Drawing.Point(107, 213);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(30, 13);
             label2.TabIndex = 87;
@@ -79,7 +79,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(27, 212);
+            label1.Location = new System.Drawing.Point(27, 186);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(110, 13);
             label1.TabIndex = 85;
@@ -124,7 +124,7 @@
             // emailLabel
             // 
             emailLabel.AutoSize = true;
-            emailLabel.Location = new System.Drawing.Point(99, 157);
+            emailLabel.Location = new System.Drawing.Point(99, 240);
             emailLabel.Name = "emailLabel";
             emailLabel.Size = new System.Drawing.Size(37, 13);
             emailLabel.TabIndex = 81;
@@ -142,7 +142,7 @@
             // address2Label
             // 
             address2Label.AutoSize = true;
-            address2Label.Location = new System.Drawing.Point(88, 185);
+            address2Label.Location = new System.Drawing.Point(88, 159);
             address2Label.Name = "address2Label";
             address2Label.Size = new System.Drawing.Size(49, 13);
             address2Label.TabIndex = 83;
@@ -151,11 +151,11 @@
             // txtFees
             // 
             this.txtFees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtFees.Location = new System.Drawing.Point(139, 236);
+            this.txtFees.Location = new System.Drawing.Point(139, 210);
             this.txtFees.MaxLength = 8;
             this.txtFees.Name = "txtFees";
             this.txtFees.Size = new System.Drawing.Size(290, 20);
-            this.txtFees.TabIndex = 8;
+            this.txtFees.TabIndex = 9;
             this.txtFees.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFees_KeyDown);
             this.txtFees.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFees_KeyPress);
             // 
@@ -189,11 +189,11 @@
             // txtNoofRequiredHours
             // 
             this.txtNoofRequiredHours.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNoofRequiredHours.Location = new System.Drawing.Point(139, 209);
+            this.txtNoofRequiredHours.Location = new System.Drawing.Point(139, 183);
             this.txtNoofRequiredHours.MaxLength = 4;
             this.txtNoofRequiredHours.Name = "txtNoofRequiredHours";
             this.txtNoofRequiredHours.Size = new System.Drawing.Size(290, 20);
-            this.txtNoofRequiredHours.TabIndex = 7;
+            this.txtNoofRequiredHours.TabIndex = 8;
             this.txtNoofRequiredHours.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtNoofRequiredHours_KeyDown);
             this.txtNoofRequiredHours.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNoofRequiredHours_KeyPress);
             // 
@@ -202,10 +202,10 @@
             this.cboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cboStatus.FormattingEnabled = true;
-            this.cboStatus.Location = new System.Drawing.Point(139, 154);
+            this.cboStatus.Location = new System.Drawing.Point(139, 237);
             this.cboStatus.Name = "cboStatus";
             this.cboStatus.Size = new System.Drawing.Size(290, 21);
-            this.cboStatus.TabIndex = 5;
+            this.cboStatus.TabIndex = 10;
             // 
             // txtShortCode
             // 
@@ -261,11 +261,11 @@
             // txtRemarks
             // 
             this.txtRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtRemarks.Location = new System.Drawing.Point(139, 182);
+            this.txtRemarks.Location = new System.Drawing.Point(139, 156);
             this.txtRemarks.MaxLength = 250;
             this.txtRemarks.Name = "txtRemarks";
             this.txtRemarks.Size = new System.Drawing.Size(290, 20);
-            this.txtRemarks.TabIndex = 6;
+            this.txtRemarks.TabIndex = 5;
             // 
             // groupBox1
             // 

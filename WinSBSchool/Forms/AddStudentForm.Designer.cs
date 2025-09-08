@@ -57,8 +57,6 @@
             this.label44 = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
             this.label46 = new System.Windows.Forms.Label();
-            this.cboStatus = new System.Windows.Forms.ComboBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
             this.cboSchool = new System.Windows.Forms.ComboBox();
@@ -75,6 +73,10 @@
             this.label59 = new System.Windows.Forms.Label();
             this.label60 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.txtKCSE = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cboStatus = new System.Windows.Forms.ComboBox();
+            this.label47 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -147,6 +149,10 @@
             // tabPage7
             // 
             this.tabPage7.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPage7.Controls.Add(this.cboStatus);
+            this.tabPage7.Controls.Add(this.label47);
+            this.tabPage7.Controls.Add(this.txtKCSE);
+            this.tabPage7.Controls.Add(this.label2);
             this.tabPage7.Controls.Add(this.lblNoofYears);
             this.tabPage7.Controls.Add(this.cboStudentAdmissionType);
             this.tabPage7.Controls.Add(this.label1);
@@ -167,8 +173,6 @@
             this.tabPage7.Controls.Add(this.label44);
             this.tabPage7.Controls.Add(this.label45);
             this.tabPage7.Controls.Add(this.label46);
-            this.tabPage7.Controls.Add(this.cboStatus);
-            this.tabPage7.Controls.Add(this.label47);
             this.tabPage7.Controls.Add(this.label49);
             this.tabPage7.Controls.Add(this.label50);
             this.tabPage7.Controls.Add(this.cboSchool);
@@ -232,11 +236,11 @@
             this.btnUploadPhoto.Text = "Upload Photo";
             this.btnUploadPhoto.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnUploadPhoto_LinkClicked);
             // 
-            // pBStudentPhoto
+            // imgStudentPhoto
             // 
             this.imgStudentPhoto.ErrorImage = global::WinSBSchool.Properties.Resources.defaultphoto;
             this.imgStudentPhoto.Location = new System.Drawing.Point(426, 184);
-            this.imgStudentPhoto.Name = "pBStudentPhoto";
+            this.imgStudentPhoto.Name = "imgStudentPhoto";
             this.imgStudentPhoto.Size = new System.Drawing.Size(275, 179);
             this.imgStudentPhoto.TabIndex = 69;
             this.imgStudentPhoto.TabStop = false;
@@ -312,7 +316,7 @@
             // txtRemarks
             // 
             this.txtRemarks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtRemarks.Location = new System.Drawing.Point(493, 137);
+            this.txtRemarks.Location = new System.Drawing.Point(493, 108);
             this.txtRemarks.MaxLength = 500;
             this.txtRemarks.Multiline = true;
             this.txtRemarks.Name = "txtRemarks";
@@ -322,7 +326,7 @@
             // txtAdmittedBy
             // 
             this.txtAdmittedBy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAdmittedBy.Location = new System.Drawing.Point(493, 106);
+            this.txtAdmittedBy.Location = new System.Drawing.Point(493, 77);
             this.txtAdmittedBy.MaxLength = 50;
             this.txtAdmittedBy.Name = "txtAdmittedBy";
             this.txtAdmittedBy.Size = new System.Drawing.Size(208, 20);
@@ -382,25 +386,6 @@
             this.label46.TabIndex = 61;
             this.label46.Text = "Address";
             // 
-            // cboStatus
-            // 
-            this.cboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboStatus.FormattingEnabled = true;
-            this.cboStatus.Location = new System.Drawing.Point(493, 43);
-            this.cboStatus.Name = "cboStatus";
-            this.cboStatus.Size = new System.Drawing.Size(208, 21);
-            this.cboStatus.TabIndex = 13;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(453, 47);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(37, 13);
-            this.label47.TabIndex = 57;
-            this.label47.Text = "Status";
-            // 
             // label49
             // 
             this.label49.AutoSize = true;
@@ -441,7 +426,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(442, 140);
+            this.label52.Location = new System.Drawing.Point(442, 111);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(49, 13);
             this.label52.TabIndex = 28;
@@ -459,7 +444,7 @@
             // 
             // dpAdmissionDate
             // 
-            this.dpAdmissionDate.Location = new System.Drawing.Point(493, 75);
+            this.dpAdmissionDate.Location = new System.Drawing.Point(493, 46);
             this.dpAdmissionDate.Name = "dpAdmissionDate";
             this.dpAdmissionDate.Size = new System.Drawing.Size(208, 20);
             this.dpAdmissionDate.TabIndex = 14;
@@ -476,7 +461,7 @@
             // label53
             // 
             this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(412, 78);
+            this.label53.Location = new System.Drawing.Point(412, 49);
             this.label53.Name = "label53";
             this.label53.Size = new System.Drawing.Size(80, 13);
             this.label53.TabIndex = 23;
@@ -485,7 +470,7 @@
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(428, 109);
+            this.label54.Location = new System.Drawing.Point(428, 80);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(63, 13);
             this.label54.TabIndex = 22;
@@ -540,6 +525,43 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // txtKCSE
+            // 
+            this.txtKCSE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtKCSE.Location = new System.Drawing.Point(94, 383);
+            this.txtKCSE.MaxLength = 50;
+            this.txtKCSE.Name = "txtKCSE";
+            this.txtKCSE.Size = new System.Drawing.Size(197, 20);
+            this.txtKCSE.TabIndex = 74;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(57, 386);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 75;
+            this.label2.Text = "KCSE";
+            // 
+            // cboStatus
+            // 
+            this.cboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboStatus.FormattingEnabled = true;
+            this.cboStatus.Location = new System.Drawing.Point(493, 140);
+            this.cboStatus.Name = "cboStatus";
+            this.cboStatus.Size = new System.Drawing.Size(208, 21);
+            this.cboStatus.TabIndex = 76;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(453, 144);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(37, 13);
+            this.label47.TabIndex = 77;
+            this.label47.Text = "Status";
+            // 
             // AddStudentForm
             // 
             this.AcceptButton = this.btnAddNewStudent;
@@ -591,8 +613,6 @@
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.ComboBox cboStatus;
-        private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.ComboBox cboSchool;
@@ -614,5 +634,9 @@
         private System.Windows.Forms.ComboBox cboStudentAdmissionType;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblNoofYears;
+        private System.Windows.Forms.TextBox txtKCSE;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cboStatus;
+        private System.Windows.Forms.Label label47;
     }
 }

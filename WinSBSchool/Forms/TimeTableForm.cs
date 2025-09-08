@@ -138,13 +138,19 @@ namespace WinSBSchool.Forms
                 calendar1.SetViewRange(firstMonthDay, lastMonthDay);
                 calendar1.FirstDayOfWeek = DayOfWeek.Monday;
 
+<<<<<<< Updated upstream
                 calendar1.HighlightRanges = new CalendarHighlightRange[] { 
                   new CalendarHighlightRange( DayOfWeek.Monday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
+=======
+                calendar.HighlightRanges = new CalendarHighlightRange[] 
+                { 
+                 new CalendarHighlightRange( DayOfWeek.Monday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
+>>>>>>> Stashed changes
                  new CalendarHighlightRange( DayOfWeek.Tuesday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
                  new CalendarHighlightRange( DayOfWeek.Wednesday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
                  new CalendarHighlightRange( DayOfWeek.Thursday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
                  new CalendarHighlightRange( DayOfWeek.Friday, new TimeSpan(8,0,0), new TimeSpan(17,0,0)),
-             };
+                };
 
                 Populate_Timetable();
 
@@ -156,6 +162,69 @@ namespace WinSBSchool.Forms
                 Utils.ShowError(ex);
             }
         }
+<<<<<<< Updated upstream
+=======
+        private string get_file_uri()
+        {
+            try
+            {
+                string file_name = "time_table_calendar_items.xml";
+                string temp_path = Path.GetTempPath();
+                string app_dir = pathlookup("soft books school");
+                string inner_dir = pathlookup("calendar");
+                string app_path = Path.Combine(temp_path, app_dir);
+                string inner_path = Path.Combine(app_path, inner_dir); //Utils.build_file_path(temp_path, dir);
+
+                var file_path = Path.Combine(inner_path, file_name);
+
+                //check if file exists.
+                if (!System.IO.File.Exists(file_path))
+                {
+                    System.IO.File.Create(file_path);
+
+                    Console.WriteLine("created file [ " + file_path + " ].");
+
+                    var doc = new XmlDocument();
+                    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    doc.Save(file_path);
+
+                }
+
+                return file_path;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile_and_EventViewer(ex);
+                return null;
+            }
+        }
+        public string pathlookup(string folder)
+        {
+            try
+            {
+                //string app_dir = Utils.get_application_path();
+
+                string temp_path = Path.GetTempPath();
+                var dir = Path.Combine(temp_path, folder);
+
+                if (!System.IO.Directory.Exists(dir))
+                {
+                    System.IO.Directory.CreateDirectory(dir);
+
+                    Console.WriteLine("created folder [ " + dir + " ].");
+                }
+
+                return dir;
+
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLogFile_and_EventViewer(ex);
+                return null;
+            }
+        }
+
+>>>>>>> Stashed changes
         public void PlaceItems()
         {
             try
@@ -184,6 +253,7 @@ namespace WinSBSchool.Forms
                 if (File.Exists(calendar_timetable_Temp_filename))
                 {
                     List<ItemInfo_DTO> calendar_timetable = this.GetDataFromXML(calendar_timetable_Temp_filename);
+
                     foreach (var item in calendar_timetable)
                     {
                         CalendarItem cal = new CalendarItem(calendar1, DateTime.Parse(item.StartTime), DateTime.Parse(item.EndTime), item.Text);
@@ -317,6 +387,7 @@ namespace WinSBSchool.Forms
                     if (cboClassStreams.SelectedIndex != -1)
                     {
                         ClassStream cs = (ClassStream)cboClassStreams.SelectedItem;
+
                         TimeTable _tt = new TimeTable();
                         _tt.ClassStreamId = cs.Id;
                         _tt.ClassTimeTableXML = timetable_xml_contents;
@@ -330,6 +401,7 @@ namespace WinSBSchool.Forms
 
                             TimeTable _tt_dto = _ttquery;
                             _tt_dto.ClassTimeTableXML = _tt.ClassTimeTableXML;
+
                             rep.UpdateTimeTable(_tt_dto);
 
                             if (_tt_dto != null)

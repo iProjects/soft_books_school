@@ -996,3 +996,9 @@ D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Help\images\payroll.jpg
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Help\help.html
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Forms.login_form.resources
 D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.LicencesInfoForm.resources
+<<<<<<< Updated upstream
+=======
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Reports.Views.Screen.ViewTransactionDetailsForm.resources
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\WinSBSchool\obj\x86\Debug\WinSBSchool.Controls.controlsform.resources
+D:\wakxpx\csharp\visualstudio\2010\SBSchool\Build\Debug\Resources\new_splash_screen.jpg
+>>>>>>> Stashed changes

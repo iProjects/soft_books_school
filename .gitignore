@@ -1,4 +1,27 @@
 
 
-SBSchoolSetup/Debug
-Build/Debug
+build/
+CommonLib/bin/
+CommonLib/obj/
+DAL/binDAL/obj/
+Rules/bin/
+Rules/obj/
+SBSchoolSetup/debug/
+SBSchoolSetup/release/
+SMOScripting/bin/
+SMOScripting/obj/
+WinSBSchool/bin/
+WinSBSchool/obj/
+
+
+
+*.pbd
+*.exe
+*.msi
+*.temp
+*.cache
+
+
+
+
+

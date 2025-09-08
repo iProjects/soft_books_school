@@ -81,6 +81,7 @@
             this.txtusername = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.chkshowpassword = new System.Windows.Forms.CheckBox();
             this.chkRememberPassword = new System.Windows.Forms.CheckBox();
             this.txtpassword = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -119,6 +120,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.appNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnrefreshdatabases = new System.Windows.Forms.LinkLabel();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -217,6 +219,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnrefreshdatabases);
             this.groupBox3.Controls.Add(this.groupBox5);
             this.groupBox3.Controls.Add(this.groupBox4);
             this.groupBox3.Controls.Add(this.lblDatabaseNo);
@@ -777,6 +780,7 @@
             // 
             // groupBox14
             // 
+            this.groupBox14.Controls.Add(this.chkshowpassword);
             this.groupBox14.Controls.Add(this.chkRememberPassword);
             this.groupBox14.Controls.Add(this.txtpassword);
             this.groupBox14.Controls.Add(this.label10);
@@ -786,6 +790,19 @@
             this.groupBox14.Size = new System.Drawing.Size(354, 69);
             this.groupBox14.TabIndex = 1;
             this.groupBox14.TabStop = false;
+            // 
+            // chkshowpassword
+            // 
+            this.chkshowpassword.AutoSize = true;
+            this.chkshowpassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkshowpassword.Location = new System.Drawing.Point(214, 44);
+            this.chkshowpassword.Name = "chkshowpassword";
+            this.chkshowpassword.Size = new System.Drawing.Size(99, 17);
+            this.chkshowpassword.TabIndex = 23;
+            this.chkshowpassword.Text = "Show Password";
+            this.toolTip1.SetToolTip(this.chkshowpassword, "Show Password");
+            this.chkshowpassword.UseVisualStyleBackColor = true;
+            this.chkshowpassword.CheckedChanged += new System.EventHandler(this.chkshowpassword_CheckedChanged);
             // 
             // chkRememberPassword
             // 
@@ -1129,6 +1146,20 @@
             this.appNotifyIcon.Text = "notifyIcon1";
             this.appNotifyIcon.Visible = true;
             // 
+            // btnrefreshdatabases
+            // 
+            this.btnrefreshdatabases.AutoSize = true;
+            this.btnrefreshdatabases.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnrefreshdatabases.LinkColor = System.Drawing.Color.Yellow;
+            this.btnrefreshdatabases.Location = new System.Drawing.Point(247, 20);
+            this.btnrefreshdatabases.Name = "btnrefreshdatabases";
+            this.btnrefreshdatabases.Size = new System.Drawing.Size(165, 20);
+            this.btnrefreshdatabases.TabIndex = 18;
+            this.btnrefreshdatabases.TabStop = true;
+            this.btnrefreshdatabases.Text = "Refresh Databases";
+            this.toolTip1.SetToolTip(this.btnrefreshdatabases, "refresh databases");
+            this.btnrefreshdatabases.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.btnrefreshdatabases_LinkClicked);
+            // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -1306,5 +1337,7 @@
         private System.Windows.Forms.ProgressBar progressBar_connect;
         private System.Windows.Forms.TextBox txtlog_settings;
         private System.Windows.Forms.TextBox txtlog_connect;
+        private System.Windows.Forms.CheckBox chkshowpassword;
+        private System.Windows.Forms.LinkLabel btnrefreshdatabases;
     }
 }

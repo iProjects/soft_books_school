@@ -269,6 +269,36 @@ namespace WinSBSchool.Forms
                 return null;
             }
         }
+<<<<<<< Updated upstream
+=======
+
+        private void btnAdd_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                var _defaultSchoolquery = (from sub in db.Schools
+                                           where sub.DefaultSchool == true
+                                           where sub.IsDeleted == false
+                                           where sub.Status == "A"
+                                           select sub).FirstOrDefault();
+                School _defaultSchool = _defaultSchoolquery;
+                if (_defaultSchool == null)
+                {
+                    MessageBox.Show("No Default School is Set!", "SB School", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                if (_defaultSchool != null)
+                {
+                    Forms.AddStudentForm asf = new Forms.AddStudentForm(user, connection, _notificationmessageEventname) { Owner = this };
+                    asf.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowError(ex);
+            }
+        }
+>>>>>>> Stashed changes
         public void RefreshGrid()
         {
             try
@@ -1139,7 +1169,7 @@ namespace WinSBSchool.Forms
             {
                 bindingSourceStudents.DataSource = _Student;
                 groupBox2.Text = bindingSourceStudents.Count.ToString();
-            } 
+            }
         }
         public void CloseForm()
         {
@@ -1148,8 +1178,8 @@ namespace WinSBSchool.Forms
                 this.Close();
             }
             catch (Exception ex)
-            { 
-                Utils.ShowError(ex); 
+            {
+                Utils.ShowError(ex);
             }
         }
         private void chkInActive_CheckedChanged(object sender, EventArgs e)

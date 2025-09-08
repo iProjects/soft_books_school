@@ -123,6 +123,21 @@ namespace WinSBSchool.Forms
                     {
                         cboSchoolClass.SelectedValue = cls.Id;
                     }
+                    //var _examtypequery = from et in db.ExamTypes
+                    //                     where et.Status == "A"
+                    //                     where et.IsDeleted == false
+                    //                     join rg in db.RegisteredExams on et.Id equals rg.ExamTypeId
+                    //                     where rg.Status == "A"
+                    //                     join exm in db.Exams on rg.ExamId equals exm.Id
+                    //                     where exm.Enabled == true
+                    //                     where exm.Closed == false
+                    //                     where exm.IsDeleted == false
+                    //                     where exm.ClassId == cls.Id
+                    //                     where exm.Id == _Exam.Id
+                    //                     where exm.Enabled == true
+                    //                     where exm.Closed == false
+                    //                     orderby et.Description ascending
+                    //                     select et;
                     var _examtypequery = from et in db.ExamTypes
                                          where et.Status == "A"
                                          where et.IsDeleted == false

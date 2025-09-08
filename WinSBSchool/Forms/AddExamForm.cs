@@ -187,6 +187,16 @@ namespace WinSBSchool.Forms
             }
         }
 
+        private void cboExamPeriods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboSubject_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
 
 

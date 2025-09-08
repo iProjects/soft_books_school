@@ -2614,6 +2614,9 @@
     <Content Include="Resources\Icons\Process.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\new_splash_screen.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\ProgrammeYears.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

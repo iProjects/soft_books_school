@@ -180,7 +180,7 @@ namespace WinSBSchool.Forms
                     DAL.SchoolClass c = new DAL.SchoolClass();
                     if (!string.IsNullOrEmpty(txtShortCode.Text))
                     {
-                        c.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text);
+                        c.ShortCode = Utils.ConvertFirstLetterToUpper(txtShortCode.Text.Trim().ToUpper());
                     }
                     if (!string.IsNullOrEmpty(txtClassName.Text))
                     {

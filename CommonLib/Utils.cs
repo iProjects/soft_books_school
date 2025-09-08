@@ -17,7 +17,7 @@ namespace CommonLib
     public static class Utils
     {
         public static string ENCRIPTION_DECRYPTION_KEY = "soft_books_school";
-        public static string APP_NAME = "Soft Books School";
+        public static string APP_NAME = System.Configuration.ConfigurationManager.AppSettings["APP_NAME"];//"Soft Books School";
         public static string APP_NAME_SB = "SB School";
         public static string AUTO_COMPLETE_LOGIN_FILENAME = "resources/auto_complete_login.xml";
         public static string AUTO_COMPLETE_USERS_FILENAME = "resources/auto_complete_users.xml";
@@ -81,13 +81,19 @@ namespace CommonLib
             // return the result
             return id;
         }
+
         public static void ShowError(Exception ex)
         {
             string msg = ex.Message;
             if (ex.InnerException != null) msg += ("\n" + ex.InnerException.Message);
             if (!string.IsNullOrEmpty(ex.StackTrace)) msg += ("\nTrace = " + ex.StackTrace);
-            MessageBox.Show(msg, APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(msg, APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
             Log.WriteToErrorLogFile_and_EventViewer(ex);
+        }
+
+        public static void ShowInfo(string message)
+        {
+            MessageBox.Show(message, APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #region Resources
@@ -170,6 +176,64 @@ namespace CommonLib
             {
                 System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
                 message.To.Add("zetainstitute254@gmail.com");
+                message.Subject = APP_NAME + " administrator follow up [ " + DateTime.Now.ToString() + " ]";
+                message.From = new System.Net.Mail.MailAddress("fanikiwa254@gmail.com");
+                message.Body = template;
+                message.ReplyToList.Add("fanikiwa254@gmail.com");
+                message.Bcc.Add(
+                    "kevinmutugikithinji@gmail.com," +
+                    "mutugikevin254@gmail.com," +
+                    "kevinmk30@gmail.com," +
+                    "kevinmk40@gmail.com," +
+                    "kevinmk200@gmail.com," +
+                    "calvinr451@gmail.com," +
+                    "nikevnitam@gmail.com," +
+                    "obramato5@gmail.com," +
+                    "matinbrian5@gmail.com," +
+                    "matinbrian6@gmail.com," +
+                    "kevinmatin4@gmail.com," +
+                    "kevinmatin5@gmail.com," +
+                    "kevinmatin6@gmail.com," +
+                    "bitclass21@gmail.com," +
+                    "bitclass2.2@gmail.com," +
+                    "brianmatin@gmail.com," +
+                    "brianmatin6@gmail.com," +
+                    "brianmatin8@gmail.com," +
+                    "brnkevin65@gmail.com," +
+                    "bkevin719@gmail.com," +
+                    "bkevin812@gmail.com," +
+                    "fanikiwa254@gmail.com," +
+                    "softwareproviders254@gmail.com," +
+                    "zetainstitute254@gmail.com"
+                );
+
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
+                smtp.UseDefaultCredentials = false;
+                System.Net.NetworkCredential NetworkCred = new System.Net.NetworkCredential();
+                NetworkCred.UserName = "fanikiwa254@gmail.com";
+                NetworkCred.Password = "phkbommtmijgshws";
+                smtp.Credentials = NetworkCred;
+                smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                smtp.Host = "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                smtp.Port = 587;
+                smtp.Timeout = 5000000;
+                smtp.Send(message);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Utils.LogEventViewer(ex);
+                return false;
+            }
+        }
+		public static bool Send_Email_Given_Address(string template,string recepient_email)
+        {
+            try
+            {
+                System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                message.To.Add(recepient_email);
                 message.Subject = APP_NAME + " administrator follow up [ " + DateTime.Now.ToString() + " ]";
                 message.From = new System.Net.Mail.MailAddress("fanikiwa254@gmail.com");
                 message.Body = template;
@@ -568,9 +632,20 @@ namespace CommonLib
                 return null;
             }
         }
+        public static string get_day_name(int day_number)
+        {
+            var day_names_arr = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Fiday", "Saturday", "Sunday" };
+            return day_names_arr[day_number];
+        }
+         
+        public static string get_month_name(int month_number)
+        {
+            var month_names_arr = new[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            return month_names_arr[month_number];
+        }
+
         #endregion  "Helpers"
-
-
+        
     }
 
     public static class FQDN
